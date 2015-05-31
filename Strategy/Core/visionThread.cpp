@@ -51,7 +51,7 @@ namespace Strategy
 
         /* Once a frame is received, the next frame will be received atleast after 1000/60ms ~ 16ms
          * due to the camera frame rate is capped at 60fps
-         */
+         Why is it 10? Shouldn't it br 16!*/
         sleep(10);
       }
       // Sleep for 1ms to prevent CPU hogging

@@ -18,7 +18,6 @@ namespace Strategy
 {
   BeliefState::BeliefState(const BeliefState &s) {
     *this = s;
-    printf(">><<>><<copy!!!!!\n");
   }
   BeliefState::BeliefState() :
     prevFrameNum(-1),

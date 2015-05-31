@@ -105,7 +105,7 @@ namespace Strategy
       GoToPoint,
       TurnToAngle,
       DefendPoint,
-			ChargeBall,
+	  ChargeBall,
       MAX_SKILLS
     };
     static HAL::Comm*    comm;
@@ -120,15 +120,9 @@ namespace Strategy
 #else
     MergeSCurve*       pathPlanner;
 #endif
-    
-    /* TODO: Extra Shit, relevance needs to be verified
-     */
+
     bool pointyInField(Vector2D<int> fianl);
     void _goToPoint(int botid, Vector2D<int> dpoint, float finalvel, float finalslope, float clearance,bool increaseSpeed=0);
-    void _goToPointLessThresh(int botid, Vector2D<int> dpoint, float finalvel, float finalslope, float clearance,bool increaseSpeed=0);
-    void _dribbleToPoint(int botID, Vector2D<int> dpoint, float finalvel, float finalslope, float clearance);
-    void _turnToAngle(float angle, float *vl, float *vr);
-    void _goToPointStraight(int botid, Vector2D<int> dpoint, float finalvel, float finalslope, float clearance);
     int prevVel;
     /***************************By Prasann***********/
     /* Arpit: params removed from here, made static in function itself. I wanted to make function static so that
@@ -143,7 +137,7 @@ namespace Strategy
     void goToPoint(const SParam& param);
     void turnToAngle(const SParam& param);
     void defendPoint(const SParam& param);
-		void chargeBall(const SParam& param);
+	void chargeBall(const SParam& param);
     
     // Parameter for skills to be trained
     static bool loadParamsFromFile;
