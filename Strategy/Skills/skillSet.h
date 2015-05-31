@@ -73,7 +73,7 @@ namespace Strategy
         float y;
         float finalslope;
         float radius;
-      } DribbleToPointP, TurnToPointP, DefendPointP;
+      } DefendPointP;
       struct type6
       {
         float finalslope;
@@ -102,20 +102,12 @@ namespace Strategy
     enum SkillID
     {
       Spin,
-      SpinToGoal,
       Stop,
       Velocity,
       GoToBall,
       GoToPoint,
-      GoalKeeping,
-      DribbleToPoint,
-      TurnToPoint,
       TurnToAngle,
       DefendPoint,
-//      DribbleToGoal,
-      GoToPointStraight,
-      GoToBallStraight,
-      GoToPointGoalie,   //BOT_POINT_THESH reduced for Goalie
 			ChargeBall,
       MAX_SKILLS
     };
@@ -150,23 +142,11 @@ namespace Strategy
     //------- List of robot skills -------//
     void spin(const SParam& param);
     void stop(const SParam& param);
-    //void kick(const SParam& param);
-    //void dribble(const SParam& param);
     void velocity(const SParam& param);
     void goToBall(const SParam& param);
     void goToPoint(const SParam& param);
-    void goToPointGoalie(const SParam& param);
-    void dribbleToPoint(const SParam& param);
-    void receiveBall(const SParam& param);
-    void goalKeeping(const SParam& param);
-    void spinToGoal(const SParam& param);
-    //void kickToGoal(const SParam& param);
-    void turnToPoint(const SParam& param);
     void turnToAngle(const SParam& param);
     void defendPoint(const SParam& param);
-    void dribbleToGoal(const SParam& param);
-    void goToPointStraight(const SParam& param);
-    void goToBallStraight(const SParam& param);
 		void chargeBall(const SParam& param);
     
     // Parameter for skills to be trained

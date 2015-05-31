@@ -52,18 +52,11 @@ SkillSet::SkillSet(const BeliefState* state, const int botID) :
   // Mapping the skill IDs to their corresponding function pointers
   skillList[Spin]           = &SkillSet::spin;
   skillList[Stop]           = &SkillSet::stop;
-  skillList[SpinToGoal]     = &SkillSet::spinToGoal;
   skillList[Velocity]       = &SkillSet::velocity;
   skillList[GoToBall]       = &SkillSet::goToBall;
   skillList[GoToPoint]      = &SkillSet::goToPoint;
-  skillList[DribbleToPoint] = &SkillSet::dribbleToPoint;
   skillList[TurnToAngle] = &SkillSet::turnToAngle;
-  skillList[TurnToPoint] = &SkillSet::turnToPoint;
   skillList[DefendPoint] = &SkillSet::defendPoint;
-  skillList[GoalKeeping] = &SkillSet::goalKeeping;
-  skillList[GoToPointStraight] = &SkillSet::goToPointStraight;
-  skillList[GoToBallStraight] = &SkillSet::goToBallStraight;
-  skillList[GoToPointGoalie]      = &SkillSet::goToPointGoalie;
 	skillList[ChargeBall] 					= &SkillSet::chargeBall;
   // Initialization check
   for (int sID = 0; sID < MAX_SKILLS; ++sID)
@@ -353,84 +346,6 @@ void SkillSet::_goToPointLessThresh(int botid, Vector2D<int> dpoint, float final
 #else
     comm->sendCommand(botID, (t - r), (t + r));
 #endif
-}
-
-void SkillSet::_dribbleToPoint(int botid, Vector2D<int> dpoint, float finalvel, float finalslope, float clearance = 80.0)
-{
-  float theta   = normalizeAngle(Vector2D<int>::angle(dpoint, state->homePos[botID]));
-  float phiStar = finalslope;
-  float phi     = (state->homeAngle[botID] < -PI) ? PI : state->homeAngle[botID];
-  float dist    = Vector2D<int>::dist(dpoint, state->homePos[botID]);  // Distance of next waypoint from the bot
-  float alpha   = normalizeAngle(theta - phiStar);
-  float beta;
-  //if(fabs(alpha)  < fabs(atan2(clearance, dist)))
-  //  printf("ALPHA!\n");
-  //else
-    //printf("c/d\n");
-  beta = (fabs(alpha) < fabs(atan2(clearance, dist))) ? (alpha) : SGN(alpha) * atan2(clearance, dist);
-  float thetaD  = normalizeAngle(theta + beta);
-  float delta   = normalizeAngle(thetaD - phi);
-  float r       = (sin(delta) * sin(delta) * SGN(sin(delta)));
-  float t       = (cos(delta) * cos(delta)); //SGN(tan(delta));
-  float ballBotAngle = fabs(normalizeAngle(Vector2D<int>::angle(state->ballPos, state->homePos[botID]) - state->homeAngle[botID]));
-  if(ballBotAngle > PI / 2)
-  {
-    t = -t;
-    r = -r;
-  }
-  //printf("delta  = %f\n", ballBotAngle * 180 / PI);
-  float profileFactor;
-  profileFactor = MAX_BOT_SPEED * ((dist > MIN_DIST_FROM_TARGET) ? (1) : (dist / MIN_DIST_FROM_TARGET));
-  //printf("dist= %f\n", dist);
-  if(dist < BOT_POINT_THRESH)
-  {
-#if FIRA_COMM || FIRASSL_COMM
-    comm->sendCommand(botID, profileFactor * (t - r), profileFactor * (t + r));
-#else
-    comm->sendCommand(botID, profileFactor * (t - r), profileFactor * (t + r));
-#endif
-  }
-  else
-  {
-    comm->sendCommand(botID, 0, 0);
-  }
-}
-void SkillSet::_goToPointStraight(int botid, Vector2D<int> dpoint, float finalvel, float finalslope, float clearance)
-{
-  float t;
-  float phiStar, theta = normalizeAngle(Vector2D<int>::angle(dpoint, state->homePos[botID]));
-  phiStar = finalslope;
-  float phi = state->homeAngle[botID];
-  float dist = Vector2D<int>::dist(dpoint, state->homePos[botID]);  // Distance of next waypoint from the bot
-  //  float alpha = firaNormalizeAngle(theta - phiStar);
-//    float beta;
-//    beta = (fabs(alpha) < fabs(atan2(clearance, dist))) ? (alpha) : SGN(alpha) * atan2(clearance, dist);
-  //  float thetaD = normalizeAngle(theta + beta);
-  float delta = normalizeAngle(theta - phi);
-  float ndelta = firaNormalizeAngle(delta);
-  float r = 0.7*(sin(ndelta) * sin(ndelta)) * SGN(tan(ndelta));
-  t = (cos(ndelta) * cos(ndelta)) * SGN(cos(delta));
-  float profileFactor, velMod;
-  velMod = ((state->homeVel[botID].x) * (state->homeVel[botID].x)) + ((state->homeVel[botID].y) * (state->homeVel[botID].y));
-  velMod = sqrtf(velMod);
-  //profileFactor =  ((dist>MIN_DIST_FROM_TARGET)?(MAX_BOT_SPEED):((MAX_BOT_SPEED-finalvel)*(dist/MIN_DIST_FROM_TARGET)+finalvel));
-  //profileFactor = fabs(t) < 0.5 ? MAX_BOT_SPEED * 0.5 : MAX_BOT_SPEED * fabs(t) ;
-  profileFactor=(MAX_BOT_SPEED/4.0 + 3/4.0* MAX_BOT_SPEED*(fabs(cos(ndelta))));
-  Util::Logger::toStdOut("t: %f,r: %f",t,r);
-  if(dist < BOT_POINT_THRESH )
-  {
-    SParam param;
-    param.TurnToAngleP.finalslope = finalslope;
-    stop(param);
-  }
-  else
-  {
-#if FIRA_COMM || FIRASSL_COMM
-    comm->sendCommand(botID, profileFactor * (t - r), profileFactor * (t + r));
-#else
-    comm->sendCommand(botID, profileFactor * (t - r), profileFactor * (t + r));
-#endif
-  }
 }
 void SkillSet::_turnToAngle(float angle, float *vl, float *vr)
 {
