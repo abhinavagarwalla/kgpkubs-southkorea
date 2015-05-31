@@ -5,7 +5,6 @@
 #include "pathPlanners.h"
 #include "beliefState.h"
 #include "geometry.hpp"
-#include "dataBox.h"
 #include "grSimComm.h"
 #include "logger.h"
 using namespace HAL;
@@ -15,10 +14,6 @@ namespace Strategy
 {
 #if GR_SIM_COMM
 Comm* SkillSet::comm = new GrSimComm();
-#elif SIM_COMM
-Comm* SkillSet::comm = new SimComm();
-#elif SSL_COMM
-Comm*   SkillSet::comm = new SSLComm();
 #elif FIRASSL_COMM
 Comm*  SkillSet::comm = new FIRAComm();
 #else
@@ -36,8 +31,6 @@ float SkillSet::GoToPoint_omegaFactor       = 1.0;
 float SkillSet::GoToPoint_profileFactorMult = 1.0;
 int   SkillSet::dribble_ball_threshold      = DRIBBLER_BALL_THRESH;
 int   SkillSet::bot_ball_threshold          = BOT_BALL_THRESH;
-decision_function<radial_basis_kernel<matrix<double, 3, 1> > > SkillSet::gotopoint_profilefac;
-decision_function<radial_basis_kernel<matrix<double, 3, 1> > > SkillSet::gotopoint_omegafac;
 SkillSet::SkillSet(const BeliefState* state, const int botID) :
   state(state),
   botID(botID),
@@ -62,8 +55,7 @@ SkillSet::SkillSet(const BeliefState* state, const int botID) :
   {
     assert(skillList[sID] != NULL); // Skill enum not mapped to the corresponding skill function
   }
-  // Loading Parameters from DataBox
-  //errt = new ERRT(0.2f, 0.6f);
+
 #ifdef LOCAL_AVOID
   pathPlanner = new LocalAvoidance();
   pathPlannerSec = new MergeSCurve();

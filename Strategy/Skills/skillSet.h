@@ -157,8 +157,6 @@ namespace Strategy
     static float Bot_Point_dis_penalty_l2;
     static float angle_penalty_l1;
     static float angle_penalty_l2;
-    static dlib::decision_function<dlib::radial_basis_kernel<dlib::matrix<double, 3, 1> > > gotopoint_profilefac;
-    static dlib::decision_function<dlib::radial_basis_kernel<dlib::matrix<double, 3, 1> > > gotopoint_omegafac;
     static int dribble_ball_threshold;
     static int bot_ball_threshold;
     static std::string skillsCollection;

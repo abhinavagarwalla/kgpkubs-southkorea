@@ -11,7 +11,6 @@
 #include <QtGui/QApplication>
 #include "tester.hpp"
 #include "worker.hpp"
-#include "paramLoaders.h"
 using namespace std;
 using namespace Strategy; 
 // logger is to be used for logging throughout the project. Use it in other files using extern
@@ -94,10 +93,6 @@ int startgame(bool usePositiveXSide, Simulator::TeamColor color)
       Simulator::YellowTeam::ID = Strategy::HOME_TEAM;
     break;
   }
-  // Loading all the parameters controlled by Databox. Make sure the databox file is correct one.
-  DataBox::loadData();
-  ParamLoaders pl;
-  pl.load_all_params();
   
   Strategy::BeliefState state;
   Util::CS writer_mutex;
@@ -134,7 +129,6 @@ int startgame(bool usePositiveXSide, Simulator::TeamColor color)
       t.run();
     }
   }
-  DataBox::saveData();
   return 0;
 }
 

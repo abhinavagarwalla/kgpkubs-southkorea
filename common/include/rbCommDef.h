@@ -19,37 +19,13 @@
 #ifndef RB_COMM_DEF_H
 #define RB_COMM_DEF_H
 
-#ifndef WIN32
 #include <stdint.h>
-#endif // !WIN32
 #include <string>
 #include "comdef.h"
 #include "geometry.hpp"
 
 namespace HAL
 {
-  //----- Protocol for sending commands to SSL bots -----//
-  typedef struct SSLPacket
-  {
-    uint8_t preamble  : 8;                // Preamble for the data packet        B0.0 - B0.7
-    uint8_t           : 0;
-    uint8_t teamColor : 1;                // Team Color                          B1.0 - B1.0
-    uint8_t botID     : 3;                // Bot ID                              B1.1 - B1.3
-    uint8_t           : 0;
-    uint8_t dirW0     : 1;                // Direction for Wheel 0               B2.0 - B2.0
-    uint8_t dirW2     : 1;                // Direction for Wheel 2               B2.1 - B2.1
-    uint8_t dirW1     : 1;                // Direction for Wheel 1               B2.2 - B2.2
-    uint8_t dribble   : 1;                // Dribbler on/off                     B2.4 - B2.4
-    uint8_t kickPower : 3;                // Kick Power                          B2.5 - B2.7
-    uint8_t           : 0;
-    uint8_t pwmW0     : 8;                // PWM for Wheel 0                     B3.0 - B3.7
-    uint8_t           : 0;
-    uint8_t pwmW2     : 8;                // PWM for Wheel 2                     B4.0 - B4.7
-    uint8_t           : 0;
-    uint8_t pwmW1     : 8;                // PWM for Wheel 1                     B5.0 - B5.7
-    uint8_t           : 0;
-  } SSLPacket;
-  
    //FIRA Packet:
   typedef struct FIRAPacket
   {
@@ -73,15 +49,9 @@ namespace HAL
   //----- Protocols for sending commands to the Robocup SSL Simulator -----//
   static const int   MAX_DEBUG_ITEMS  = 20;
 
-#ifdef WIN32 // When compiled in Windows, the shared memory is identified by aa unique string
-  static const char* SHM_BLUE_ALIAS   = "ShmemBlue";
-  static const char* SEM_BLUE_ALIAS   = "SemBlue";
-  static const char* SHM_YELLOW_ALIAS = "ShmemYellow";
-  static const char* SEM_YELLOW_ALIAS = "SemYellow";
-#else // When compiled in linux, the shared memory is identified by an unique integer
+// When compiled in linux, the shared memory is identified by an unique integer
   const int SHM_BLUE_ALIAS   = 5678; // Some arbitrary number
   const int SHM_YELLOW_ALIAS = 1234; // Some arbitrary number
-#endif // !WIN32
 
   typedef struct
   {
@@ -166,7 +136,7 @@ namespace HAL
   static const int BlueMarkerMap[]   = {0, 1, 2, 3, 4};
   static const int YellowMarkerMap[] = {0, 1, 2, 3, 4};
 
-#endif // SSL_COMM
+#endif
 
   class VisionInfo
   {
@@ -191,8 +161,6 @@ namespace HAL
     { }
   };
 
-
-  // TODO : Put these settings in DataBox
   static std::string      REF_BOX_MULTICAST_ADDR = "224.5.23.1";
   static const unsigned short REF_BOX_MULTICAST_PORT = 30002;
   

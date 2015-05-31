@@ -10,7 +10,6 @@
 #include "skillSet.h"
 #include "kalman.h"
 #include "config.h"
-#include "dataBox.h"
 #include "tactic.h"
 #include "tinclude.h"
 #endif

@@ -230,9 +230,9 @@ public:
         //printf("mid %d\n",state.pr_ballMidField);
         //printf("dbox %d\n",state.pr_ball_in_opp_dbox);    
         //ttest1.execute(ptestpoint);
-        tVelocity2.execute(pVelocity);
+        //tVelocity2.execute(pVelocity);
 	  // tS0.execute(paramStop);
-	//  tAttack1.execute(pAttack);
+	  tAttack2.execute(pAttack);
     //tAttack4.execute(pAttack); 
 
 	 //tVelocity1.execute(pVelocity);
