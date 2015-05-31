@@ -23,13 +23,7 @@ namespace HAL
 {
   class FIRAComm;
 }
-#if GR_SIM_COMM
-# include "grSimComm.h"
-#elif SIM_COMM
-# include "simComm.h"
-#elif SSL_COMM
-# include "sslComm.h"
-#elif FIRASSL_COMM
+#if FIRASSL_COMM
 # include "fira_comm.h"
 #else
 # error Macro for Comm class not defined

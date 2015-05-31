@@ -46,10 +46,9 @@ namespace HAL
                              float v_l,             // in mm/sec
                              float v_r             // in mm/sec
                              ) = 0;    // on(true) or off(false)
-    #ifdef COMBINED_PACKET
     virtual void writeCombinedPacket(){} //Implemented only in FIRAComm. Always writes to HOME_TEAM
     virtual void getSentData(int botid, int &vl, int &vr){} // Implemented only in FIRAComm, there too only used only for BOTLOG
-    #endif
+	
     //Following provided for QtDebugger compatibiltity
     std::list<Debug_Circle> getCircles();
     std::list<Debug_Line> getLines();

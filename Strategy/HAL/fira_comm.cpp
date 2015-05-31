@@ -7,10 +7,9 @@
 #include <unistd.h>
 using namespace std;
 using namespace Util;
-// Blue Bots Channel - D
+
 namespace HAL
 {
-#ifdef COMBINED_PACKET
   CS FIRAComm::cs_internal[5];
   void FIRAComm::getSentData(int botid, int &vl, int &vr)
   {
@@ -19,7 +18,7 @@ namespace HAL
     vr = command.data[botid*2+1];
     cs_internal[botid].leave();    
   }
-#endif
+  
   FIRAComm::FIRAComm()
   {
     debug_cs = new CS();
@@ -56,10 +55,9 @@ namespace HAL
       sPort.Clear();
     }
     fprintf(f, "%d %d %d %d %d\n", really, ourV_l, ourV_r, botSendvL, botSendvR);
-    //printf(">>>>>>>>>>>Bot sent data: %d %d, really = %d\n", botSendvL , botSendvR, (int) really);
     fclose(f);
   }
-#ifdef COMBINED_PACKET
+  
   void FIRAComm::writeCombinedPacket()
   {
       for(int i=0; i<5; i++) {
@@ -77,45 +75,16 @@ namespace HAL
         cs_internal[i].leave();
       }
   }
-#endif
   
   void FIRAComm::sendCommand(int botID,
                              float v_l,
                              float v_r)
   {
-	/*Arpit: I deleted all the commented code for fake kalman on vL, vR. Plz refer to prev commits if needed later on. */
-    int pwmWL = v_l;
-    int pwmWR = v_r;
-    printf("Bot Velocity(firacomm) %d: %d %d\n", botID, pwmWL, pwmWR);
-#ifdef COMBINED_PACKET
+    printf("Bot Velocity(firacomm) %d: %d %d\n", botID, (int)v_l, (int)v_r);
     cs_internal[botID].enter();		
-    command.data[botID*2] = (int8_t)pwmWL;
-    command.data[botID*2+1] = (int8_t)pwmWR;
+    command.data[botID*2] = (int8_t)v_l;
+    command.data[botID*2+1] = (int8_t)v_r;
     cs_internal[botID].leave();
-#else
-    commCS.enter();
-    command.preamble  = 0xAA;
-    command.teamColor = (uint8_t)Strategy::HomeTeam::COLOR;
-    command.botID     = botID;
-    command.dirWL     = pwmWL < 0 ? 1 : 0;
-    command.dirWR     = pwmWR < 0 ? 1 : 0;
-
-    //printf("v_l: %f v_r: %f l:%d, r:%d\n", v_l, v_r, pwmWL, pwmWR);
-    
-    if (pwmWL < 0)
-    {
-      pwmWL = -pwmWL;
-    }
-    if (pwmWR < 0)
-    {
-      pwmWR = -pwmWR;
-    }
-    command.pwmWL     = pwmWL;
-    command.pwmWR     = pwmWR;
-
-    sPort.Write(&command, sizeof(FIRAPacket));
-    commCS.leave();
-#endif
   }
   void FIRAComm::addCircle(int x, int y, unsigned int radius, unsigned int color = 0xFFFFFFFF)
   {

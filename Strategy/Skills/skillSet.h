@@ -4,9 +4,7 @@
 #define SKILLS_H
 #include "dlib/svm.h"
 
-#if GR_SIM_COMM
-# include "grSimComm.h"
-#elif FIRASSL_COMM||FIRA_COMM
+#if FIRASSL_COMM||FIRA_COMM
 # include "fira_comm.h"
 #else
 # error Macro for Comm class not defined
@@ -122,7 +120,6 @@ namespace Strategy
 #else
     MergeSCurve*       pathPlanner;
 #endif
-    ERRT*              errt;
     
     /* TODO: Extra Shit, relevance needs to be verified
      */

@@ -278,30 +278,9 @@ public:
 //        tDefendLine1.execute(pDefendL1);
 	//	tDefendLine2.execute(pDefendL2);
        //tAttack2.execute(pAttack);
-#ifdef COMBINED_PACKET
-        SkillSet::comm->writeCombinedPacket();
-#endif
-#ifdef BOTLOG
-#ifdef COMBINED_PACKET
-        int vl, vr;
-        //SkillSet::comm->getSentData(4, vl, vr);
-        //SkillSet::errorLog(4, vl, vr, &state);
-#else
-  // no clue what to do in case of single bot (old) comm. Don't have sentVl and sentVr anymore...
-#endif
-#endif
-        
-        
 
-        //tCharge2.execute(pCharge);
-        //tDefendLine1.execute(pDefendL1);
-        //tDefendLine2.execute(pDefendL2);
-        //tPos1.execute(pPos);
-        //tAttack2.execute(pAttack);
-        //turnangle.executeSkill(SkillSet::TurnToAngle, sparam);
-        //tReceive2.execute(pReceive);
-        //tReceive0.execute(pReceive);
-        //tblock0.execute(pBlock);
+        SkillSet::comm->writeCombinedPacket();
+       
       }
      else
       {
@@ -312,7 +291,7 @@ public:
       }
     //      printf("tIMER US = %d\n", timer.stopus() );
       //moprintf("Ball Pos: %d %d %f\n",state.ballPos.x,state.ballPos.y,state.homeAngle[2]);
-         usleep(20000);  // Adding sleep to this thread of execution to prevent CPU hogging
+         usleep(16000);  // Adding sleep to this thread of execution to prevent CPU hogging
       
     }
     vThread.stop();

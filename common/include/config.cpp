@@ -1,13 +1,5 @@
 #include <config.h>
 
-//#if SIM_COMM || GR_SIM_COMM // Parameters for the simulator
-//# define SELECT(sim_param, ssl_param) (sim_param)
-//#elif SSL_COMM || FIRA_COMM || FIRASSL_COMM// Parametres for the real bots
-//# define SELECT(sim_param, ssl_param) (ssl_param)
-//#else
-//# error Macro for Comm class not fully handled
-//#endif
-
 //#define SGN(x) (((x)>0)?1:(((x)<0)?(-1):0))
 //extern bool FIELD_IS_INVERTED;
 

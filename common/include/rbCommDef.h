@@ -26,18 +26,6 @@
 
 namespace HAL
 {
-   //FIRA Packet:
-  typedef struct FIRAPacket
-  {
-    uint8_t preamble	  : 8;					// Preamble for the data packet        B0.0 - B0.7
-    uint8_t teamColor	  : 1;					// Team Color                          B1.0 - B1.0
-    uint8_t botID     	: 3;          // Bot ID                              B1.1 - B1.3
-    uint8_t dirWR     	: 1;          // Direction for Right Wheel           B1.4 - B1.4
-    uint8_t dirWL     	: 1;          // Direction for Left Wheel            B1.5 - B1.5
-    uint8_t pwmWL     	: 8;          // PWM for Wheel Left                  B2.0 - B2.7
-    uint8_t pwmWR     	: 8;          // PWM for Wheel Right                 B3.0 - B3.7
-  } FIRAPacket;
-  
    //Combined FIRA Packet:
   typedef struct CombinedFIRAPacket
   {
@@ -127,14 +115,6 @@ namespace HAL
    */
   static int BlueMarkerMap[]   = {0, 1, 2, 3, 4, -1, -1, -1, -1, -1, -1, -1};
   static int YellowMarkerMap[] = {0, 1, 2, 3, 4, -1, -1, -1, -1, -1, -1, -1};
-
-#elif GR_SIM_COMM || SIM_COMM
-
-  /* When using the simulator, the SSLVision is skipped entirely and so the bot ids
-   * obtained are used without any mapping
-   */
-  static const int BlueMarkerMap[]   = {0, 1, 2, 3, 4};
-  static const int YellowMarkerMap[] = {0, 1, 2, 3, 4};
 
 #endif
 

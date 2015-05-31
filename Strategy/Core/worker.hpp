@@ -121,9 +121,7 @@ public:
 		printf("executing play!\n");
         pExec.executePlay();
       }
-#ifdef COMBINED_PACKET
       SkillSet::comm->writeCombinedPacket();
-#endif
   //   printf("%d\t%d\n",state.ourGoalCount,state.oppGoalCount);
       usleep(16000);  // Adding sleep to this thread of execution to prevent CPU hogging
     }

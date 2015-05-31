@@ -77,9 +77,6 @@ namespace Util
     fprintf(stderr, "%s", msg);
     fflush(stderr);
     stdoutCS.leave();
-#ifdef WIN32
-    MessageBox(NULL, TEXT(msg), TEXT("Aborting..."), MB_OK | MB_ICONERROR | MB_DEFBUTTON1);
-#endif // WIN32
     exit(EXIT_FAILURE);
   }
 } // namespace Util

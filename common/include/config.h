@@ -2,9 +2,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 #include <string>
-#if SIM_COMM || GR_SIM_COMM // Parameters for the simulator
-# define SELECT(sim_param, ssl_param) (sim_param)
-#elif FIRA_COMM || FIRASSL_COMM// Parametres for the real bots
+#if FIRA_COMM || FIRASSL_COMM// Parametres for the real bots
 # define SELECT(sim_param, ssl_param) (ssl_param)
 #else
 # error Macro for Comm class not fully handled

@@ -12,9 +12,7 @@ using namespace std;
 using namespace dlib;
 namespace Strategy
 {
-#if GR_SIM_COMM
-Comm* SkillSet::comm = new GrSimComm();
-#elif FIRASSL_COMM
+#if FIRASSL_COMM
 Comm*  SkillSet::comm = new FIRAComm();
 #else
 # error Macro for Comm class not defined
@@ -65,7 +63,6 @@ SkillSet::SkillSet(const BeliefState* state, const int botID) :
 } // SkillSet
 SkillSet::~SkillSet()
 {
-  delete errt;
   delete pathPlanner;
 #ifdef LOCAL_AVOID
   delete pathPlannerSec;

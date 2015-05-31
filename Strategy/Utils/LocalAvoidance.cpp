@@ -7,31 +7,7 @@
 #include "intersection.hpp"
 #include <algorithm>
 using namespace Util;
-//
-//#if GR_SIM_COMM
-//# include "grSimComm.h"
-//#elif SIM_COMM
-//# include "simComm.h"
-//#elif SSL_COMM
-//# include "sslComm.h"
-//#elif FIRA_COMM || FIRASSL_COMM
-//# include "fira_comm.h"
-//#else
-//# error Macro for Comm class not defined
-//#endif
-//
-//
-//#if GR_SIM_COMM
-//  typedef HAL::GrSimComm CommType;
-//#elif SIM_COMM
-//  typedef HAL::SimComm   CommType;
-//#elif SSL_COMM
-//  typedef HAL::SSLComm   CommType;
-//#elif FIRA_COMM || FIRASSL_COMM
-//  typedef HAL::FIRAComm  CommType;
-//#else
-//# error Macro for Comm class not defined
-//#endif
+
 namespace Strategy
 {
   std::vector<std::pair<Point2D<int>, Point2D<int> > > LocalAvoidance::boundaries;
