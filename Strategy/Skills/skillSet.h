@@ -2,7 +2,6 @@
 #pragma once
 #ifndef SKILLS_H
 #define SKILLS_H
-#include "evaluator.h"
 #include "dlib/svm.h"
 
 #if GR_SIM_COMM

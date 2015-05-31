@@ -7,7 +7,6 @@
 #include "geometry.hpp"
 #include "dataBox.h"
 #include "grSimComm.h"
-#include "sslComm.h"
 #include "logger.h"
 using namespace HAL;
 using namespace std;

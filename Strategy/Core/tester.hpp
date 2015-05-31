@@ -1,6 +1,5 @@
 #include "mainheaders.hpp"
 #include "thread.h"
-#include "trainers.hpp"
 #include "strategygui_thread.hpp"
 #include "command-packet.pb.h"
 #include "tExec.h"
@@ -47,7 +46,6 @@ public:
 	TGoalKeepingOurSide tGoalOur3(&state, 3);
 	TGoalKeepingOurSide tGoalOur4(&state, 4);
     Tactic::Param paramGoal;
-    TGoalKeepingOppSide tGoalOpp(&state, 1);
     
     //tCharge
     TCharge tCharge2(&state, 2);
@@ -118,8 +116,8 @@ public:
 	pVelocity_1.VelocityP.vr = 20;
 	
 	Tactic::Param pVelocity_2;
-	pVelocity_2.VelocityP.vl = 00;
-	pVelocity_2.VelocityP.vr = 00;
+	pVelocity_2.VelocityP.vl = 60;
+	pVelocity_2.VelocityP.vr = 60;
 	Tactic::Param pVelocity_3;
 	pVelocity_3.VelocityP.vl = 60;
 	pVelocity_3.VelocityP.vr = 60;
@@ -135,14 +133,7 @@ public:
     Tactic::Param pDefendPoint;
     paramList[Tactic::DefendPoint].DefendPointP.x = -HALF_FIELD_MAXX/2;
     paramList[Tactic::DefendPoint].DefendPointP.y = 0;
-    paramList[Tactic::DefendPoint].DefendPointP.radius = HALF_FIELD_MAXX/4;       
-
-    //tBackup
-    Strategy::TBackup tBackup0(&state,0);
-    TBackup tBackup1(&state,1);
-    TBackup tBackup2(&state,2);
-    Tactic::Param pBackup;
-    pBackup.BackupP.BotID = 0;
+    paramList[Tactic::DefendPoint].DefendPointP.radius = HALF_FIELD_MAXX/4;
     
     //tAttack
     TAttack tAttack1(&state, 1);
@@ -182,12 +173,8 @@ public:
     while(running)
     {
     //      timer.start();
-      writer_preference->enter();
-      writer_mutex->enter();
       state.update();
-      kFilter.update(state);   
-      writer_mutex->leave();
-      writer_preference->leave();
+      kFilter.update(state);
       
       if(1)
       {
@@ -243,7 +230,7 @@ public:
         //printf("mid %d\n",state.pr_ballMidField);
         //printf("dbox %d\n",state.pr_ball_in_opp_dbox);    
         //ttest1.execute(ptestpoint);
-        tVelocity4.execute(pVelocity);
+        tVelocity2.execute(pVelocity);
 	  // tS0.execute(paramStop);
 	//  tAttack1.execute(pAttack);
     //tAttack4.execute(pAttack); 
