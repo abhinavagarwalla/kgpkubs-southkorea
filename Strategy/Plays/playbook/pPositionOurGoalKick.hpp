@@ -27,14 +27,9 @@ namespace Strategy
 	  Vector2D<int> finalPoint ;
 	  /* for goalie */
 	  roleList[0].push_back(std::make_pair(Tactic::GoalieOur, param));
-      /*Vector2D<int> dpointg(ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*1.2),state.ballPos.y);
-	  param.PositionP.x  = ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*1.2) ;
-	  param.PositionP.y  = state.ballPos.y;
-	  param.PositionP.finalSlope = 0;
-	  param.PositionP.align = false ;
-	  roleList[0].push_back(std::make_pair(Tactic::Position,param));
-      *//* Role 1 - Defender 1*/
-	  Vector2D<int> dpoint0(ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*9),-1*(OUR_GOAL_MAXY + 2*BOT_RADIUS));
+      
+      /* Role 1 - Defender 1*/
+	  Vector2D<int> dpoint0((-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*5),-1*(OUR_GOAL_MAXY + BOT_RADIUS));
 	  finalPoint = position_our_bot(&state,dpoint0,0);
 	  param.PositionP.x = finalPoint.x ; param.PositionP.y = finalPoint.y ;
 	  param.PositionP.finalSlope = 0 ;
@@ -55,7 +50,7 @@ namespace Strategy
       roleList[3].push_back(std::make_pair(Tactic::Position, param));
       
 	  //Role 4
-	  Vector2D<int> dpoint2(ForwardX(HALF_FIELD_MAXX/6),-HALF_FIELD_MAXY/2);
+	  Vector2D<int> dpoint2(ForwardX(HALF_FIELD_MAXX/2.5),HALF_FIELD_MAXY/2);
 	  finalPoint = position_our_bot(&state,dpoint2,0);
 	  param.PositionP.x = finalPoint.x ; param.PositionP.y = finalPoint.y ;
       param.PositionP.finalSlope  = 0;
@@ -66,17 +61,10 @@ namespace Strategy
 
 	virtual void reevaluateRoleParams()
     {
-       /* {
-		 	Tactic::Param &param = roleList[0][0].second;
-			param.PositionP.x  = ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*1.2) ;
-	        param.PositionP.y  = state.ballPos.y;
-			param.PositionP.finalSlope = 0;
-			param.PositionP.align = false ;
-		}*/
-		{
+        {
 			Vector2D<int> finalPoint;
             Tactic::Param &param = roleList[1][0].second;
-             Vector2D<int> dpoint0(ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*9),-1*(OUR_GOAL_MAXY + 2*BOT_RADIUS));
+             Vector2D<int> dpoint0((-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*5),-1*(OUR_GOAL_MAXY + BOT_RADIUS));
 	  finalPoint = position_our_bot(&state,dpoint0,0);
 	  param.PositionP.x = finalPoint.x ; param.PositionP.y = finalPoint.y ;
 	  param.PositionP.finalSlope = 0 ;
@@ -93,7 +81,7 @@ namespace Strategy
         {   
 			Vector2D<int> finalPoint;
             Tactic::Param &param = roleList[3][0].second;
-           Vector2D<int> dpoint1(ForwardX(-CENTER_CIRCLE_DIAMETER),HALF_FIELD_MAXY/4);
+           Vector2D<int> dpoint1(ForwardX(-CENTER_CIRCLE_DIAMETER/2),HALF_FIELD_MAXY/4);
 	  finalPoint = position_our_bot(&state,dpoint1,0);
 	  param.PositionP.x = finalPoint.x ; param.PositionP.y = finalPoint.y ;
       param.PositionP.finalSlope  = 0;
@@ -102,7 +90,7 @@ namespace Strategy
 		{
 			Vector2D<int> finalPoint;
 		Tactic::Param &param = roleList[4][0].second;
-		 Vector2D<int> dpoint2(ForwardX(HALF_FIELD_MAXX/6),-HALF_FIELD_MAXY/2);
+		 Vector2D<int> dpoint2(ForwardX(HALF_FIELD_MAXX/2.5),HALF_FIELD_MAXY/2);
 	  finalPoint = position_our_bot(&state,dpoint2,0);
 	  param.PositionP.x = finalPoint.x ; param.PositionP.y = finalPoint.y ;
       param.PositionP.finalSlope  = 0;
