@@ -46,7 +46,7 @@ namespace Strategy
       roleList[3].push_back(std::make_pair(Tactic::Position, param));
       
 	  //Role 4
-      param.PositionP.x = ForwardX(-CENTER_CIRCLE_DIAMETER/2);
+      param.PositionP.x = ForwardX(-CENTER_CIRCLE_DIAMETER/2);;
       param.PositionP.y = -HALF_FIELD_MAXY/2;
       param.PositionP.finalSlope  = 0;
       roleList[4].push_back(std::make_pair(Tactic::Position, param));
@@ -74,10 +74,10 @@ namespace Strategy
         }
 		{
 			Vector2D<int> finalpoint;
-		    Tactic::Param &param = roleList[4][0].second;
-		    param.PositionP.x = ForwardX(-CENTER_CIRCLE_DIAMETER/2);;
-            param.PositionP.y = -HALF_FIELD_MAXY/2;
-            param.PositionP.finalSlope  = 0;
+		Tactic::Param &param = roleList[4][0].second;
+		param.PositionP.x = ForwardX(-CENTER_CIRCLE_DIAMETER/2);;
+      param.PositionP.y = -HALF_FIELD_MAXY/2;
+      param.PositionP.finalSlope  = 0;
 	 
 		}
         printf("reevaling params in OurFreeKick. ballPos = %d, %d\n", state.ballPos.x, state.ballPos.y);

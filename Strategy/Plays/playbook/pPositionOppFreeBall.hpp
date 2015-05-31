@@ -39,34 +39,30 @@ namespace Strategy
 	  
 	//  int quadrant = getQuarter(state.ballPos.x,state.ballPos.y);
       /* Role 1 - for the defender 1*/
-	  param.PositionP.x = ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*4);  //check the condition
-	  if(SGN(state.ballPos.x)<0) 
-	   param.PositionP.y = -1*SGN(state.ballPos.y)*2*BOT_RADIUS ;
-	  else
-		param.PositionP.y = SGN(state.ballPos.y)*2*BOT_RADIUS ;
+	  param.PositionP.x = ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*4);
+	  param.PositionP.y = -1*SGN(state.ballPos.y)*BOT_RADIUS ;
 	  param.PositionP.finalSlope = 0 ;
 	  param.PositionP.align = true ;
 	  roleList[1].push_back(std::make_pair(Tactic::Position,param));
 	  
 	  //Role 2
-	  Vector2D<int> dpoint(state.ballPos.x - ForwardX(FREEBALL_RADIUS),state.ballPos.y - SGN(state.ballPos.y)*BOT_RADIUS*0.5);  //position to optimal angle& position
+	  Vector2D<int> dpoint(state.ballPos.x - ForwardX(FREEBALL_RADIUS),state.ballPos.y);
 	  finalPoint = position_correcter(&state,dpoint);
 	  param.PositionP.x = finalPoint.x ; param.PositionP.y = finalPoint.y ;
-      param.PositionP.finalSlope  = Vector2D<int>::angle(finalPoint,state.ballPos);
+      param.PositionP.finalSlope  = 0;
       roleList[2].push_back(std::make_pair(Tactic::Position,param));
 	  
 	  //Role 3
 	  Vector2D<int> dpoint1(state.ballPos.x,SGN(-state.ballPos.y)*HALF_FIELD_MAXY/2);
 	  finalPoint = position_correcter(&state,dpoint1);
 	  param.PositionP.x = finalPoint.x ; param.PositionP.y = finalPoint.y ;
-	  param.PositionP.finalSlope  = Vector2D<int>::angle(finalPoint,state.ballPos);
       roleList[3].push_back(std::make_pair(Tactic::Position, param));
       
 	  //Role 4
-	  Vector2D<int> dpoint2(SGN(-1*state.ballPos.x)*(HALF_FIELD_MAXX/2),-1*(state.ballPos.y));
+	  Vector2D<int> dpoint2(state.ballPos.x - ForwardX(HALF_FIELD_MAXX)/4,-1*(state.ballPos.y)/2);
 	  finalPoint = position_correcter(&state,dpoint2);
 	  param.PositionP.x = finalPoint.x ; param.PositionP.y = finalPoint.y ;
-      param.PositionP.finalSlope  = Vector2D<int>::angle(finalPoint,state.ballPos);
+      param.PositionP.finalSlope  = 0;
       roleList[4].push_back(std::make_pair(Tactic::Position, param));
       
       computeMaxTacticTransits();
@@ -77,36 +73,31 @@ namespace Strategy
 		{
 			Tactic::Param &param = roleList[1][0].second;
 			param.PositionP.x = ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*4);
-	        if(SGN(state.ballPos.x)<0) 
-	         param.PositionP.y = -1*SGN(state.ballPos.y)*2*BOT_RADIUS ;
-	       else
-		     param.PositionP.y = -1*SGN(state.ballPos.y)*2*BOT_RADIUS ;
-			 
-	        param.PositionP.finalSlope = 0 ;
-	        param.PositionP.align = true ;
+	  param.PositionP.y = -1*SGN(state.ballPos.y)*BOT_RADIUS ;
+	  param.PositionP.finalSlope = 0 ;
+	  param.PositionP.align = true ;
 		}
 		{         Vector2D<int> finalPoint;
 		         Tactic::Param &param = roleList[2][0].second;
-				 Vector2D<int> dpoint(state.ballPos.x - ForwardX(FREEBALL_RADIUS),state.ballPos.y - SGN(state.ballPos.y)*BOT_RADIUS*0.5);
-	            finalPoint = position_correcter(&state,dpoint);
-	            param.PositionP.x = finalPoint.x ; param.PositionP.y = finalPoint.y ;
-                param.PositionP.finalSlope  = Vector2D<int>::angle(finalPoint,state.ballPos);
-		}
+                       Vector2D<int> dpoint(state.ballPos.x - ForwardX(FREEBALL_RADIUS),state.ballPos.y);
+	  finalPoint = position_correcter(&state,dpoint);
+	  param.PositionP.x = finalPoint.x ; param.PositionP.y = finalPoint.y ;
+      param.PositionP.finalSlope  = 0;
+        }
         {
           			Vector2D<int> finalPoint;
-					Tactic::Param &param = roleList[3][0].second;
-					Vector2D<int> dpoint1(state.ballPos.x,SGN(-state.ballPos.y)*HALF_FIELD_MAXY/2);
-					finalPoint = position_correcter(&state,dpoint1);
-	                param.PositionP.x = finalPoint.x ; param.PositionP.y = finalPoint.y ;
-	                param.PositionP.finalSlope  = Vector2D<int>::angle(finalPoint,state.ballPos);
+						Tactic::Param &param = roleList[3][0].second;
+                       Vector2D<int> dpoint1(state.ballPos.x,SGN(-state.ballPos.y)*HALF_FIELD_MAXY/2);
+	  finalPoint = position_correcter(&state,dpoint1);
+	  param.PositionP.x = finalPoint.x ; param.PositionP.y = finalPoint.y ;
         }
         {
 			Vector2D<int> finalPoint;
             Tactic::Param &param = roleList[4][0].second;
-		    Vector2D<int> dpoint2(SGN(-1*state.ballPos.x)*(HALF_FIELD_MAXX/2),-1*(state.ballPos.y));
-	        finalPoint = position_correcter(&state,dpoint2);
-			param.PositionP.x = finalPoint.x ; param.PositionP.y = finalPoint.y ;
-            param.PositionP.finalSlope  = Vector2D<int>::angle(finalPoint,state.ballPos);
+                       Vector2D<int> dpoint2(state.ballPos.x - ForwardX(HALF_FIELD_MAXX)/4,-1*(state.ballPos.y)/2);
+	  finalPoint = position_correcter(&state,dpoint2);
+	  param.PositionP.x = finalPoint.x ; param.PositionP.y = finalPoint.y ;
+      param.PositionP.finalSlope  = 0;
         }
         printf("reevaling params in OurFreeKick. ballPos = %d, %d\n", state.ballPos.x, state.ballPos.y);
     }
