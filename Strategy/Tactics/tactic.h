@@ -24,15 +24,22 @@ namespace Strategy
       Block = 0,            // Defend the goal a particular distance from the goal
       ChargeBall,           // Set-play tactic
       CoverGoal,
+	  DragToGoal,           //Go to the ball and start dragging the ballto goal
       DefendLine,           // Defend the ball from crossing a particular line on the field
 	  DefendPoint,          // Defend the ball from a particular point on the field
       GoalieOur,            // A special tactic just for the goalie for our side
+      GoalieOpp,            // Grant Goalie to opponent team. only for testing purpose.
+      MarkBot,              // Mark an opponent preventing them from getting the ball, getting to the goal, blocking a shot
       Pass,                 // Pass to a point. for kickoff exclusively.
       Kickoff,              // kick ball into goal suring kickoff exclusively.
       Position,             // Go to the given position
+      PositionForPenalty,   // Set-play tactic
+     // PositionForReceive,   // Pass Receive check
+      PositionForStart,     // Set-play tactic
       ReceiveBall,          // Receive Pass
       Defend,               // Defend the ball from coming to our side
       Attack,               // Attck the ball towards the goal      
+      Steal,                // Manipulate the ball to remove possession of it from another robot*/
       Stop,                 // Stop the bot
       Velocity,             // Move at a fixed velocity     
       Backup,
@@ -57,7 +64,7 @@ namespace Strategy
        */
             // Parameters for tactic Goalie
       struct type1
-        { } GoalieP, ShootP, StopP,TestgotopointP;
+        { } GoalieP, ClearP, StealP, ShootP, StopP,TestgotopointP;
 
 
 
@@ -77,8 +84,13 @@ namespace Strategy
 		  vr = _vr;
         }
       } VelocityP,TestbotRaceP;
-
+      // Parameters for side to defend (-1 for right and 1 for left )
       struct type4
+      {
+        int side;
+      } DefendSideP;
+
+      struct type5
       {
         float x ;
         float y ;
@@ -92,33 +104,33 @@ namespace Strategy
           finalVelocity = _finalVelocity;
           align = _align;
         }
-      } PositionP;
-
-      struct type5
-      {
-        int BotID ;
-      } MarkBotP;
+      } PositionP , PositionForStartP, PositionForPenaltyP;
 
       struct type6
       {
-        int x1, x2, y1, y2;	 			// y1=miny y2 = maxy
-      } DefendLineP;
+        int BotID ;
+      } MarkBotP,BackupP;
 
       struct type7
+      {
+        int x1, x2, y1, y2;	 			// y1=miny y2 = maxy
+      } DefendLineP,DefendLineHorizP;
+
+      struct type8
       {
         int x, y,radius;
 		void init(int _x, int _y) { x = _x; y = _y;}
       } DefendPointP;
 
-      struct type8
+      struct type9
       {
         int x;
       } DefendP;
-      struct type9
+      struct type10
       {
         bool rotateOnError;
       } AttackP;      
-      struct type10
+      struct type11
       {
         int distFromGoal;
       } CoverGoalP; //tactic needs to be renamed to TDefendGoal
@@ -199,34 +211,13 @@ namespace Strategy
      */
     virtual void execute(const Param& tParam) = 0;
     // List utility functions for use in common in all tactics here.
-    bool isBallInMyWideAngleRange() const;
-    bool isBallInMyWideAngleRange(const int botID) const;
-    bool isBallInMyLastHopeRange(const int botID) const;
-    bool isBallWithMe() const;
-    bool isBallAchievableInForwardMotion() const;
     void getFullAngularClearance(std::vector<std::pair<float, float> > &result, const int radius, const Vector2D<int> &center) const;
     bool getOppGoalClearance(const std::vector<std::pair<float, float> > &obstacles, const Vector2D<int> &center, std::pair<float, float> &result) const;
-    bool getOurGoalClearance(const std::vector<std::pair<float, float> > &obstacles, const Vector2D<int> &center, std::pair<float, float> &result) const;
-    bool getBotClearance(const std::vector<std::pair<float, float> > &obstacles, const Vector2D<int> &center, std::pair<float, float> &result, const Vector2D<int> &oppPos) const;
-    // List the stateless decisive skill calling functions here.
-    void kickBall(int speed);
-    void kickBallFullSpeed() ;
-    void kickBallForPass(const float distance);
-    void preciseKick(float angle, int speed);
-    void turnToTargetWithBall(const float goalAngle);
-    void moveToBlockBall();
-    void gotoStaticBall(const float finalSlope);
-    void captureBall(const float targetAngle);
-    bool canBlockBall(float &dist_from_line) const;
     void gotoPoint(int x, int y, bool align, float finalSlope, float finalVelocity);
-    void gotoPointQuick(int x, int y, bool align, float finalSlope, float finalVelocity);
     void gotoPointExact(int x, int y, bool align, float finalSlope, float finalVelocity);
-    void standAndDribble();
     void turnToAngle(const float finalSlope, const int maxOmega = MAX_BOT_OMEGA);
     void stopBot();
     void coverBall();
-    int selectBestBotforPassReceive(const Vector2D<int> passer, const int preferred_bot, const int passerid) const;
-    void kickForGoalOrPassBall();
   
   private:
     void addsegment(std::vector<std::pair<float, float> >&, const Vector2D<int>&, const Vector2D<int>&, const Vector2D<int>&) const;
