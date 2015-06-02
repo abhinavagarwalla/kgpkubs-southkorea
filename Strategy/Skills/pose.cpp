@@ -1,6 +1,7 @@
 #include "pose.h"
 #include <math.h>
 #include <algorithm>
+#include "../../common/include/geometry.hpp"
 /* Constructor takes in x, y in Strategy coordinates! */
 Pose::Pose(double x, double y, double theta):
     x_(x/fieldXConvert),

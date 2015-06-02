@@ -1,5 +1,4 @@
 #include "velocity-profile.hpp"
-#include "constants.h"
 #include <limits>
 #include "arclength-param.hpp"
 #include <iostream>
@@ -12,17 +11,17 @@ namespace VelocityProfiling {
 // vsat: max vl (or vr) in  cm/s
 // vwmax: max centripetal acceleration, cm/s^2
 // return: vmax, cm/s
-double vmax_isolated(double k, double vsat, double vwmax ) {
+double vmax_isolated(double k, double vsatu, double vwmaxi ) {
   double res;
   // saturation considering curvature
   // remember, v is always positive, sign of k decides sign of w
   if (k > 0) {
-    res = vsat/(1+Constants::d*k/2);
+    res = vsatu/(1+d*k/2);
   } else {
-    res = vsat/(1-Constants::d*k/2);
+    res = vsatu/(1-d*k/2);
   }
   // centripetal acceleration constraint:
-  res = min(res, sqrt(vwmax/fabs(k)));
+  res = min(res, sqrt(vwmaxi/fabs(k)));
   // add obstacle constraints later on if needed
   return res;
 }
@@ -169,7 +168,7 @@ vector<ProfileDatapoint> generateVelocityProfile(Spline &p, int numPoints, doubl
         double u = Integration::getArcLengthParam(p, s, full);
         double k = p.k(u);
         //NOTE: hardcoding vsat here!!
-        v[i].v = min(vmax_isolated(k, 100), Constants::vsat);
+        v[i].v = min(vmax_isolated(k, 100), vsat);
         v[i].u = u;
         v[i].s = s;
     }
@@ -178,13 +177,13 @@ vector<ProfileDatapoint> generateVelocityProfile(Spline &p, int numPoints, doubl
     v[0].v = vs;
     for (int i = 1; i < numPoints; i++) {
         double vwold = v[i-1].v*v[i-1].v*p.k(v[i-1].u);
-        v[i].v = min(v[i].v, trans_acc_limits(vwold, Constants::vwmax, v[i-1].v, Constants::atmax, dels).second);
+        v[i].v = min(v[i].v, trans_acc_limits(vwold, vwmax, v[i-1].v, atmax, dels).second);
     }
     // backward consistency
     v[numPoints-1].v = ve;
     for (int i = numPoints-2; i >= 0; i--) {
         double vwold = v[i+1].v*v[i+1].v*p.k(v[i+1].u);
-        v[i].v = min(v[i].v, trans_acc_limits(vwold, Constants::vwmax, v[i+1].v, Constants::atmax, dels).second);
+        v[i].v = min(v[i].v, trans_acc_limits(vwold, vwmax, v[i+1].v, atmax, dels).second);
     }
     // set time to reach for each datapoint
     v[0].t = 0;

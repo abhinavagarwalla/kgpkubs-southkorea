@@ -21,8 +21,8 @@ class Tracker {
             e1 = cos(p.theta())*diff.x() + sin(p.theta())*diff.y();
             e2 = -sin(p.theta())*diff.x() + cos(p.theta())*diff.y();
             e3 = diff.theta();
-            e1 = e1/Constants::fieldXConvert;
-            e2 = e2/Constants::fieldXConvert;
+            e1 = e1/fieldXConvert;
+            e2 = e2/fieldXConvert;
             // error coordinates are in cm!!
         }
     };

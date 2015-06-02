@@ -47,6 +47,7 @@ SkillSet::SkillSet(const BeliefState* state, const int botID) :
   skillList[GoToPoint]      = &SkillSet::goToPoint;
   skillList[TurnToAngle] = &SkillSet::turnToAngle;
   skillList[DefendPoint] = &SkillSet::defendPoint;
+  skillList[SplineGoToPoint] = &SkillSet::splineGoToPoint;
 	skillList[ChargeBall] 					= &SkillSet::chargeBall;
   // Initialization check
   for (int sID = 0; sID < MAX_SKILLS; ++sID)
@@ -184,10 +185,16 @@ void SkillSet::_goToPoint(int botid, Vector2D<int> dpoint, float finalvel, float
 		{
 			
 		}
-#if FIRA_COMM || FIRASSL_COMM
+		
     comm->sendCommand(botID, (t - r), (t + r));
-#else
-    comm->sendCommand(botID, (t - r), (t + r));
-#endif
+}
+
+void SkillSet::_splineGoToPoint(int botid, Pose start, Pose end, float finalvel){
+	
+	int vl,vr;
+	algoController->genControls(start, end, vl, vr, finalvel);
+    assert(vl <= 120 && vl >= -120);
+    assert(vr <= 120 && vr >= -120);
+	comm->sendCommand(botid, vl, vr); //maybe add mutex
 }
 }

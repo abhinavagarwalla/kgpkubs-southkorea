@@ -101,6 +101,20 @@ extern const int HYSTERESIS ;
 extern const short STRATEGY_GUI_MULTICAST_PORT ;
 extern const std::string STRATEGY_GUI_MULTICAST_ADDR ;
 
+extern const double d ;
+extern const double ticksToCmS;
+extern const double fieldXConvert ;
+extern const double fieldYConvert ;
+extern const double xUncertainty ;
+extern const double yUncertainty ;
+extern const double thetaUncertainty ;
+extern const int numPacketDelay ;
+
+extern const double vwmax    ; // cm/s^2
+extern const double vsat     ; // cm/s
+extern const double atmax    ; // cm/s^2, need to measure this, need to take inertia into account
+extern const double awmax    ; // 1/s^2, no idea how to measure this, need to take inertia into account
+
 namespace Simulator
 {
   // THESE ARE THE RATES FOR UPDATE ETC

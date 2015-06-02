@@ -5,7 +5,7 @@
 #include <time.h>
 #include <sys/time.h>
 #include <stdlib.h>
-#include "constants.h"
+#include "../../common/include/config.h"
 /* Pose defines the position and angle of the robot.
  * It is in REAL WORLD coordinates (m and radians).
  * NOTE: vl, vr are taken in ticks only. dt is in ms
@@ -26,8 +26,6 @@ struct MiscData {
         rangeMin(0), rangeMax(0), v_ref(v_ref), omega_ref(omega_ref), v1(v1), v2(v2), t(t), v(v), w(w), vl(vl), vr(vr),
         vl_ref(vl_ref), vr_ref(vr_ref) {}
 };
-
-using namespace Constants;
 
 class Pose
 {

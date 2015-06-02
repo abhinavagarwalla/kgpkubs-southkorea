@@ -7,7 +7,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <time.h>
-#include "constants.h"
+#include "../../common/include/config.h"
 using namespace std;
 class Spline;
 namespace VelocityProfiling {
@@ -17,7 +17,7 @@ namespace VelocityProfiling {
 // vsat: max vl (or vr) in  cm/s
 // vwmax: max centripetal acceleration, cm/s^2
 // return: vmax, cm/s
-double vmax_isolated(double k, double vsat = Constants::vsat, double vwmax = Constants::vwmax );
+double vmax_isolated(double k, double vsatu = vsat, double vwmaxi = vwmax );
 
 typedef pair<double, double> Interval;
 // acceleration constraints

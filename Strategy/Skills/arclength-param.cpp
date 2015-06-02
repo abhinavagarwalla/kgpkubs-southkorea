@@ -8,6 +8,7 @@
 #include "gsl/gsl_math.h"
 #include "gsl/gsl_blas.h"
 #include <algorithm>
+#include <iostream>
 
 namespace Integration {
 gsl_integration_workspace * w = NULL;

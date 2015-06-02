@@ -3,21 +3,6 @@
 #include "trajectory.hpp"
 #include "alglib/interpolation.h"
 
-// currently only able to handle starting and ending point
-// need to extend so that it handles more points
-class QuinticBezierSpline: public Spline {
-protected:
-  ParamPoly p;
-public:
-  QuinticBezierSpline(Pose start, Pose end, double vls, double vrs, double vle, double vre);
-  virtual double x(double u) const;
-  virtual double y(double u) const;
-  virtual double xd(double u) const;
-  virtual double yd(double u) const;
-  virtual double xdd(double u) const;
-  virtual double ydd(double u) const;
-};
-
 class CubicSpline: public Spline {
 protected:
   alglib::spline1dinterpolant splineX, splineY;

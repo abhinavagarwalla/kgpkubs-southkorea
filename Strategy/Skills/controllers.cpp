@@ -91,15 +91,15 @@ MiscData CMU(Pose s, Pose e, int &vl, int &vr, double prevSpeed, double prevOmeg
 }
 
 
-QString outputFilename = "/home/robocup/Output_QT.txt";
+QString outputFilename = "/home/robocup/FileLog.txt STorage/FileLogQT6.txt";
 QFile outputFile(outputFilename);
 
 
 int va=-1;
 MiscData DynamicWindow(Pose s, Pose e, int &vl, int &vr, double prevSpeed, double prevOmega, double finalSpeed)
 {
-//    std::cout<<"prevSpeed = "<<prevSpeed<<" prevOmega = "<<prevOmega;
-//    std::cout<<"Inside function Dynamic Window";
+//    qDebug()<<"prevSpeed = "<<prevSpeed<<" prevOmega = "<<prevOmega;
+//    qDebug()<<"Inside function Dynamic Window";
 //    sprintf(buf, "in function Dynamic Window");
 
 
@@ -113,8 +113,9 @@ MiscData DynamicWindow(Pose s, Pose e, int &vl, int &vr, double prevSpeed, doubl
     }
     va=0;
      outputFile.open(QIODevice::Append);
-     outStream<< s.x() << '\t'<< s.y() <<'\t'<< prevSpeed <<'\t'<< prevOmega<< '\t';
-    const int del_v_max = 12; //ticks
+     outStream<<" x = "<< s.x()<<" & y = "<< s.y();
+
+    const int del_v_max = 15; //ticks
     const float step = 1; //ticks
     const float max_vel = 100; //ticks
     const float a_r_max = 380; //cm/s^2
@@ -132,26 +133,23 @@ MiscData DynamicWindow(Pose s, Pose e, int &vl, int &vr, double prevSpeed, doubl
             for(float del_vl=-del_v_max;del_vl<=del_v_max;del_vl+=step)
             {
 
-                float newSpeed= prevSpeed + Constants::ticksToCmS*(del_vr+del_vl)/2; // cm/s
-                float newOmega= prevOmega + Constants::ticksToCmS*(del_vr-del_vl)/Constants::d;  // cm/s                //D Is the constant breadth of the bot
-//                std::cout<<"Trying newSpeed = "<<newSpeed<<" newOmega = "<<newOmega;
-                if(abs(newSpeed/Constants::ticksToCmS) >max_vel || abs(newOmega/Constants::ticksToCmS) >(2*max_vel)/Constants::d)
+                float newSpeed= prevSpeed + ticksToCmS*(del_vr+del_vl)/2; // cm/s
+                float newOmega= prevOmega + ticksToCmS*(del_vr-del_vl)/d;  // cm/s                //D Is the constant breadth of the bot
+//                qDebug()<<"Trying newSpeed = "<<newSpeed<<" newOmega = "<<newOmega;
+                if(abs(newSpeed/ticksToCmS) >max_vel || abs(newOmega/ticksToCmS) >(2*max_vel)/d)
+                    continue;
+                if(abs((newSpeed+(d*newOmega)/2)) > max_vel ||  abs((newSpeed-(d *newOmega)/2)) > max_vel)
                     continue;
                 if((newSpeed*newOmega)>=a_r_max*sqrt(1-pow((del_vr + del_vl)/(2*del_v_max),2)))
                     continue;                   // constraint from the equation of ellipse.
                 //if(count>400) break;                                 //we would take only a fixed number of points under consideration
-//                std::cout<<"Trying newSpeed = "<<newSpeed<<" newOmega = "<<newOmega;
+//                qDebug()<<"Trying newSpeed = "<<newSpeed<<" newOmega = "<<newOmega;
                 // float alpha=(newOmega-prevOmega)/t; // rad/cm^2
                 float theta= s.theta() + (newOmega*t); //rad
-                //float acc_x=(newSpeed*cos(theta)-prevSpeed*cos(s.theta()))/t; //cm/s^2
-                //float acc_y=(newSpeed*sin(theta)-prevSpeed*sin(s.theta()))/t; //cm/s^2
                 theta = normalizeAngle(theta);
-                //float x= s.x() + (prevSpeed*cos(theta)*t) + (0.5*acc_x*t*t);
-                //float y= s.y() + (prevSpeed*sin(theta)*t) + (0.5*acc_y*t*t);
 
                  float x= s.x() + (newSpeed*cos(theta)*t);
                  float y= s.y() + (newSpeed*sin(theta)*t);
-//                std::cout<<"x"<<s.x()<<" --> "<<x<<" y "<<s.y()<<" --> "<<y;
 
                 float reqtheta=atan2((e.y()-y),(e.x()-x));
 
@@ -161,7 +159,6 @@ MiscData DynamicWindow(Pose s, Pose e, int &vl, int &vr, double prevSpeed, doubl
                 arr[count][1]= newSpeed;
                 arr[count][2]= newOmega;
                 count++;
-//                std::cout<<"obj = "<<arr[count][0];
             }
         }
     float min= arr[0][0];
@@ -181,13 +178,13 @@ MiscData DynamicWindow(Pose s, Pose e, int &vl, int &vr, double prevSpeed, doubl
     float x= s.x() + (best_v*cos(theta)*t);
     float y= s.y() + (best_v*sin(theta)*t);
 
-    outStream<<best_v<< '\t'<< best_w <<'\t'<< x <<'\t'<< y<<endl;
+    //outStream<<best_v<< '\t'<< best_w <<'\t'<< x <<'\t'<< y<<endl;
 
-    vr=(best_v)+(Constants::d *best_w)/2 ;                    // update velocity
+    vr=(best_v)+(d *best_w)/2 ;                    // update velocity
     vl=(2*best_v) - vr;                       // update omega
-    vr/=Constants::ticksToCmS;
-    vl/=Constants::ticksToCmS;
-
+    vr/=ticksToCmS;
+    vl/=ticksToCmS;
+    outStream<<" vl = "<<vl<<" & vr = "<<vr<<'\n';
     return MiscData();
 }
 
@@ -261,9 +258,9 @@ MiscData PController(Pose s, Pose e, int &vl, int &vr, double prevSpeed, double 
         }
     }
     double w = -1.5*angleError;
-    v *= Constants::ticksToCmS;
-    vl = v - Constants::d*w/2;
-    vr = v + Constants::d*w/2;
+    v *= ticksToCmS;
+    vl = v - d*w/2;
+    vr = v + d*w/2;
     if(abs(vl) > MAX_BOT_SPEED || abs(vr) > MAX_BOT_SPEED) {
         double max = abs(vl)>abs(vr)?abs(vl):abs(vr);
         vl = vl*MAX_BOT_SPEED/max;
@@ -307,9 +304,9 @@ MiscData PolarBased(Pose s, Pose e, int &vl, int &vr, double prevSpeed, double p
     double v_curve = MAX_BOT_SPEED/(1+beta*pow(fabs(k),lambda));
     if (v_curve < MIN_BOT_SPEED)
         v_curve = MIN_BOT_SPEED;
-    v *= Constants::ticksToCmS;
-    vl = v - Constants::d*w/2;
-    vr = v + Constants::d*w/2;
+    v *= ticksToCmS;
+    vl = v - d*w/2;
+    vr = v + d*w/2;
     double timeMs = 0.250*rho + 14.0 * sqrt(rho) + 100.0 * fabs(gamma);
     double speed = timeMs/timeLCMs<(prevSpeed/MAX_BOT_LINEAR_VEL_CHANGE)?prevSpeed-MAX_BOT_LINEAR_VEL_CHANGE:prevSpeed+MAX_BOT_LINEAR_VEL_CHANGE;
     // use vcurve as the velocity
@@ -381,9 +378,9 @@ void PolarBasedGA(Pose s, Pose e, int &vl, int &vr, double k1, double k2, double
     } else {
         w = k2*gamma+k1*sin(gamma)*cos(gamma)/gamma*(gamma + k3*delta);
     }
-    v *= Constants::ticksToCmS;
-    vl = v - Constants::d*w/2;
-    vr = v + Constants::d*w/2;
+    v *= ticksToCmS;
+    vl = v - d*w/2;
+    vr = v + d*w/2;
     double timeMs = 23 * sqrt(rho); // empirical
     double speed = timeMs<timeLCMs*5?timeMs/timeLCMs*(80/5):80;
     double max = fabs(vl)>fabs(vr)?fabs(vl):fabs(vr);

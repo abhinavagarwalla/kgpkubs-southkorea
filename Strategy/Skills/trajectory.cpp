@@ -4,6 +4,7 @@
 #include "arclength-param.hpp"
 #include <iostream>
 #include <cmath>
+#include <algorithm> 
 
 const double Trajectory::deltaT = 0.001;
 
@@ -159,7 +160,7 @@ void SplineTrajectory::calculateAll(double t) const
 {
     assert(t >= 0);
     tPrev = t;
-    vector<ProfileDatapoint>::const_iterator upper = upper_bound(profile.begin(), profile.end(), ProfileDatapoint(0.,0.,0.,t));
+    vector<ProfileDatapoint>::const_iterator upper = std::upper_bound(profile.begin(), profile.end(), ProfileDatapoint(0.,0.,0.,t));
     double dt, s, u, at;
     int i;
     if (upper == profile.end()) {

@@ -13,6 +13,7 @@
 #include <vector>
 #include "pathPlanners.h"
 #include "sslDebug_Data.pb.h"
+#include "pose.h"
 // Forward Declarations
 namespace Strategy
 {
@@ -53,8 +54,11 @@ namespace Strategy
       // Parameters for the skill Kick
       struct type3
       {
-        float power;
-      } KickP;
+        float x;
+        float y;
+        float finalslope;
+        float finalVelocity;
+      } SplineGoToPointP;
 
       // Parameters for the skill Velocity
       struct type4
@@ -95,20 +99,10 @@ namespace Strategy
     };
   class SkillSet
   {
-  public:
-    enum SkillID
-    {
-      Spin,
-      Stop,
-      Velocity,
-      GoToBall,
-      GoToPoint,
-      TurnToAngle,
-      DefendPoint,
-	  ChargeBall,
-      MAX_SKILLS
-    };
-    static HAL::Comm*    comm;
+	private:
+		ControllerWrapper *algoController; 
+		std::queue<Pose> predictedPoseQ;
+		
   protected:
     typedef void (SkillSet::*skillFncPtr)(const SParam&);
     const BeliefState* state;
@@ -123,12 +117,28 @@ namespace Strategy
 
     bool pointyInField(Vector2D<int> fianl);
     void _goToPoint(int botid, Vector2D<int> dpoint, float finalvel, float finalslope, float clearance,bool increaseSpeed=0);
-    int prevVel;
+    void _splineGoToPoint(int botid, Pose start, Pose end, float finalvel);
+	int prevVel;
     /***************************By Prasann***********/
     /* Arpit: params removed from here, made static in function itself. I wanted to make function static so that
      * it can be called from sendCommand or tester itself. */
     /***************************By Prasann***********/
-  public:
+	public:
+	
+	enum SkillID
+    {
+      Spin,
+      Stop,
+      Velocity,
+      GoToBall,
+      GoToPoint,
+      TurnToAngle,
+      DefendPoint,
+	  ChargeBall,
+	  SplineGoToPoint,
+      MAX_SKILLS
+    };
+    static HAL::Comm*    comm;
     //------- List of robot skills -------//
     void spin(const SParam& param);
     void stop(const SParam& param);
@@ -138,7 +148,7 @@ namespace Strategy
     void turnToAngle(const SParam& param);
     void defendPoint(const SParam& param);
 	void chargeBall(const SParam& param);
-    
+    void splineGoToPoint(const SParam& param);
     // Parameter for skills to be trained
     static bool loadParamsFromFile;
     static bool  skillParamsLoaded;

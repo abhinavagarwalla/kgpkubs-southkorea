@@ -2,10 +2,10 @@
 #ifndef CONTROLLERS_H
 #define CONTROLLERS_H
 #include "pose.h"
-#include <string>
 #include <deque>
 #include "tracking.hpp"
 #include <assert.h>
+#include "../../common/include/geometry.hpp"
 using namespace std;
 // Constants required by generateControl, directly copied from most recent version of kgpkubs.
 const float MAX_BOT_LINEAR_VEL_CHANGE  = 4;
@@ -32,7 +32,7 @@ MiscData DynamicWindow(Pose s, Pose e, int &vl, int &vr, double prevSpeed,double
 void PolarBasedGA(Pose s, Pose e, int &vl, int &vr, double k1, double k2, double k3); // for use in GA
 }
 typedef MiscData(*FType)(Pose, Pose, int &, int &, double,double, double);
-typedef std::pair<QString, FType> FPair;
+//typedef std::pair<QString, FType> FPair;
 
 
 
