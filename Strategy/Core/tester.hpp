@@ -143,18 +143,26 @@ public:
     TAttack tAttack4(&state, 4);
     Tactic::Param pAttack;
     paramList[Tactic::Attack].AttackP.rotateOnError = true;
-//		TAttackDuo tAttackDuo12(&state,1,2);
-    
-    //tBlock
-    TBlock tblock2(&state,2);
-    TBlock tblock0(&state,0);
-    Tactic::Param pBlock;
-    paramList[Tactic::Block].BlockP.dist = 1000;
     
     // TestgotoPoint
     Strategy::Testgotopoint ttest1(&state,1);
 	
-    //TestgotoPoint ttest1(&state,1);
+	//SplineGoToPoint
+	Strategy::SParam params1;
+	params1.SplineGoToPointP.finalVelocity = 0;
+	params1.SplineGoToPointP.x = -HALF_FIELD_MAXX;
+	params1.SplineGoToPointP.y = 0;
+	params1.SplineGoToPointP.finalslope = PI/2 ;
+	params1.SplineGoToPointP.initTraj = 1;
+	SkillSet sppoint(&state, 1); 
+	
+	Strategy::SParam params2;
+	SkillSet point(&state, 0);
+	params2.GoToPointP.x = 0;
+	params2.GoToPointP.y = 0;
+	params2.GoToPointP.finalslope = PI/2;
+	
+	
     Tactic::Param ptestpoint;
     TestbotRace ttest2(&state,2);
     Tactic::Param ptestrace;
@@ -232,7 +240,7 @@ public:
         //ttest1.execute(ptestpoint);
         //tVelocity2.execute(pVelocity);
 	  // tS0.execute(paramStop);
-	  tAttack2.execute(pAttack);
+	  //tAttack2.execute(pAttack);
     //tAttack4.execute(pAttack); 
 
 	 //tVelocity1.execute(pVelocity);
@@ -249,7 +257,8 @@ public:
         //tDefendLine1.execute(pDefendL1);
 				//tGoalOur2.execute(paramGoal);
 	//	tGoalOur3.execute(paramGoal);
-
+		sppoint.executeSkill(SkillSet::SplineGoToPoint, params1);
+		params1.SplineGoToPointP.initTraj = 0;
         //tPosition
 				//tcover3.execute(paramcover);
        // tAttack3.execute(paramcover);

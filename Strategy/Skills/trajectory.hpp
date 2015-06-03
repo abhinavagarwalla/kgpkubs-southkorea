@@ -69,8 +69,6 @@ public:
     virtual double k(double u) const;
 };
 
-
-
 // NOTE: x(t) and y(t) MUST be in cm!!!!
 // NOTE: always create SplineTrajectory object with a dynamically allocated Spline.
 // This class takes ownership of the passed Spline and is responsible for its destruction.

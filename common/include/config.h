@@ -16,6 +16,8 @@ template<class T> T ForwardX(T distance)
 }
 #define SELECTX(a, b) ForwardX(SELECT(a, b))
 
+#define PI  (3.14159265358979323f)
+#define INF (9999999)
 // Add new parameters by declaring extern variable here and defining it in "config.cpp"
 
 static const int   BOT_MAX                    = SELECT(5, 5);

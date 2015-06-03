@@ -10,6 +10,7 @@
 using namespace HAL;
 using namespace std;
 using namespace dlib;
+
 namespace Strategy
 {
 #if FIRASSL_COMM
@@ -45,10 +46,10 @@ SkillSet::SkillSet(const BeliefState* state, const int botID) :
   skillList[Velocity]       = &SkillSet::velocity;
   skillList[GoToBall]       = &SkillSet::goToBall;
   skillList[GoToPoint]      = &SkillSet::goToPoint;
-  skillList[TurnToAngle] = &SkillSet::turnToAngle;
-  skillList[DefendPoint] = &SkillSet::defendPoint;
-  skillList[SplineGoToPoint] = &SkillSet::splineGoToPoint;
-	skillList[ChargeBall] 					= &SkillSet::chargeBall;
+  skillList[TurnToAngle] 	= &SkillSet::turnToAngle;
+  skillList[DefendPoint] 	= &SkillSet::defendPoint;
+  skillList[SplineGoToPoint]= &SkillSet::splineGoToPoint;
+	skillList[ChargeBall]   = &SkillSet::chargeBall;
   // Initialization check
   for (int sID = 0; sID < MAX_SKILLS; ++sID)
   {
@@ -61,6 +62,9 @@ SkillSet::SkillSet(const BeliefState* state, const int botID) :
 #else
   pathPlanner = new MergeSCurve();
 #endif
+
+	algoController = NULL;
+	traj = NULL;
 } // SkillSet
 SkillSet::~SkillSet()
 {
@@ -187,14 +191,5 @@ void SkillSet::_goToPoint(int botid, Vector2D<int> dpoint, float finalvel, float
 		}
 		
     comm->sendCommand(botID, (t - r), (t + r));
-}
-
-void SkillSet::_splineGoToPoint(int botid, Pose start, Pose end, float finalvel){
-	
-	int vl,vr;
-	algoController->genControls(start, end, vl, vr, finalvel);
-    assert(vl <= 120 && vl >= -120);
-    assert(vr <= 120 && vr >= -120);
-	comm->sendCommand(botid, vl, vr); //maybe add mutex
 }
 }

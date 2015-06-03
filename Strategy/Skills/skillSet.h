@@ -3,21 +3,21 @@
 #ifndef SKILLS_H
 #define SKILLS_H
 #include "dlib/svm.h"
-
 #if FIRASSL_COMM||FIRA_COMM
 # include "fira_comm.h"
 #else
 # error Macro for Comm class not defined
 #endif
-
 #include <vector>
 #include "pathPlanners.h"
 #include "sslDebug_Data.pb.h"
 #include "pose.h"
+#include "controller-wrapper.hpp"
+#include "trajectory.hpp"
+#include "trajectory-generators.cpp"
 // Forward Declarations
 namespace Strategy
 {
-  class ERRT;
   class MergeSCurve;
   class LocalAvoidance;
   class BeliefState;
@@ -38,6 +38,7 @@ namespace Strategy
    *       except that the enum name starts with a capital letter. Name of the corresponding
    *       struct should be the same as that of enum with a trailing 'P' character
    */
+   
   // Union of parameters for each skill enumerated in SkillID
     union SParam
     {
@@ -58,6 +59,7 @@ namespace Strategy
         float y;
         float finalslope;
         float finalVelocity;
+		bool initTraj;
       } SplineGoToPointP;
 
       // Parameters for the skill Velocity
@@ -100,9 +102,24 @@ namespace Strategy
   class SkillSet
   {
 	private:
-		ControllerWrapper *algoController; 
+		ControllerWrapper *algoController;
+		Trajectory* traj;
 		std::queue<Pose> predictedPoseQ;
-		
+	public:
+		enum SkillID
+		{
+			Spin,
+			Stop,
+			Velocity,
+			GoToBall,
+			GoToPoint,
+			TurnToAngle,
+			DefendPoint,
+			ChargeBall,
+			SplineGoToPoint,
+			MAX_SKILLS
+		};
+	
   protected:
     typedef void (SkillSet::*skillFncPtr)(const SParam&);
     const BeliefState* state;
@@ -117,7 +134,6 @@ namespace Strategy
 
     bool pointyInField(Vector2D<int> fianl);
     void _goToPoint(int botid, Vector2D<int> dpoint, float finalvel, float finalslope, float clearance,bool increaseSpeed=0);
-    void _splineGoToPoint(int botid, Pose start, Pose end, float finalvel);
 	int prevVel;
     /***************************By Prasann***********/
     /* Arpit: params removed from here, made static in function itself. I wanted to make function static so that
@@ -125,19 +141,6 @@ namespace Strategy
     /***************************By Prasann***********/
 	public:
 	
-	enum SkillID
-    {
-      Spin,
-      Stop,
-      Velocity,
-      GoToBall,
-      GoToPoint,
-      TurnToAngle,
-      DefendPoint,
-	  ChargeBall,
-	  SplineGoToPoint,
-      MAX_SKILLS
-    };
     static HAL::Comm*    comm;
     //------- List of robot skills -------//
     void spin(const SParam& param);
@@ -149,6 +152,8 @@ namespace Strategy
     void defendPoint(const SParam& param);
 	void chargeBall(const SParam& param);
     void splineGoToPoint(const SParam& param);
+	void _splineGoToPointTrack(int botid, Pose start, Pose end, float finalvel);
+	void _splineGoToPointInitTraj(int botid, Pose start, Pose end, float finalvel);
     // Parameter for skills to be trained
     static bool loadParamsFromFile;
     static bool  skillParamsLoaded;
