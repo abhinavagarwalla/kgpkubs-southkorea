@@ -5,6 +5,8 @@
 #include "visionThread.h"
 #include "geometry.hpp"
 #include "../common/include/timer.h"
+#include <queue>
+#include <utility>
 #include <set>
 // Forward Declarations
 namespace Util
@@ -41,6 +43,7 @@ namespace Strategy
     Vector2D<float> homePose[HomeTeam::SIZE];
     Vector2D<float> awayPose[AwayTeam::SIZE];
     Vector2D<float> homeVelocity[HomeTeam::SIZE];
+	Vector2D<float> homeVlVr[HomeTeam::SIZE];
     Vector2D<float> awayVelocity[AwayTeam::SIZE];
     Vector2D<float> homeAcc[HomeTeam::SIZE];
     Vector2D<float> awayAcc[AwayTeam::SIZE];
@@ -76,6 +79,20 @@ namespace Strategy
     
     void addInfo(SSL_DetectionFrame& detection);
     void update(BeliefState& state);
+	
+	std::queue<std::pair<BeliefState, double> > bsQ;
+	static const int MAX_BS_Q = 2;
+	
+	typedef struct BotP {
+		float x, y;
+		float theta;
+		BotP():x(0), y(0), theta(0) {}
+		BotP(float x, float y, float theta): x(x), y(y), theta(theta) {}
+	}BotPose;
+	
+	void strategyToRealConversion(BotPose &p);
+	Vector2D<float> calcBotVelocity(BotPose p1, BotPose p2, float timeMs);
+	
   };
 }
 

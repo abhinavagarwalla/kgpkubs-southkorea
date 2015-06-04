@@ -29,7 +29,7 @@ const float ROTATION_FACTOR            = SELECT(0.05, 0.15);                //
 const float RFACTOR                    = SELECT(3,   0.3);
 const float RFACTOR_SMALL              = SELECT(0.6, 0.15);
 
-const int CLEARANCE_PATH_PLANNER       = SELECT(500, 400);               //mm
+const int CLEARANCE_PATH_PLANNER       = SELECT(500, 400);              //mm
 const int MID_FIELD_THRESH             = SELECT(10, 150);                       // mm
 const float BOT_RADIUS                 = SELECT(70, 150);                       // mm
 const float BALL_RADIUS                = SELECT(40, 40);                       // mm

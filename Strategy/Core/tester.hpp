@@ -9,7 +9,6 @@
 using namespace std;
 using namespace Strategy;
 
-
 class Tester : public Util::Thread
 {
 public:
@@ -150,17 +149,17 @@ public:
 	//SplineGoToPoint
 	Strategy::SParam params1;
 	params1.SplineGoToPointP.finalVelocity = 0;
-	params1.SplineGoToPointP.x = -HALF_FIELD_MAXX;
-	params1.SplineGoToPointP.y = 0;
-	params1.SplineGoToPointP.finalslope = PI/2 ;
+	params1.SplineGoToPointP.x = ForwardX(HALF_FIELD_MAXX/2);
+	params1.SplineGoToPointP.y = HALF_FIELD_MAXY/2;
+	params1.SplineGoToPointP.finalslope = 0 ;
 	params1.SplineGoToPointP.initTraj = 1;
-	SkillSet sppoint(&state, 1); 
+	SkillSet sppoint(&state, 2); 
 	
 	Strategy::SParam params2;
 	SkillSet point(&state, 0);
 	params2.GoToPointP.x = 0;
 	params2.GoToPointP.y = 0;
-	params2.GoToPointP.finalslope = PI/2;
+	params2.GoToPointP.finalslope = 0;
 	
 	
     Tactic::Param ptestpoint;
@@ -178,12 +177,22 @@ public:
     bool isRunning = true; 
     //    Util::Timer timer;
 	int loopcount = 0;
+	unsigned long long int t1=0,t2=0;
+	
     while(running)
     {
     //      timer.start();
       state.update();
       kFilter.update(state);
-      
+	  
+	  /*unsigned long long int x;
+	   unsigned a, d;
+	   __asm__ volatile("rdtsc" : "=a" (a), "=d" (d));
+	   t2 =  ((unsigned long long)a) | (((unsigned long long)d) << 32);
+	   
+	  printf("\n\tTime taken for while loop\t %f\n",(t2-t1)/3200000.);
+      t1 = t2;*/ //used to calculate execution time
+	  
       if(1)
       {
 		#ifdef STR_GUI
@@ -257,8 +266,11 @@ public:
         //tDefendLine1.execute(pDefendL1);
 				//tGoalOur2.execute(paramGoal);
 	//	tGoalOur3.execute(paramGoal);
-		sppoint.executeSkill(SkillSet::SplineGoToPoint, params1);
-		params1.SplineGoToPointP.initTraj = 0;
+		if(loopcount++ > 10){
+			sppoint.executeSkill(SkillSet::SplineGoToPoint, params1);
+			params1.SplineGoToPointP.initTraj = 0;
+			loopcount = loopcount%100 + 10;
+		}
         //tPosition
 				//tcover3.execute(paramcover);
        // tAttack3.execute(paramcover);

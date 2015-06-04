@@ -63,7 +63,7 @@ namespace Strategy
       }
       
       cout << "Got valid packet: " << strPkt->which() << endl;
-      usleep(20000);
+      usleep(16000);
       //sock->recvFrom
     }
   }

@@ -73,6 +73,8 @@ namespace Strategy
       homePose[id].y     = 2*HALF_FIELD_MAXY + BOT_RADIUS*4;
       homeVelocity[id].x = 0;
       homeVelocity[id].y = 0;
+	  homeVlVr[id].x = 0;
+      homeVlVr[id].y = 0;
       homePosK[id].x     = 1.0;
       homePosK[id].y     = 1.0;
       homeAngle[id]      = 0;
@@ -97,6 +99,10 @@ namespace Strategy
     ballVelocity.y = 0;
     ballPosK.x     = 1;
     ballPosK.y     = 1;
+	
+	for (int i = 0; i < MAX_BS_Q; i++) {
+        bsQ.push(std::make_pair(BeliefState(), 0));
+    }
   }
 
   Kalman::~Kalman()
@@ -134,36 +140,114 @@ namespace Strategy
     }
     return res;
   }
+
+  void Kalman::strategyToRealConversion(BotPose &p) {
+    // converts from strategy to actual coordinates (cm)
+    p.x /= fieldXConvert;
+    p.y /= fieldYConvert;
+  }
+  
+  Vector2D<float> Kalman::calcBotVelocity(BotPose p1, BotPose p2, float timeMs) {
+    strategyToRealConversion(p1);
+    strategyToRealConversion(p2);
+
+	float vl,vr;
+    double delX = p2.x - p1.x;
+    double delY = p2.y - p1.y;
+    double delTheta = normalizeAngle(p2.theta - p1.theta); // assuming |delTheta| < PI, which is safe to assume
+                                                           // for ~ 16 ms of rotation at any speed (even 120,-120?).
+    assert(timeMs > 0);
+    // w * timeMs = delTheta
+    double w = delTheta / (timeMs * 0.001);
+    if (delTheta < 1e-2 && delTheta > -1e-2) {  // be realistic
+        // bot should be headed straight, but again confusion
+        // so taking projection of (delX, delY) along (cos(theta), sin(theta)) as displacement.
+        double dispLength = delX*cos(p1.theta) + delY*sin(p1.theta);
+        vl = dispLength / (timeMs * 0.001);
+        vl = vl / ticksToCmS;
+        vr = vl;
+		Vector2D<float> v(vl,vr);
+        return v;
+    }
+    // we calculate 2 rho's, based on delX and delY, and take average
+    double rho1 = delX / (sin(p2.theta) - sin(p1.theta));
+    double rho2 = -delY / (cos(p2.theta) - cos(p1.theta));
+    // try harmonic mean?
+//    double rho = (rho1 + rho2) / 2;
+    double rho = 2*rho1*rho2 / (rho1 + rho2);
+    vl = w * (rho - d/2.0) / ticksToCmS;
+    vr = w * (rho + d/2.0) / ticksToCmS;
+
+	Vector2D<float> v(vl,vr);
+    return v;
+  }
+
   void Kalman::addInfo(SSL_DetectionFrame &detection)
   {
     static double minDelTime = 999999;
-    //printf("addinfo......................\n");
     static double lastTime = 0;
     mutex->enter();
     //double timeCapture           = detection.t_capture();
     int ballsNum                 = detection.balls_size();
-     blueNum                  = detection.robots_blue_size();
-     yellowNum                = detection.robots_yellow_size();
+    blueNum                      = MIN(detection.robots_blue_size(), Simulator::BlueTeam::SIZE);
+    yellowNum                    = MIN(detection.robots_yellow_size(), Simulator::YellowTeam::SIZE);
 
-    blueNum                      = MIN(blueNum, Simulator::BlueTeam::SIZE);
-    yellowNum                    = MIN(yellowNum, Simulator::YellowTeam::SIZE);
-
-    SSL_DetectionBall ball;
-    if (ballsNum > 0)
-    {
-      ball = detection.balls(0);
-    }
-    //fprintf(kalmanlog, ">>>>>>>>>>>>>>>>Time: %f\n", timeCapture - lastTime);
+	//fprintf(kalmanlog, ">>>>>>>>>>>>>>>>Time: %f\n", timeCapture - lastTime);
     //double timeCapture      = detection.t_capture()/1000.0; //This is only valid if both the other side also uses the same reference time
     // neglecting the time for network delay. and wait time in race conditions 
     struct timeval tv;
     assert(gettimeofday(&tv, NULL) == 0);
     double timeCapture      = tv.tv_sec+tv.tv_usec/1000000.0;
     
-//    fprintf(kalmanlog, ">>>>>>>>>>>>>TimeDiff: %lld\n", microseconds);
     lastTime = timeCapture;
     std::set<int> uniqueBotIDs;
-//    printf(">>>>>>>>>>>>>>> new iter in kalman.. <<<<<\n");
+	
+	double nowTime = detection.t_capture();
+	double timeMs = (nowTime - bsQ.front().second)*1000.0;
+	if(timeMs <= 0){
+		timeMs = 0.001;
+	}
+	//Adding Ball Info
+    SSL_DetectionBall ball;
+    if (ballsNum > 0)
+    {
+      ball = detection.balls(0);
+	  
+      int newx = ball.x() - CENTER_X;
+      int newy = ball.y() - CENTER_Y;
+      double delTime = timeCapture - ballLastUpdateTime;
+      float garbage;
+      #if GR_SIM_COMM || FIRASSL_COMM
+      linearTransform(newx, newy, garbage);
+      #endif
+      ballPosSigmaSqK.x          = ballPosSigmaSqK.x * ( 1 - ballPosK.x) + SIGMA_SQ_NOISE_POS * delTime;
+      ballPosK.x                 = ballPosSigmaSqK.x / (ballPosSigmaSqK.x + SIGMA_SQ_OBSVN_POS);
+      float  predictedPoseX      = ballPose.x + ballVelocity.x * (delTime);
+      float  lastPoseX           = ballPose.x;
+      ballPose.x                 = predictedPoseX + ballPosK.x * (newx - predictedPoseX);
+      
+      ballPosSigmaSqK.y          = ballPosSigmaSqK.y * ( 1 - ballPosK.y) + SIGMA_SQ_NOISE_POS * delTime;
+      ballPosK.y                 = ballPosSigmaSqK.y / (ballPosSigmaSqK.y + SIGMA_SQ_OBSVN_POS);
+      float  predictedPoseY      = ballPose.y + ballVelocity.y * (delTime);
+      float  lastPoseY           = ballPose.y;
+      ballPose.y                 = predictedPoseY + ballPosK.y * (newy - predictedPoseY);
+      
+	  float lastVelocityx        = ballVelocity.x;
+	  float lastVelocityy        = ballVelocity.y;
+      //ballVelocity.x             = (ballPose.x - lastPoseX) / delTime;
+	  //ballVelocity.y             = (ballPose.y - lastPoseY) / delTime;
+      
+	  ballVelocity.x = (newx - bsQ.front().first.ballPos.x)/(timeMs * 0.001);
+	  ballVelocity.y = (newy - bsQ.front().first.ballPos.y)/(timeMs * 0.001);
+	  ballAcceleration.x         = (ballVelocity.x - lastVelocityx) / delTime;
+      ballAcceleration.y         = (ballVelocity.y - lastVelocityy) / delTime;
+      //printf("Ball: %f %f %f %f %lf\n", ballPose.x, ballPose.y, ballVelocity.x, ballVelocity.y, delTime);
+      
+      checkValidX(ballPose.x, ballVelocity.x, newx);
+      checkValidY(ballPose.y, ballVelocity.y, newy);
+      ballLastUpdateTime         = timeCapture;
+    }
+
     if (HomeTeam::COLOR == Simulator::BLUE_TEAM)
     {
       // Blue robot info
@@ -227,6 +311,10 @@ namespace Strategy
         else if(homeAngle[id] <=-PI) homeAngle[id] += 2*PI;
         homeLastUpdateTime[id]   = timeCapture;
         
+		//Adding vl,vr calculation from motion-simulation
+		BotPose p1(bsQ.front().first.homePos[id].x, bsQ.front().first.homePos[id].y, bsQ.front().first.homeAngle[id]);
+        BotPose p2(newx, newy, newangle);
+		homeVlVr[id] = calcBotVelocity(p1, p2, timeMs);
 //        if(id == 1)
 //          printf("%f %f %f %f\n", homePose[1].x, homePosK[1].x, homePosSigmaSqK[1].x, homeVelocity[1].x);
         checkValidX(homePose[id].x, homeVelocity[id].x, newx);
@@ -291,6 +379,12 @@ namespace Strategy
         if(awayAngle[id] > PI)        awayAngle[id] -= 2*PI;
         else if(awayAngle[id] <=-PI)  awayAngle[id] += 2*PI;
         awayLastUpdateTime[id]   = timeCapture;
+		
+		//Adding vl,vr calculation from motion-simulation
+		BotPose p1(bsQ.front().first.awayPos[id].x, bsQ.front().first.awayPos[id].y, bsQ.front().first.awayAngle[id]);
+        BotPose p2(newx, newy, newangle);
+		homeVlVr[id] = calcBotVelocity(p1, p2, timeMs);
+		
         checkValidX(awayPose[id].x, awayVelocity[id].x, newx);
         checkValidY(awayPose[id].y, awayVelocity[id].y, newy);
         checkValidA(awayAngle[id], awayOmega[id], newangle);
@@ -354,6 +448,11 @@ namespace Strategy
         checkValidY(homePose[id].y, homeVelocity[id].y, newy);
         checkValidA(homeAngle[id], homeOmega[id], newangle);
         homeLastUpdateTime[id]   = timeCapture;
+		
+		//Adding vl,vr calculation from motion-simulation
+		BotPose p1(bsQ.front().first.homePos[id].x, bsQ.front().first.homePos[id].y, bsQ.front().first.homeAngle[id]);
+        BotPose p2(newx, newy, newangle);
+		homeVlVr[id] = calcBotVelocity(p1, p2, timeMs);
       }
 	  
       // Blue robot info
@@ -419,40 +518,13 @@ namespace Strategy
         
         awayLastUpdateTime[id]   = timeCapture;
         //printf("Awaybots %d: %f %f %f %f %lf\n", id, awayPose[id].x, awayPose[id].y, predictedPoseX, awayPosK[id].y, delTime);
+		//Adding vl,vr calculation from motion-simulation
+		BotPose p1(bsQ.front().first.awayPos[id].x, bsQ.front().first.awayPos[id].y, bsQ.front().first.awayAngle[id]);
+        BotPose p2(newx, newy, newangle);
+		homeVlVr[id] = calcBotVelocity(p1, p2, timeMs);
       }
     }
-    // Ball info
-    if (ballsNum > 0) {
-      int newx = ball.x() - CENTER_X;
-      int newy = ball.y() - CENTER_Y;
-      double delTime = timeCapture - ballLastUpdateTime;
-      float garbage;
-      #if GR_SIM_COMM || FIRASSL_COMM
-      linearTransform(newx, newy, garbage);
-      #endif
-      ballPosSigmaSqK.x          = ballPosSigmaSqK.x * ( 1 - ballPosK.x) + SIGMA_SQ_NOISE_POS * delTime;
-      ballPosK.x                 = ballPosSigmaSqK.x / (ballPosSigmaSqK.x + SIGMA_SQ_OBSVN_POS);
-      float  predictedPoseX      = ballPose.x + ballVelocity.x * (delTime);
-      float  lastPoseX           = ballPose.x;
-      ballPose.x                 = predictedPoseX + ballPosK.x * (newx - predictedPoseX);
-      float lastVelocityx        = ballVelocity.x;
-      ballVelocity.x             = (ballPose.x - lastPoseX) / delTime;
-      ballAcceleration.x         = (ballVelocity.x - lastVelocityx) / delTime;
 
-      ballPosSigmaSqK.y          = ballPosSigmaSqK.y * ( 1 - ballPosK.y) + SIGMA_SQ_NOISE_POS * delTime;
-      ballPosK.y                 = ballPosSigmaSqK.y / (ballPosSigmaSqK.y + SIGMA_SQ_OBSVN_POS);
-      float  predictedPoseY      = ballPose.y + ballVelocity.y * (delTime);
-      float  lastPoseY           = ballPose.y;
-      ballPose.y                 = predictedPoseY + ballPosK.y * (newy - predictedPoseY);
-      float lastVelocityy        = ballVelocity.y;
-      ballVelocity.y             = (ballPose.y - lastPoseY) / delTime;
-      ballAcceleration.y         = (ballVelocity.y - lastVelocityy) / delTime;
-      //printf("Ball: %f %f %f %f %lf\n", ballPose.x, ballPose.y, ballVelocity.x, ballVelocity.y, delTime);
-      
-      checkValidX(ballPose.x, ballVelocity.x, newx);
-      checkValidY(ballPose.y, ballVelocity.y, newy);
-      ballLastUpdateTime         = timeCapture;
-    }
     mutex->leave();
   }
 
@@ -491,6 +563,7 @@ namespace Strategy
       printf("Home Pose: %d %d %d\n",botID,state.homePos[botID].x,state.homePos[botID].y);
 	  state.homeAngle[botID] = homeAngle[botID];// + homeOmega[botID]*delTime;
       state.homeVel[botID]   = homeVelocity[botID];
+	  state.homeVlVr[botID] = homeVlVr[botID];
       state.homeOmega[botID] = homeOmega[botID];
       state.homeAcc[botID]   = homeAcc[botID];
       state.homeAngAcc[botID]= homeAngularAcc[botID];

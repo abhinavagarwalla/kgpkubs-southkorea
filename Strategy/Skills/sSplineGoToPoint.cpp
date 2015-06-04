@@ -15,8 +15,7 @@ namespace Strategy
 
 		if(!algoController){
 			if(traj)
-			algoController = new ControllerWrapper(traj, 0, 0, PREDICTION_PACKET_DELAY);
-			
+				algoController = new ControllerWrapper(traj, 0, 0, PREDICTION_PACKET_DELAY);
 		}
 		int vl,vr;
 		algoController->genControls(start, end, vl, vr, finalvel);
@@ -32,6 +31,11 @@ namespace Strategy
 		
 		if(algoController)delete algoController;
 		algoController = new ControllerWrapper(traj, 0, 0, PREDICTION_PACKET_DELAY);
+		
+		/*while(!predictedPoseQ.empty())predictedPoseQ.pop_front();
+		for (int i = 0; i < PREDICTION_PACKET_DELAY; i++) {
+			predictedPoseQ.push_back(Pose(bs.homeX[BOT_ID_TESTING], bs.homeY[BOT_ID_TESTING], bs.homeTheta[BOT_ID_TESTING]));
+		}*/
 		_splineGoToPointTrack(botid,start,end,finalvel);
 	}
 	
