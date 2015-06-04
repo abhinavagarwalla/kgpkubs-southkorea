@@ -178,7 +178,8 @@ public:
     //    Util::Timer timer;
 	int loopcount = 0;
 	unsigned long long int t1=0,t2=0;
-	
+	usleep(1000);
+	  
     while(running)
     {
     //      timer.start();
@@ -266,11 +267,16 @@ public:
         //tDefendLine1.execute(pDefendL1);
 				//tGoalOur2.execute(paramGoal);
 	//	tGoalOur3.execute(paramGoal);
-		if(loopcount++ > 10){
+
+		if(loopcount++ > 3){
 			sppoint.executeSkill(SkillSet::SplineGoToPoint, params1);
 			params1.SplineGoToPointP.initTraj = 0;
-			loopcount = loopcount%100 + 10;
+			loopcount = loopcount%100 + 3;
 		}
+		else{
+				printf("%d\t%d\n", state.homePos[2].x, state.homePos[2].y);
+		}
+		assert(loopcount<10);
         //tPosition
 				//tcover3.execute(paramcover);
        // tAttack3.execute(paramcover);

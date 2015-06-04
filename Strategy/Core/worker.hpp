@@ -74,8 +74,7 @@ public:
       kFilter.update(state);   
       writer_mutex->leave();
       writer_preference->leave();
-
-      
+		
 #ifdef RUN_REFBOX
       {
         // Critical Section protected by refBoxCS

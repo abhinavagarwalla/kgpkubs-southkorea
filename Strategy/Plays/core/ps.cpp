@@ -72,8 +72,8 @@ namespace Strategy
      // playID = PlayBook::PenaltyOur ;
      //playID = PlayBook::PositionOurPenalty;
 	 //playID = PlayBook::PositionGather;
-    //playID = PlayBook::PositionOurFreeBall;
-	  playID = PlayBook::OurFreeKick;
+    playID = PlayBook::PositionOurFreeBall;
+	  //playID = PlayBook::OurFreeKick;
     //playID = PlayBook::PenaltyOur;
 	 //playID = PlayBook::Kickoff ;
 	//playID = PlayBook::PositionOurKickoff;

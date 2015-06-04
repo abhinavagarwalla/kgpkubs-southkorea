@@ -24,22 +24,16 @@ namespace Strategy
       Block = 0,            // Defend the goal a particular distance from the goal
       ChargeBall,           // Set-play tactic
       CoverGoal,
-	  DragToGoal,           //Go to the ball and start dragging the ballto goal
       DefendLine,           // Defend the ball from crossing a particular line on the field
 	  DefendPoint,          // Defend the ball from a particular point on the field
       GoalieOur,            // A special tactic just for the goalie for our side
-      GoalieOpp,            // Grant Goalie to opponent team. only for testing purpose.
-      MarkBot,              // Mark an opponent preventing them from getting the ball, getting to the goal, blocking a shot
       Pass,                 // Pass to a point. for kickoff exclusively.
       Kickoff,              // kick ball into goal suring kickoff exclusively.
       Position,             // Go to the given position
-      PositionForPenalty,   // Set-play tactic
      // PositionForReceive,   // Pass Receive check
-      PositionForStart,     // Set-play tactic
       ReceiveBall,          // Receive Pass
       Defend,               // Defend the ball from coming to our side
       Attack,               // Attck the ball towards the goal      
-      Steal,                // Manipulate the ball to remove possession of it from another robot*/
       Stop,                 // Stop the bot
       Velocity,             // Move at a fixed velocity     
       Backup,
@@ -64,7 +58,7 @@ namespace Strategy
        */
             // Parameters for tactic Goalie
       struct type1
-        { } GoalieP, ClearP, StealP, ShootP, StopP,TestgotopointP;
+        { } GoalieP, ClearP, ShootP, StopP,TestgotopointP;
 
 
 
