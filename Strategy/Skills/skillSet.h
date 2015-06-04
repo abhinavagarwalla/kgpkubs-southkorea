@@ -60,7 +60,7 @@ namespace Strategy
         float finalslope;
         float finalVelocity;
 		bool initTraj;
-      } SplineGoToPointP;
+      } SplineGoToPointP, DWGoToPointP;
 
       // Parameters for the skill Velocity
       struct type4
@@ -117,6 +117,7 @@ namespace Strategy
 			DefendPoint,
 			ChargeBall,
 			SplineGoToPoint,
+			DWGoToPoint,
 			MAX_SKILLS
 		};
 	
@@ -154,6 +155,9 @@ namespace Strategy
     void splineGoToPoint(const SParam& param);
 	void _splineGoToPointTrack(int botid, Pose start, Pose end, float finalvel);
 	void _splineGoToPointInitTraj(int botid, Pose start, Pose end, float finalvel);
+	void dwGoToPoint(const SParam& param);
+	void _dwGoToPointTrack(int botid, Pose start, Pose end, float finalvel);
+	void _dwGoToPointInitTraj(int botid, Pose start, Pose end, float finalvel);
     // Parameter for skills to be trained
     static bool loadParamsFromFile;
     static bool  skillParamsLoaded;

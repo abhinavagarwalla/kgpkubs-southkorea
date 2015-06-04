@@ -58,7 +58,6 @@ public:
 		TReceiveBall tReceive2(&state, 2);
     Tactic::Param pReceive;
     
-    \
     //tCover Bot
     TCoverGoal tcover0(&state, 0);
     TCoverGoal tcover2(&state,2);
@@ -273,10 +272,6 @@ public:
 			params1.SplineGoToPointP.initTraj = 0;
 			loopcount = loopcount%100 + 3;
 		}
-		else{
-				printf("%d\t%d\n", state.homePos[2].x, state.homePos[2].y);
-		}
-		assert(loopcount<10);
         //tPosition
 				//tcover3.execute(paramcover);
        // tAttack3.execute(paramcover);

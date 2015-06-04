@@ -49,6 +49,7 @@ SkillSet::SkillSet(const BeliefState* state, const int botID) :
   skillList[TurnToAngle] 	= &SkillSet::turnToAngle;
   skillList[DefendPoint] 	= &SkillSet::defendPoint;
   skillList[SplineGoToPoint]= &SkillSet::splineGoToPoint;
+  skillList[DWGoToPoint]= &SkillSet::dwGoToPoint;
 	skillList[ChargeBall]   = &SkillSet::chargeBall;
   // Initialization check
   for (int sID = 0; sID < MAX_SKILLS; ++sID)
