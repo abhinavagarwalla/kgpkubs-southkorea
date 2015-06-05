@@ -38,7 +38,7 @@ namespace Strategy
     float finalvel;
     finalvel  = param.GoToPointP.finalVelocity;
   Pose start(state->homePos[botID].x, state->homePos[botID].y, state->homeAngle[botID]);
-  Pose end(param.DWGoToPointP.x, param.DWGoToPointP.y, param.DWGoToPointP.finalslope);
+  Pose end(param.DWGoToPointP.x, param.DWGoToPointP.y, param.DWGoToPointP.finalSlope);
   
   if(param.DWGoToPointP.initTraj)_dwGoToPointInitTraj(botID, start, end, finalvel);
   else _dwGoToPointTrack(botID, start, end, finalvel);

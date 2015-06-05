@@ -3,6 +3,7 @@
 #include "logger.h"
 #include "config.h"
 #include "pose.h"
+#include "trajectory-generators.cpp"
 #include <iostream>
 
 #define PREDICTION_PACKET_DELAY 4
@@ -45,7 +46,7 @@ namespace Strategy
     float finalvel;
     finalvel  = param.GoToPointP.finalVelocity;
 	Pose start(state->homePos[botID].x, state->homePos[botID].y, state->homeAngle[botID]);
-	Pose end(param.SplineGoToPointP.x, param.SplineGoToPointP.y, param.SplineGoToPointP.finalslope);
+	Pose end(param.SplineGoToPointP.x, param.SplineGoToPointP.y, param.SplineGoToPointP.finalSlope);
 	
 	if(param.SplineGoToPointP.initTraj)_splineGoToPointInitTraj(botID, start, end, finalvel);
 	else _splineGoToPointTrack(botID, start, end, finalvel);

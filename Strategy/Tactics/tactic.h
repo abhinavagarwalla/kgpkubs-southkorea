@@ -37,12 +37,11 @@ namespace Strategy
       Stop,                 // Stop the bot
       Velocity,             // Move at a fixed velocity     
       Backup,
-			TestgotoPoint,
-			TestbotRace,
-			GoalKick,
-			Shoot,
-		//	AttackDuo,
-			//Clear,
+	  TestgotoPoint,
+	  TestbotRace,
+	  GoalKick,
+	  Shoot,
+	  DWDefender,
       MAX_TACTICS          // Total number of tactics. All Implemented Tactics above this point
     };
     /* List the UnImplented Tactics below this line. When Implemented:
@@ -58,7 +57,7 @@ namespace Strategy
        */
             // Parameters for tactic Goalie
       struct type1
-        { } GoalieP, ClearP, ShootP, StopP,TestgotopointP;
+        { } GoalieP, ClearP, ShootP, StopP,TestgotopointP, DWDefenderP;
 
 
 
@@ -123,7 +122,7 @@ namespace Strategy
       struct type10
       {
         bool rotateOnError;
-      } AttackP;      
+      } AttackP ;     
       struct type11
       {
         int distFromGoal;

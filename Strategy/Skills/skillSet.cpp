@@ -51,6 +51,7 @@ SkillSet::SkillSet(const BeliefState* state, const int botID) :
   skillList[SplineGoToPoint]= &SkillSet::splineGoToPoint;
   skillList[DWGoToPoint]= &SkillSet::dwGoToPoint;
 	skillList[ChargeBall]   = &SkillSet::chargeBall;
+	skillList[SplineInterceptBall] = &SkillSet::splineInterceptBall;
   // Initialization check
   for (int sID = 0; sID < MAX_SKILLS; ++sID)
   {

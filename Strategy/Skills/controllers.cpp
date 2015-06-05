@@ -117,7 +117,7 @@ MiscData DynamicWindow(Pose s, Pose e, int &vl, int &vr, double prevSpeed, doubl
 
     const int del_v_max = 15; //ticks
     const float step = 1; //ticks
-    const float max_vel = 100; //ticks
+    const float max_vel =120; //ticks
     const float a_r_max = 380; //cm/s^2
 //    const float PI= 3.14159;
     const float t=0.016;

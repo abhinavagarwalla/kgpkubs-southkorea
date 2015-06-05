@@ -14,7 +14,7 @@
 #include "pose.h"
 #include "controller-wrapper.hpp"
 #include "trajectory.hpp"
-#include "trajectory-generators.cpp"
+
 // Forward Declarations
 namespace Strategy
 {
@@ -57,7 +57,7 @@ namespace Strategy
       {
         float x;
         float y;
-        float finalslope;
+        float finalSlope;
         float finalVelocity;
 		bool initTraj;
       } SplineGoToPointP, DWGoToPointP;
@@ -98,6 +98,12 @@ namespace Strategy
         bool increaseSpeed;
         bool isBallObstacle ;
       } GoToPointP;
+	  struct type9
+      {
+        float vl;
+        float vr;
+		bool initTraj;
+      }SplineInterceptBallP;
     };
   class SkillSet
   {
@@ -118,6 +124,7 @@ namespace Strategy
 			ChargeBall,
 			SplineGoToPoint,
 			DWGoToPoint,
+			SplineInterceptBall,
 			MAX_SKILLS
 		};
 	
@@ -158,7 +165,11 @@ namespace Strategy
 	void dwGoToPoint(const SParam& param);
 	void _dwGoToPointTrack(int botid, Pose start, Pose end, float finalvel);
 	void _dwGoToPointInitTraj(int botid, Pose start, Pose end, float finalvel);
-    // Parameter for skills to be trained
+	void splineInterceptBall(const SParam& param);
+	void _splineInterceptBallInitTraj(int botid, Pose start, Vector2D<float> ballPos, Vector2D<float> ballVel, Vector2D<float> botVel, float final_vl, float final_vr);
+	void _splineInterceptBallTrack(int botid, Pose start, Vector2D<float> ballPos, Vector2D<float> ballVel, Vector2D<float> botVel, float final_vl, float final_vr);
+    
+	// Parameter for skills to be trained
     static bool loadParamsFromFile;
     static bool  skillParamsLoaded;
     static float GoToPoint_profileFactorMult;

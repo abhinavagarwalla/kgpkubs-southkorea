@@ -52,10 +52,11 @@ namespace Strategy
     tacticList[Tactic::Backup]              = new TBackup(state, botID);
    //tacticList[Tactic::PositionForReceive]  = new TPositionForReceive(state, botID);
     tacticList[Tactic::ReceiveBall]         = new TReceiveBall(state, botID);
-		tacticList[Tactic::TestgotoPoint] 			= new Testgotopoint(state,botID);
-		tacticList[Tactic::TestbotRace] 				= new TestbotRace(state,botID);
-		tacticList[Tactic::GoalKick]						= new TGoalKick(state,botID);
-		tacticList[Tactic::Shoot]                  = new TShoot(state,botID);
+	tacticList[Tactic::TestgotoPoint] 			= new Testgotopoint(state,botID);
+	tacticList[Tactic::TestbotRace] 				= new TestbotRace(state,botID);
+	tacticList[Tactic::GoalKick]						= new TGoalKick(state,botID);
+	tacticList[Tactic::Shoot]                  = new TShoot(state,botID);
+		tacticList[Tactic::DWDefender]		   = new TDWDefender(state, botID);
 		//tacticList[Tactic::Clear]								= new TClear(state,botID);
 		//tacticList[Tactic::AttackDuo] = new TAttackDuo() -- how the fuck am i supposed to add two bot ids ??? :-(
     // Initialization check

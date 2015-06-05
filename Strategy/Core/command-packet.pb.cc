@@ -212,6 +212,7 @@ bool StrategyPacket_TacticID_IsValid(int value) {
     case 15:
     case 16:
     case 17:
+	case 18:
       return true;
     default:
       return false;
@@ -236,6 +237,7 @@ const StrategyPacket_TacticID StrategyPacket::Attack;
 const StrategyPacket_TacticID StrategyPacket::Steal;
 const StrategyPacket_TacticID StrategyPacket::Stop;
 const StrategyPacket_TacticID StrategyPacket::Velocity;
+const StrategyPacket_TacticID StrategyPacket::DWDefender;
 const StrategyPacket_TacticID StrategyPacket::TacticID_MIN;
 const StrategyPacket_TacticID StrategyPacket::TacticID_MAX;
 const int StrategyPacket::TacticID_ARRAYSIZE;

@@ -46,6 +46,8 @@ public:
 	TGoalKeepingOurSide tGoalOur4(&state, 4);
     Tactic::Param paramGoal;
     
+	TDWDefender dwDefend2(&state, 2);
+	Tactic::Param paramDWDefend;
     //tCharge
     TCharge tCharge2(&state, 2);
     TCharge tCharge1(&state, 1);
@@ -54,8 +56,8 @@ public:
     //tReceiveBall
     TReceiveBall tReceive3(&state, 3);
     TReceiveBall tReceive0(&state, 0);
-		TReceiveBall tReceive1(&state, 1);
-		TReceiveBall tReceive2(&state, 2);
+	TReceiveBall tReceive1(&state, 1);
+	TReceiveBall tReceive2(&state, 2);
     Tactic::Param pReceive;
     
     //tCover Bot
@@ -147,20 +149,30 @@ public:
 	
 	//SplineGoToPoint
 	Strategy::SParam params1;
-	params1.SplineGoToPointP.finalVelocity = 0;
-	params1.SplineGoToPointP.x = ForwardX(HALF_FIELD_MAXX/2);
-	params1.SplineGoToPointP.y = HALF_FIELD_MAXY/2;
-	params1.SplineGoToPointP.finalslope = 0 ;
+	params1.SplineGoToPointP.finalVelocity = 100;
+	params1.SplineGoToPointP.x = ForwardX(HALF_FIELD_MAXX);
+	params1.SplineGoToPointP.y = 0;
+	params1.SplineGoToPointP.finalSlope = 0 ;
 	params1.SplineGoToPointP.initTraj = 1;
 	SkillSet sppoint(&state, 2); 
 	
+	Strategy::SParam params4;
+	params4.SplineInterceptBallP.vl = 70;
+	params4.SplineInterceptBallP.vr = 70;
+	params4.SplineInterceptBallP.initTraj = 1;
+	SkillSet sball(&state, 2); 
+	
 	Strategy::SParam params2;
-	SkillSet point(&state, 0);
-	params2.GoToPointP.x = 0;
+	SkillSet dwpoint(&state, 2);
+	params2.GoToPointP.x = ForwardX(HALF_FIELD_MAXX);
 	params2.GoToPointP.y = 0;
 	params2.GoToPointP.finalslope = 0;
 	
-	
+	Strategy::SParam params3 ;
+	params2.DWGoToPointP.x = ForwardX(HALF_FIELD_MAXX);
+	params2.DWGoToPointP.y = 0;
+	params2.DWGoToPointP.finalSlope = 0;
+
     Tactic::Param ptestpoint;
     TestbotRace ttest2(&state,2);
     Tactic::Param ptestrace;
@@ -266,16 +278,28 @@ public:
         //tDefendLine1.execute(pDefendL1);
 				//tGoalOur2.execute(paramGoal);
 	//	tGoalOur3.execute(paramGoal);
-
+       /*
 		if(loopcount++ > 3){
 			sppoint.executeSkill(SkillSet::SplineGoToPoint, params1);
 			params1.SplineGoToPointP.initTraj = 0;
 			loopcount = loopcount%100 + 3;
 		}
+		*/
         //tPosition
 				//tcover3.execute(paramcover);
        // tAttack3.execute(paramcover);
    //     tcover0.execute(paramcover);
+		//dwDefend2.execute(paramDWDefend);
+		if(loopcount++ >5){
+//			dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
+//			params2.DWGoToPointP.initTraj = 0;
+//			sppoint.executeSkill(SkillSet::SplineGoToPoint,params1) ;
+//			params1.SplineGoToPointP.initTraj = 0;
+			sball.executeSkill(SkillSet::SplineInterceptBall,params4) ;
+			params4.SplineInterceptBallP.initTraj = 0;
+			loopcount = loopcount%10+5;
+		}
+
         //goTopointStraight.executeSkill(SkillSet::GoToBallStraight,param1);
         //goToBallStraight.executeSkill(SkillSet::GoToBallStraight,param9)
      //   tAttack2.execute(pAttack);

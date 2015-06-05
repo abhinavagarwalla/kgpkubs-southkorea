@@ -67,7 +67,6 @@ namespace Strategy
           sParam.DefendPointP.y=tParam.DefendPointP.y;
           sParam.DefendPointP.radius=tParam.DefendPointP.radius;
           
-          
           if (Vector2D<int>::dist(state->ballPos, state->homePos[botID]) < 1.5*BOT_BALL_THRESH) 
           {
             if(state->ballPos.y > 0)

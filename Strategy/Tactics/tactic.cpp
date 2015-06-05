@@ -1,6 +1,7 @@
 #include "tactic.h"
 #include "beliefState.h"
 #include "logger.h"
+#include "pose.h"
 using namespace std;
 #define D_CAPTURE_BALL 0
 #define D_BLOCK_BALL   1
@@ -184,6 +185,7 @@ namespace Strategy {
   
   // List the stateless decisive skill calling functions here.
 
+
   void Tactic::gotoPoint(int x, int y, bool align, float finalSlope, float finalVelocity) {
     sID = SkillSet::GoToPoint;
     sParam.GoToPointP.x                       = x ;
@@ -197,6 +199,7 @@ namespace Strategy {
     // Execute the selected skill
     skillSet->executeSkill(sID, sParam);
   }
+  
   void Tactic::gotoPointExact(int x, int y, bool align, float finalSlope, float finalVelocity) {
     sID = SkillSet::GoToPoint;
     sParam.GoToPointP.x                       = x ;

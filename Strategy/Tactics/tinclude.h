@@ -14,6 +14,8 @@
 #include "tVelocity.hpp"
 #include "tCoverGoal.hpp"
 #include "tGoalKick.hpp"
+#include "tDWDefender.hpp"
+
 //#include "tDragToGoal.hpp"
 #include "tBackup.hpp"
 #include "TestgoToPoint.hpp"
