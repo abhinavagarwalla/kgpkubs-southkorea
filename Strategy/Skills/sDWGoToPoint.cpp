@@ -5,7 +5,7 @@
 #include "pose.h"
 #include <iostream>
 
-#define PREDICTION_PACKET_DELAY 4
+#define PREDICTION_PACKET_DELAY 0
 using namespace Util;
 
 namespace Strategy
@@ -19,8 +19,26 @@ namespace Strategy
     }
     int vl,vr;
     algoController->genControls(start, end, vl, vr, finalvel);
+	float dist = sqrt(((start.x() - end.x())*(start.x() - end.x())) + ((start.y() - end.y())*(start.y() - end.y())));
     assert(vl <= 120 && vl >= -120);
     assert(vr <= 120 && vr >= -120);
+	cout << "\n\n dist " << dist << " " <<start.x() << " " << start.y() << " " << end.x() << " " << end.y() << endl;
+	if(dist < 1500.0){
+		vl = (int)(0.8*vl);
+		vr = (int)(0.8*vr);
+	}
+	if(dist < 1000.0){
+		vl = (int)(0.6*vl);
+		vr = (int)(0.6*vr);
+	}
+//	if(dist < 500.0){
+//		vl = (int)(0.6*vl);
+//		vr = (int)(0.6*vr);
+//	}
+	if(dist < 500.0){
+		vl = (int)((dist/1000)*vl);
+		vr = (int)((dist/1000)*vr);
+	}
     comm->sendCommand(botid, vl, vr); //maybe add mutex
   }
 
@@ -37,11 +55,16 @@ namespace Strategy
   Vector2D<int> dpoint;
     float finalvel;
     finalvel  = param.GoToPointP.finalVelocity;
-  Pose start(state->homePos[botID].x, state->homePos[botID].y, state->homeAngle[botID]);
-  Pose end(param.DWGoToPointP.x, param.DWGoToPointP.y, param.DWGoToPointP.finalSlope);
-  
-  if(param.DWGoToPointP.initTraj)_dwGoToPointInitTraj(botID, start, end, finalvel);
-  else _dwGoToPointTrack(botID, start, end, finalvel);
-  
+	float dist = sqrt((state->ballPos.x - state->homePos[botID].x) * (state->ballPos.x - state->homePos[botID].x) + (state->ballPos.y - state->homePos[botID].y) * (state->ballPos.y - state->homePos[botID].y));
+	/*if (dist < 0.5 * BOT_BALL_THRESH) {
+		comm->sendCommand(botID, 0, 0);
+	} else {*/
+	  Pose start(state->homePos[botID].x, state->homePos[botID].y, state->homeAngle[botID]);
+	  Pose end(param.DWGoToPointP.x, param.DWGoToPointP.y, param.DWGoToPointP.finalSlope);
+	  
+	  
+	  if(param.DWGoToPointP.initTraj)_dwGoToPointInitTraj(botID, start, end, finalvel);
+	  else _dwGoToPointTrack(botID, start, end, finalvel);
+	//}
    }
 }

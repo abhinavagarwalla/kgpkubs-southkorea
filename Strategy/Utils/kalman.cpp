@@ -9,6 +9,8 @@
 #include "logger.h"
 #include <limits>
 #include <set>
+#include <iostream>
+
 #define DEBUG_KALMAN 1
 const int botcenterbluecenterdist =75; //Ankit: for botCentreTransform
 bool isIndeterminate(const float pV)
@@ -182,8 +184,10 @@ namespace Strategy
     return v;
   }
 
+	
   void Kalman::addInfo(SSL_DetectionFrame &detection)
   {
+	 // std::cout << "\n\n\nadding info\n\n\n" << std::endl;
     static double minDelTime = 999999;
     static double lastTime = 0;
     mutex->enter();
@@ -224,21 +228,21 @@ namespace Strategy
       ballPosK.x                 = ballPosSigmaSqK.x / (ballPosSigmaSqK.x + SIGMA_SQ_OBSVN_POS);
       float  predictedPoseX      = ballPose.x + ballVelocity.x * (delTime);
       float  lastPoseX           = ballPose.x;
-      ballPose.x                 = predictedPoseX + ballPosK.x * (newx - predictedPoseX);
+      ballPose.x                 = newx;//predictedPoseX + ballPosK.x * (newx - predictedPoseX);
       
       ballPosSigmaSqK.y          = ballPosSigmaSqK.y * ( 1 - ballPosK.y) + SIGMA_SQ_NOISE_POS * delTime;
       ballPosK.y                 = ballPosSigmaSqK.y / (ballPosSigmaSqK.y + SIGMA_SQ_OBSVN_POS);
       float  predictedPoseY      = ballPose.y + ballVelocity.y * (delTime);
       float  lastPoseY           = ballPose.y;
-      ballPose.y                 = predictedPoseY + ballPosK.y * (newy - predictedPoseY);
+      ballPose.y                 = newy;//predictedPoseY + ballPosK.y * (newy - predictedPoseY);
       
 	  float lastVelocityx        = ballVelocity.x;
 	  float lastVelocityy        = ballVelocity.y;
-      //ballVelocity.x             = (ballPose.x - lastPoseX) / delTime;
-	  //ballVelocity.y             = (ballPose.y - lastPoseY) / delTime;
+      ballVelocity.x             = (ballPose.x - lastPoseX) / delTime;
+	  ballVelocity.y             = (ballPose.y - lastPoseY) / delTime;
       
-	  ballVelocity.x = (newx - bsQ.front().first.ballPos.x)/(timeMs * 0.001);
-	  ballVelocity.y = (newy - bsQ.front().first.ballPos.y)/(timeMs * 0.001);
+	 // ballVelocity.x = (newx - bsQ.front().first.ballPos.x)/(timeMs * 0.001);
+	 // ballVelocity.y = (newy - bsQ.front().first.ballPos.y)/(timeMs * 0.001);
 	  ballAcceleration.x         = (ballVelocity.x - lastVelocityx) / delTime;
       ballAcceleration.y         = (ballVelocity.y - lastVelocityy) / delTime;
       //printf("Ball: %f %f %f %f %lf\n", ballPose.x, ballPose.y, ballVelocity.x, ballVelocity.y, delTime);
@@ -526,6 +530,10 @@ namespace Strategy
     }
 
     mutex->leave();
+//	bsQ.pop();
+//	mutex->enter();
+//	bsQ.push(std::make_pair(BeliefState(), nowTime));
+//	mutex->leave();
   }
 
   void Kalman::update(BeliefState& state)
@@ -552,8 +560,6 @@ namespace Strategy
     {
       assert(HomeTeam::COLOR == Simulator::YELLOW_TEAM || HomeTeam::COLOR == Simulator::BLUE_TEAM);
     }
-    
-    /* */
 	
     for (int botID = 0; botID < HomeTeam::SIZE; ++botID)
     {
@@ -580,6 +586,7 @@ namespace Strategy
       state.awayAngAcc[botID]= awayAngularAcc[botID];
     }
       double delTime = 0;
+	  
       state.ballPos = Vector2D<int>(ballPose.x + delTime*ballVelocity.x, ballPose.y + delTime*ballVelocity.y);
       state.ballVel = ballVelocity;
       state.ballAcc = ballAcceleration;

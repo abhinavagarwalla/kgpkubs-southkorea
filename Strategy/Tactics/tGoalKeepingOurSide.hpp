@@ -24,11 +24,7 @@ namespace Strategy
     TGoalKeepingOurSide(const BeliefState* state, int botID) :
       Tactic(Tactic::Stop, state, botID)
     {
-            for(int i=0; i<10; i++)
-        movementError[i] = 0;
-      movementErrorSum  = 0;
-      movementErrorIndex = 0;
-      prevBotPos = state->homePos[botID];
+		prevBotPos = state->homePos[botID];
       prevBotAngle = state->homeAngle[botID];
     } // TGoalKeeping
 
@@ -73,32 +69,18 @@ namespace Strategy
     {
       
       printf("Goalie Bot ID%d \n",botID);
-      movementError[movementErrorIndex++] = (Vector2D<int>::distSq(prevBotPos, state->homePos[botID])) + (prevBotAngle - state->homeAngle[botID])*(prevBotAngle - state->homeAngle[botID])*50000;
       prevBotPos = state->homePos[botID];
       prevBotAngle = state->homeAngle[botID];
-      movementErrorIndex %= 10;
-      movementErrorSum = 0;
-      for(int i=0; i<10; i++)
-        movementErrorSum += movementError[i];
-      /*if(movementErrorSum < 500 && tParam.AttackP.rotateOnError)
-      {
-        sID = SkillSet::Spin;
-        sParam.SpinP.radPerSec = MAX_BOT_OMEGA * (state->homePos[botID].y > 0? ForwardX(1): ForwardX(-1));
-        skillSet->executeSkill(sID, sParam);
-        return;
-      }*/
-	  
-	  	  int dist = Vector2D<int>::dist(state->homePos[botID],state->ballPos);
+	  int dist = Vector2D<int>::dist(state->homePos[botID],state->ballPos);
       
-      if (!isGoalKeeperInPosition() )
+      if (!isGoalKeeperInPosition())
       {
         sID = SkillSet::GoToPoint;
-        sParam.GoToPointP.align = false;
+  //     sParam.DWGoToPointP.align = false;
         sParam.GoToPointP.finalslope =- PI / 2;
         sParam.GoToPointP.x = ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*1.2) /*/4*/;
         sParam.GoToPointP.y = 0;
         sParam.GoToPointP.finalVelocity = 0;
-
       }
       else
       {
@@ -106,9 +88,9 @@ namespace Strategy
 		  {
 			  sID = SkillSet::Spin;
 			  if(state->ballPos.y < 0 )
-				  sParam.SpinP.radPerSec = -MAX_BOT_OMEGA   ;
-			else
 				  sParam.SpinP.radPerSec = +MAX_BOT_OMEGA   ;
+			else
+				  sParam.SpinP.radPerSec = -MAX_BOT_OMEGA   ;
 		  }
 		  else
 		  {
@@ -116,12 +98,11 @@ namespace Strategy
 			  sParam.GoToPointP.x = ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*1.2) /*/4*/;
 			  int temp = getBotDestPointY();
 			  sParam.GoToPointP.y = temp;
-			  sParam.GoToPointP.align = false;
+//			  sParam.DWGoToPointP.align = false;
 			  sParam.GoToPointP.finalVelocity = 0;
 			  sParam.GoToPointP.finalslope = -PI / 2;
 		  }
       }
-      
       skillSet->executeSkill(sID, sParam);
 
 
@@ -136,7 +117,6 @@ namespace Strategy
         return true;
       else
         return false;
-
     }
     
     int getBotDestPointY()

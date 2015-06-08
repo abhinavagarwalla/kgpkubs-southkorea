@@ -45,6 +45,10 @@ public:
 	TGoalKeepingOurSide tGoalOur3(&state, 3);
 	TGoalKeepingOurSide tGoalOur4(&state, 4);
     Tactic::Param paramGoal;
+	
+	TGoalie2 tGoalie2(&state, 2);
+	Tactic::Param paramGoal2;
+	paramGoal2.Goalie2P.initTraj = 1;
     
 	TDWDefender dwDefend2(&state, 2);
 	Tactic::Param paramDWDefend;
@@ -108,16 +112,16 @@ public:
 		TVelocity tVelocity2(&state,2);
     
 	Tactic::Param pVelocity;
-	pVelocity.VelocityP.vl = 60;
-	pVelocity.VelocityP.vr = 60;
+	pVelocity.VelocityP.vl = 100;
+	pVelocity.VelocityP.vr = 100;
 	
 	Tactic::Param pVelocity_1;
 	pVelocity_1.VelocityP.vl = 20;
 	pVelocity_1.VelocityP.vr = 20;
 	
 	Tactic::Param pVelocity_2;
-	pVelocity_2.VelocityP.vl = 60;
-	pVelocity_2.VelocityP.vr = 60;
+	pVelocity_2.VelocityP.vl = 100;
+	pVelocity_2.VelocityP.vr = 100;
 	Tactic::Param pVelocity_3;
 	pVelocity_3.VelocityP.vl = 60;
 	pVelocity_3.VelocityP.vr = 60;
@@ -150,7 +154,7 @@ public:
 	//SplineGoToPoint
 	Strategy::SParam params1;
 	params1.SplineGoToPointP.finalVelocity = 100;
-	params1.SplineGoToPointP.x = ForwardX(HALF_FIELD_MAXX);
+	params1.SplineGoToPointP.x = 0;
 	params1.SplineGoToPointP.y = 0;
 	params1.SplineGoToPointP.finalSlope = 0 ;
 	params1.SplineGoToPointP.initTraj = 1;
@@ -163,17 +167,18 @@ public:
 	SkillSet sball(&state, 2); 
 	
 	Strategy::SParam params2;
-	SkillSet dwpoint(&state, 2);
+	SkillSet dwpoint(&state, 1);
 	params2.GoToPointP.x = ForwardX(HALF_FIELD_MAXX);
 	params2.GoToPointP.y = 0;
 	params2.GoToPointP.finalslope = 0;
 	
 	Strategy::SParam params3 ;
-	params2.DWGoToPointP.x = ForwardX(HALF_FIELD_MAXX);
-	params2.DWGoToPointP.y = 0;
-	params2.DWGoToPointP.finalSlope = 0;
+	params3.DWGoToPointP.x = ForwardX(HALF_FIELD_MAXX/2);
+	params3.DWGoToPointP.y = 0;
+	params3.DWGoToPointP.finalSlope = 0;
 
     Tactic::Param ptestpoint;
+	   
     TestbotRace ttest2(&state,2);
     Tactic::Param ptestrace;
     ptestrace.TestbotRaceP.vl = 100;
@@ -190,7 +195,11 @@ public:
 	int loopcount = 0;
 	unsigned long long int t1=0,t2=0;
 	usleep(1000);
-	  
+	
+		
+	ofstream myfile;
+	myfile.open ("ballPosLog.txt");
+	
     while(running)
     {
     //      timer.start();
@@ -207,6 +216,8 @@ public:
 	  
       if(1)
       {
+		  myfile << state.ballPos.x << " -ballPos- " << state.ballPos.y << endl;
+	
 		#ifdef STR_GUI
 		{
 			int test_tactic=0;
@@ -259,13 +270,13 @@ public:
         //printf("mid %d\n",state.pr_ballMidField);
         //printf("dbox %d\n",state.pr_ball_in_opp_dbox);    
         //ttest1.execute(ptestpoint);
-        //tVelocity2.execute(pVelocity);
+      //  tVelocity2.execute(pVelocity);
 	  // tS0.execute(paramStop);
 	  //tAttack2.execute(pAttack);
     //tAttack4.execute(pAttack); 
 
 	 //tVelocity1.execute(pVelocity);
-	//tVelocity0.execute(pVelocity);
+	//tVelocity2.execute(pVelocity);
 	/*	tVelocity2.execute(pVelocity_2);
    	tVelocity3.execute(pVelocity_3);  
 	  tVelocity4.execute(pVelocity_4);
@@ -273,8 +284,8 @@ public:
 				//tVelocity3.execute(pVelocity);
 				//tAttackDuo12.execute(pAttack);
 
-      //  tGoalOur2.execute(paramGoal);
-        //tGoalOur1.execute(paramGoal);
+        //tGoalie2.execute(paramGoal);
+        //tGoalOur2.execute(paramGoal);
         //tDefendLine1.execute(pDefendL1);
 				//tGoalOur2.execute(paramGoal);
 	//	tGoalOur3.execute(paramGoal);
@@ -289,14 +300,12 @@ public:
 				//tcover3.execute(paramcover);
        // tAttack3.execute(paramcover);
    //     tcover0.execute(paramcover);
-		//dwDefend2.execute(paramDWDefend);
+		dwDefend2.execute(paramDWDefend);
 		if(loopcount++ >5){
-//			dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
-//			params2.DWGoToPointP.initTraj = 0;
-//			sppoint.executeSkill(SkillSet::SplineGoToPoint,params1) ;
-//			params1.SplineGoToPointP.initTraj = 0;
-			sball.executeSkill(SkillSet::SplineInterceptBall,params4) ;
-			params4.SplineInterceptBallP.initTraj = 0;
+			//dwpoint.executeSkill(SkillSet::DWGoToPoint,params3) ;
+			//params3.DWGoToPointP.initTraj = 0;
+			//sppoint.executeSkill(SkillSet::SplineGoToPoint,params1) ;
+			//params1.SplineGoToPointP.initTraj = 0;
 			loopcount = loopcount%10+5;
 		}
 
@@ -342,7 +351,9 @@ public:
     }
     vThread.stop();
     Util::Logger::toStdOut("Exiting process");
+	myfile.close();
     return;
 
   }
+  
 };

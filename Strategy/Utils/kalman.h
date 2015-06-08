@@ -91,8 +91,7 @@ namespace Strategy
 	}BotPose;
 	
 	void strategyToRealConversion(BotPose &p);
-	Vector2D<float> calcBotVelocity(BotPose p1, BotPose p2, float timeMs);
-	
+	Vector2D<float> calcBotVelocity(BotPose p1, BotPose p2, float timeMs);	
   };
 }
 

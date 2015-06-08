@@ -15,6 +15,7 @@
 #include "tCoverGoal.hpp"
 #include "tGoalKick.hpp"
 #include "tDWDefender.hpp"
+#include "tGoalie2.hpp"
 
 //#include "tDragToGoal.hpp"
 #include "tBackup.hpp"

@@ -7,10 +7,22 @@
 #include <iostream>
 
 #define PREDICTION_PACKET_DELAY 4
+static bool direction = true;
 using namespace Util;
 
 namespace Strategy
 {
+	
+	bool SkillSet::_isFrontDirected(Pose botPos, Pose endPos) {
+		int r = 10;
+		double cosTheta = cos(botPos.theta());
+		double sinTheta = sin(botPos.theta());
+		double testx = botPos.x() + r * cosTheta;
+		double testy = botPos.y() + r * sinTheta;
+		double v1 = testx / tan(botPos.theta()) + testy - botPos.x() / tan(botPos.theta()) - botPos.y();
+		double v2 = endPos.x() / tan(botPos.theta()) + endPos.y() - botPos.x() / tan(botPos.theta()) - botPos.y();
+		return ((v1 * v2) >= 0) ? true : false;
+	}
 		
 	void SkillSet::_splineGoToPointTrack(int botid, Pose start, Pose end, float finalvel){
 
@@ -19,15 +31,27 @@ namespace Strategy
 				algoController = new ControllerWrapper(traj, 0, 0, PREDICTION_PACKET_DELAY);
 		}
 		int vl,vr;
+		if(!direction)
+			start.setTheta(start.theta() - PI);
 		algoController->genControls(start, end, vl, vr, finalvel);
 		assert(vl <= 120 && vl >= -120);
 		assert(vr <= 120 && vr >= -120);
-		comm->sendCommand(botid, vl, vr); //maybe add mutex
+		if (direction)
+			comm->sendCommand(botid, vl, vr); //maybe add mutex
+		else {
+			cout << "ulta chaloooo" << endl;
+			int vl1 = (-1)*vr;
+			int vr1 = (-1)*vl;
+			comm->sendCommand(botid, vl1, vr1);
+		}
 	}
 
 	void SkillSet::_splineGoToPointInitTraj(int botid, Pose start, Pose end, float finalvel){
 
 		if(traj)delete traj;
+		direction = _isFrontDirected(start, end);
+		if (!direction) 
+			start.setTheta(start.theta() - PI);
 		traj = TrajectoryGenerators::cubic(start, end ,0,0,0,0); //may need to modify vle,vls,vre,vrs
 		
 		if(algoController)delete algoController;
