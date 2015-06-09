@@ -105,6 +105,8 @@ namespace Strategy
 	for (int i = 0; i < MAX_BS_Q; i++) {
         bsQ.push(std::make_pair(BeliefState(), 0));
     }
+	for(int i = 0 ; i<10;i++)
+		ballPosQueue.push_back(Vector2D<float>(0,0));
   }
 
   Kalman::~Kalman()
@@ -187,7 +189,6 @@ namespace Strategy
 	
   void Kalman::addInfo(SSL_DetectionFrame &detection)
   {
-	 // std::cout << "\n\n\nadding info\n\n\n" << std::endl;
     static double minDelTime = 999999;
     static double lastTime = 0;
     mutex->enter();
@@ -223,7 +224,10 @@ namespace Strategy
       float garbage;
       #if GR_SIM_COMM || FIRASSL_COMM
       linearTransform(newx, newy, garbage);
+	 // std::cout << "\n\n\nhere linear\n\n\n" << std::endl;
       #endif
+	  ballPosQueue.pop_front();
+	  ballPosQueue.push_back(Vector2D<float>(newx, newy));
       ballPosSigmaSqK.x          = ballPosSigmaSqK.x * ( 1 - ballPosK.x) + SIGMA_SQ_NOISE_POS * delTime;
       ballPosK.x                 = ballPosSigmaSqK.x / (ballPosSigmaSqK.x + SIGMA_SQ_OBSVN_POS);
       float  predictedPoseX      = ballPose.x + ballVelocity.x * (delTime);
@@ -238,9 +242,22 @@ namespace Strategy
       
 	  float lastVelocityx        = ballVelocity.x;
 	  float lastVelocityy        = ballVelocity.y;
-      ballVelocity.x             = (ballPose.x - lastPoseX) / delTime;
-	  ballVelocity.y             = (ballPose.y - lastPoseY) / delTime;
+//      ballVelocity.x             = (ballPose.x - lastPoseX) / delTime;
+//	  ballVelocity.y             = (ballPose.y - lastPoseY) / delTime;
       
+	  //New code for ball Velocity
+	  float sumX =0, sumY =0;
+	  float prevPosX = ballPosQueue[0].x;
+	  float prevPosY = ballPosQueue[0].y;
+	  for(int i = 1; i <10 ;i++){
+			sumX += (ballPosQueue[i].x - prevPosX);
+			sumY += (ballPosQueue[i].y - prevPosY);
+			prevPosX = ballPosQueue[i].x;
+			prevPosY = ballPosQueue[i].y;
+	  }
+	  ballVelocity.x = sumX/10;
+	  ballVelocity.y = sumY/10;
+	  
 	 // ballVelocity.x = (newx - bsQ.front().first.ballPos.x)/(timeMs * 0.001);
 	 // ballVelocity.y = (newy - bsQ.front().first.ballPos.y)/(timeMs * 0.001);
 	  ballAcceleration.x         = (ballVelocity.x - lastVelocityx) / delTime;

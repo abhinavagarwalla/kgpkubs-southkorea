@@ -80,6 +80,7 @@ namespace Strategy
     void addInfo(SSL_DetectionFrame& detection);
     void update(BeliefState& state);
 	
+	std::deque<Vector2D<float> > ballPosQueue;
 	std::queue<std::pair<BeliefState, double> > bsQ;
 	static const int MAX_BS_Q = 2;
 	

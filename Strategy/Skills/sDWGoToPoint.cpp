@@ -23,21 +23,21 @@ namespace Strategy
     assert(vl <= 120 && vl >= -120);
     assert(vr <= 120 && vr >= -120);
 	cout << "\n\n dist " << dist << " " <<start.x() << " " << start.y() << " " << end.x() << " " << end.y() << endl;
-	if(dist < 1500.0){
+//	if(dist < 1500.0){
+//		vl = (int)(0.8*vl);
+//		vr = (int)(0.8*vr);
+//	}
+	if(dist < 1000.0){
 		vl = (int)(0.8*vl);
 		vr = (int)(0.8*vr);
-	}
-	if(dist < 1000.0){
-		vl = (int)(0.6*vl);
-		vr = (int)(0.6*vr);
 	}
 //	if(dist < 500.0){
 //		vl = (int)(0.6*vl);
 //		vr = (int)(0.6*vr);
 //	}
 	if(dist < 500.0){
-		vl = (int)((dist/1000)*vl);
-		vr = (int)((dist/1000)*vr);
+		vl = (int)((dist/500)*vl);
+		vr = (int)((dist/500)*vr);
 	}
     comm->sendCommand(botid, vl, vr); //maybe add mutex
   }

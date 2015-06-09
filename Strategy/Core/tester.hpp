@@ -284,7 +284,7 @@ public:
 				//tVelocity3.execute(pVelocity);
 				//tAttackDuo12.execute(pAttack);
 
-        //tGoalie2.execute(paramGoal);
+        tGoalie2.execute(paramGoal);
         //tGoalOur2.execute(paramGoal);
         //tDefendLine1.execute(pDefendL1);
 				//tGoalOur2.execute(paramGoal);
@@ -300,7 +300,7 @@ public:
 				//tcover3.execute(paramcover);
        // tAttack3.execute(paramcover);
    //     tcover0.execute(paramcover);
-		dwDefend2.execute(paramDWDefend);
+	//	dwDefend2.execute(paramDWDefend);
 		if(loopcount++ >5){
 			//dwpoint.executeSkill(SkillSet::DWGoToPoint,params3) ;
 			//params3.DWGoToPointP.initTraj = 0;
