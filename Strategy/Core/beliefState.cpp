@@ -78,7 +78,7 @@ namespace Strategy
 
   BeliefState::~BeliefState()
   {
-    printf("<><><><>destroy!!!\n");
+    //printf("<><><><>destroy!!!\n");
   }
 
   bool BeliefState::update()

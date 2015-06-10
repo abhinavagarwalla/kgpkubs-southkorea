@@ -300,7 +300,7 @@ public:
 				//tcover3.execute(paramcover);
        // tAttack3.execute(paramcover);
    //     tcover0.execute(paramcover);
-	//	dwDefend2.execute(paramDWDefend);
+		//dwDefend2.execute(paramDWDefend);
 		if(loopcount++ >5){
 			//dwpoint.executeSkill(SkillSet::DWGoToPoint,params3) ;
 			//params3.DWGoToPointP.initTraj = 0;

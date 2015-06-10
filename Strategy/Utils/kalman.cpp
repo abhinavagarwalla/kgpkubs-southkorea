@@ -226,40 +226,41 @@ namespace Strategy
       linearTransform(newx, newy, garbage);
 	 // std::cout << "\n\n\nhere linear\n\n\n" << std::endl;
       #endif
-	  ballPosQueue.pop_front();
-	  ballPosQueue.push_back(Vector2D<float>(newx, newy));
+	  
       ballPosSigmaSqK.x          = ballPosSigmaSqK.x * ( 1 - ballPosK.x) + SIGMA_SQ_NOISE_POS * delTime;
       ballPosK.x                 = ballPosSigmaSqK.x / (ballPosSigmaSqK.x + SIGMA_SQ_OBSVN_POS);
+	 
       float  predictedPoseX      = ballPose.x + ballVelocity.x * (delTime);
       float  lastPoseX           = ballPose.x;
-      ballPose.x                 = newx;//predictedPoseX + ballPosK.x * (newx - predictedPoseX);
+      ballPose.x                 = predictedPoseX + ballPosK.x * (newx - predictedPoseX);
       
       ballPosSigmaSqK.y          = ballPosSigmaSqK.y * ( 1 - ballPosK.y) + SIGMA_SQ_NOISE_POS * delTime;
       ballPosK.y                 = ballPosSigmaSqK.y / (ballPosSigmaSqK.y + SIGMA_SQ_OBSVN_POS);
       float  predictedPoseY      = ballPose.y + ballVelocity.y * (delTime);
       float  lastPoseY           = ballPose.y;
-      ballPose.y                 = newy;//predictedPoseY + ballPosK.y * (newy - predictedPoseY);
+      ballPose.y                 = predictedPoseY + ballPosK.y * (newy - predictedPoseY);
       
 	  float lastVelocityx        = ballVelocity.x;
 	  float lastVelocityy        = ballVelocity.y;
-//      ballVelocity.x             = (ballPose.x - lastPoseX) / delTime;
-//	  ballVelocity.y             = (ballPose.y - lastPoseY) / delTime;
-      
+		ballPosQueue.pop_front();
+	  ballPosQueue.push_back(ballPose);
+	  ballVelocity.x             = (ballPose.x - lastPoseX) / delTime;
+	  ballVelocity.y             = (ballPose.y - lastPoseY) / delTime;
 	  //New code for ball Velocity
-	  float sumX =0, sumY =0;
+/*	  float sumX =0, sumY =0;
 	  float prevPosX = ballPosQueue[0].x;
 	  float prevPosY = ballPosQueue[0].y;
-	  for(int i = 1; i <10 ;i++){
-			sumX += (ballPosQueue[i].x - prevPosX);
-			sumY += (ballPosQueue[i].y - prevPosY);
+	  for(int i = 1; i <10 ;i+=2){
+			sumX += (ballPosQueue[i].x - ballPosQueue[i-1].x)/delTime;
+			sumY += (ballPosQueue[i].y - ballPosQueue[i-1].y)/delTime;
 			prevPosX = ballPosQueue[i].x;
 			prevPosY = ballPosQueue[i].y;
 	  }
-	  ballVelocity.x = sumX/10;
-	  ballVelocity.y = sumY/10;
-	  
-	 // ballVelocity.x = (newx - bsQ.front().first.ballPos.x)/(timeMs * 0.001);
-	 // ballVelocity.y = (newy - bsQ.front().first.ballPos.y)/(timeMs * 0.001);
+	  ballVelocity.x = sumX/5;
+	  ballVelocity.y = sumY/5;
+	  */
+	  //ballVelocity.x = (newx - bsQ.front().first.ballPos.x)/(timeMs * 0.001);
+	  //ballVelocity.y = (newy - bsQ.front().first.ballPos.y)/(timeMs * 0.001);
 	  ballAcceleration.x         = (ballVelocity.x - lastVelocityx) / delTime;
       ballAcceleration.y         = (ballVelocity.y - lastVelocityy) / delTime;
       //printf("Ball: %f %f %f %f %lf\n", ballPose.x, ballPose.y, ballVelocity.x, ballVelocity.y, delTime);
@@ -546,11 +547,10 @@ namespace Strategy
       }
     }
 
+	bsQ.pop();
+	bsQ.push(std::make_pair(BeliefState(), nowTime));
+
     mutex->leave();
-//	bsQ.pop();
-//	mutex->enter();
-//	bsQ.push(std::make_pair(BeliefState(), nowTime));
-//	mutex->leave();
   }
 
   void Kalman::update(BeliefState& state)

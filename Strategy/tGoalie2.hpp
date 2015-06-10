@@ -85,28 +85,33 @@ namespace Strategy
 
  void execute(const Param& tParam)
   {
-      float dist = Vector2D<int>::dist(state->ballPos, state->homePos[botID]);
-
-
     Vector2D<int> botDestination ;
    float ang1;
-	   if(state->ballVel.x> (-100)) 
+	   if(state->ballVel.x> (-50)) 
 		   ang1 = 0;
 	   else
 			ang1 = atan(state->ballVel.y/state->ballVel.x);
-	   //in case of ball traveling directly from the oponent's half 
-	   botDestination.y = state->ballPos.y + SGN(state->ballVel.y)*((state->ballPos.x) - (-HALF_FIELD_MAXX + DBOX_WIDTH + BOT_RADIUS*1.6))*tan(ang1) ; //tan(ang1)
+		
+		botDestination.y = state->ballPos.y -((state->ballPos.x)-(-HALF_FIELD_MAXX + DBOX_WIDTH))*tan(ang1);
 
-		cout << botDestination.y << " " << state->ballVel.x << "vel x " << state->ballVel.y << " " << state->ballPos.x << " " << state->ballPos.y << endl;
-	//	if(ang1 != 0)
-			botDestination.y = botDestination.y + SGN(botDestination.y - state->homePos[botID].y)*2*BOT_RADIUS;
-	 if(botDestination.y >=  OUR_GOAL_MAXY)
-		   botDestination.y = OUR_GOAL_MAXY ;
-	   if(botDestination.y <= OUR_GOAL_MINY)
-		   botDestination.y = OUR_GOAL_MINY;
+	//`botDestination.y = state->ballPos.y - ((state->ballPos.x) - (-HALF_FIELD_MAXX + DBOX_WIDTH + BOT_RADIUS*1.6))*ang1 ; //tan(ang1)
+		cout << botDestination.y << " " << ang1 << " " << state->ballVel.x << "vel x " << state->ballVel.y << " " << state->ballPos.x << " " << state->ballPos.y << endl;
+		botDestination.x = (-HALF_FIELD_MAXX + GOAL_DEPTH+ 1.6*BOT_RADIUS);
+		
+		float botBallDist = Vector2D<int>::dist(state->ballPos, state->homePos[botID]);
+		
+		botDestination.y = botDestination.y + SGN(state->ballVel.y)*((2*BOT_RADIUS));
+		//if(botBallDist < 1500)
+			//botDestination.y = botDestination.y + SGN(botDestination.y - state->homePos[botID].y)*2*((int)((botBallDist/1500)*BOT_RADIUS));
+	  float dist = Vector2D<int>::dist(botDestination, state->homePos[botID]);	
+	 if(botDestination.y >=  (OUR_GOAL_MAXY - 0.7*BOT_RADIUS))
+		   botDestination.y = OUR_GOAL_MAXY - 0.7*BOT_RADIUS;
+	   if(botDestination.y <= (OUR_GOAL_MINY + 0.7*BOT_RADIUS))
+		   botDestination.y = OUR_GOAL_MINY + 0.7*BOT_RADIUS;
 	//cout << "bot dest y " << botDestination.y << endl;
-	botDestination.x = (-HALF_FIELD_MAXX + GOAL_DEPTH+ 1.6*BOT_RADIUS); //+ 100;   //set your threshold ********
+	 //+ 100;   //set your threshold ********
 	// botDestination.y + =  oscillation()*BOT_RADIUS ;// set according to you decide to put oscillation at normal point********
+
 
 	if (!isGoalKeeperInPosition() && dist > 0.5 * BOT_BALL_THRESH)
       {
@@ -124,15 +129,12 @@ namespace Strategy
 			skillSet->executeSkill(sID, sParam);
 			return;
 		}
-					sID = SkillSet::DWGoToPoint;
-						sParam.DWGoToPointP.x = ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*1.6);//botDestination.x;
-						sParam.DWGoToPointP.y = botDestination.y;
-						sParam.DWGoToPointP.finalSlope = -PI/2;
-						sParam.DWGoToPointP.finalVelocity = 0;
-						skillSet->executeSkill(sID, sParam);  // PI    //set ur angle ******at PI :: to much of disturbation , -PI/2 :: gap is being left ::@oscillation
-   // _goToPoint(botID,point,0,PI/2);
-
-  // if(float distance = Vector2D<int>::dist(state->ballPos,state->homePos[botID])< 3.2*BOT_BALL_THRESH) //1.2
+			sID = SkillSet::DWGoToPoint;
+			sParam.DWGoToPointP.x = ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*1.6);//botDestination.x;
+			sParam.DWGoToPointP.y = botDestination.y;
+			sParam.DWGoToPointP.finalSlope = -PI/2;
+			sParam.DWGoToPointP.finalVelocity = 0;
+			skillSet->executeSkill(sID, sParam);  // PI    //set ur angle ******at PI :: to much of disturbation , -PI/2 :: gap is being left ::@oscillation
 
 }
  
