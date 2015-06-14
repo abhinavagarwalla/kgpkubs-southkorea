@@ -82,7 +82,9 @@ enum StrategyPacket_TacticID {
   StrategyPacket_TacticID_Steal = 15,
   StrategyPacket_TacticID_Stop = 16,
   StrategyPacket_TacticID_Velocity = 17,
-  StrategyPacket_TacticID_DWDefender = 18
+  StrategyPacket_TacticID_DWDefender = 18,
+  //StrategyPacket_TacticID_DWDefender2015 = 19,
+  
 };
 bool StrategyPacket_TacticID_IsValid(int value);
 const StrategyPacket_TacticID StrategyPacket_TacticID_TacticID_MIN = StrategyPacket_TacticID_Block;
@@ -321,6 +323,8 @@ class StrategyPacket : public ::google::protobuf::Message {
   static const TacticID Stop = StrategyPacket_TacticID_Stop;
   static const TacticID Velocity = StrategyPacket_TacticID_Velocity;
   static const TacticID DWDefender = StrategyPacket_TacticID_DWDefender;
+  //static const TacticID DWDefender2015 = StrategyPacket_TacticID_DWDefender2015;
+  
   
   static inline bool TacticID_IsValid(int value) {
     return StrategyPacket_TacticID_IsValid(value);

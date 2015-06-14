@@ -43,6 +43,8 @@ namespace Strategy
 	  Shoot,
 	  DWDefender,
 	  Goalie2,
+	  DWDefender2015,
+	  CoverGoal2015,
       MAX_TACTICS          // Total number of tactics. All Implemented Tactics above this point
     };
     /* List the UnImplented Tactics below this line. When Implemented:
@@ -58,7 +60,7 @@ namespace Strategy
        */
             // Parameters for tactic Goalie
       struct type1
-        { } GoalieP, ClearP, ShootP, StopP,TestgotopointP, DWDefenderP;
+        { } GoalieP, ClearP, ShootP, StopP,TestgotopointP, DWDefenderP, DWDefender2015P;
 
 
 
@@ -127,7 +129,7 @@ namespace Strategy
       struct type11
       {
         int distFromGoal;
-      } CoverGoalP; //tactic needs to be renamed to TDefendGoal
+      } CoverGoalP,CoverGoal2015P; //tactic needs to be renamed to TDefendGoal
 
 	  struct type12{
 		  bool initTraj;

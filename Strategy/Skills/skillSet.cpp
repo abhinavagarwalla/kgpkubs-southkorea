@@ -64,7 +64,7 @@ SkillSet::SkillSet(const BeliefState* state, const int botID) :
 #else
   pathPlanner = new MergeSCurve();
 #endif
-
+	counter = 0;
 	algoController = NULL;
 	traj = NULL;
 } // SkillSet

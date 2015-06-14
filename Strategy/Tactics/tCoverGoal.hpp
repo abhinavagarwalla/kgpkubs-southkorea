@@ -61,6 +61,14 @@ if(dist_from_goal + factor * perpend_dist < mindis)
       return minv;
     } // chooseBestBot
 
+	
+	bool isAngleSet() {
+		return ((state->homeAngle[botID] >= (-PI/2 -PI/6) && state->homeAngle[botID] <= (-PI/2 + PI/6)) ||
+				(state->homeAngle[botID] <= (PI/2 + PI/6) && state->homeAngle[botID] >= (PI/2 - PI/6))
+				);
+	}
+
+
     void execute(const Param& tParam)
     {
       printf("CoverGoal BotID: %d\n",botID);
@@ -84,14 +92,18 @@ if(dist_from_goal + factor * perpend_dist < mindis)
       {
         //Bot elsewhere in field. Bring the bot to the Goalkeeper position.
         //  Util::Logger::toStdOut("Bot going to goalkeeper positon.");
-        sID = SkillSet::GoToPoint;
-        sParam.GoToPointP.align = false;
-        sParam.GoToPointP.finalslope =- PI / 2;
-        sParam.GoToPointP.x = ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + 4.5*BOT_RADIUS);
-        sParam.GoToPointP.y = 0;
+        sID = SkillSet::DWGoToPoint;
+        sParam.DWGoToPointP.finalSlope =- PI / 2;
+        sParam.DWGoToPointP.x = ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + 3.5*BOT_RADIUS);
+        sParam.DWGoToPointP.y = 0;
 
       }
-      else
+      else if (!isAngleSet()) {
+			sID = SkillSet::TurnToAngle;
+			sParam.TurnToAngleP.finalslope = -PI / 2;
+			skillSet->executeSkill(sID, sParam);
+			return;
+		}
       {
         //Bot in Goalkeeper position. Show goalkeeping skills.
         //note: try commenting this if block if bot not working properly
@@ -109,18 +121,18 @@ if(dist_from_goal + factor * perpend_dist < mindis)
 //          sParam.TurnToAngleP.finalslope = PI / 2;
 //          state1 = 0;
 //        }
-if(0){printf("\n in if(0)\n");}
+		if(0){printf("\n in if(0)\n");}
         else
         {
+			
           state1 = 1;
           //printf("Ball x:%d y:%d v_x:%f v_y:%f\n", state->ballPos.x, state->ballPos.y, state->ballVel.x, state->ballVel.y);
-          sID = SkillSet::GoToPoint;
-          sParam.GoToPointP.x = ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*4.5) /*/4*/;
+          sID = SkillSet::DWGoToPoint;
+          sParam.DWGoToPointP.x = ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*3.5) /*/4*/;
           int temp = getBotDestPointY();
-          sParam.GoToPointP.y = temp;
+          sParam.DWGoToPointP.y = temp;
 					printf("\n Predicting point = %d \n",temp);
-          sParam.GoToPointP.align = false;
-          sParam.GoToPointP.finalslope = -PI / 2;
+          sParam.DWGoToPointP.finalSlope = -PI / 2;
           
           // Util::Logger::toStdOut("%d  Bot showing goalkeeping skills.\n",botID);
           //  Util::Logger::toStdOut("GO to Point %d, %d\n",ForwardX(-(HALF_FIELD_MAXX) + DBOX_WIDTH),temp);
@@ -128,17 +140,14 @@ if(0){printf("\n in if(0)\n");}
           //  tState = COMPLETED;
         }
       }
-      
       skillSet->executeSkill(sID, sParam);
-
-
     }
 
     bool isGoalKeeperInPosition()
     {
       //Util::Logger::toStdOut("Half_field_max : %d, Dbox_width : %d\n",HALF_FIELD_MAXX,DBOX_WIDTH);
       if ((ForwardX(state->homePos[botID].x) >  (-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*3)) &&
-          (ForwardX(state->homePos[botID].x) <= (-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*6)) &&
+          (ForwardX(state->homePos[botID].x) <= (-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*5)) &&
           (state->homePos[botID].y >= OUR_GOAL_MINY - DBOX_WIDTH) &&
           (state->homePos[botID].y <= (OUR_GOAL_MAXY + DBOX_WIDTH)))
         return true;

@@ -8,6 +8,9 @@
 #include <queue>
 #include <utility>
 #include <set>
+#include <fstream>
+
+using namespace std;
 // Forward Declarations
 namespace Util
 {
@@ -80,6 +83,7 @@ namespace Strategy
     void addInfo(SSL_DetectionFrame& detection);
     void update(BeliefState& state);
 	
+	std::deque<Vector2D<float> > QueueVel, QueuePos;
 	std::deque<Vector2D<float> > ballPosQueue;
 	std::queue<std::pair<BeliefState, double> > bsQ;
 	static const int MAX_BS_Q = 2;
@@ -90,7 +94,8 @@ namespace Strategy
 		BotP():x(0), y(0), theta(0) {}
 		BotP(float x, float y, float theta): x(x), y(y), theta(theta) {}
 	}BotPose;
-	
+	ofstream myfile;
+ 
 	void strategyToRealConversion(BotPose &p);
 	Vector2D<float> calcBotVelocity(BotPose p1, BotPose p2, float timeMs);	
   };

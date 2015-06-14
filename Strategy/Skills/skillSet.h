@@ -110,6 +110,7 @@ namespace Strategy
 	private:
 		ControllerWrapper *algoController;
 		Trajectory* traj;
+		int counter;
 		std::queue<Pose> predictedPoseQ;
 	public:
 		enum SkillID
@@ -169,7 +170,7 @@ namespace Strategy
 	void splineInterceptBall(const SParam& param);
 	void _splineInterceptBallInitTraj(int botid, Pose start, Vector2D<float> ballPos, Vector2D<float> ballVel, Vector2D<float> botVel, float final_vl, float final_vr);
 	void _splineInterceptBallTrack(int botid, Pose start, Vector2D<float> ballPos, Vector2D<float> ballVel, Vector2D<float> botVel, float final_vl, float final_vr);
-    
+    void _splineGoToPointCheckTraj(int botid, Pose start, Pose end, float finalvel, int initTraj);
 	// Parameter for skills to be trained
     static bool loadParamsFromFile;
     static bool  skillParamsLoaded;

@@ -25,7 +25,8 @@ namespace Strategy
 	}
 		
 	void SkillSet::_splineGoToPointTrack(int botid, Pose start, Pose end, float finalvel){
-
+		
+		counter++;	
 		if(!algoController){
 			if(traj)
 				algoController = new ControllerWrapper(traj, 0, 0, PREDICTION_PACKET_DELAY);
@@ -39,7 +40,7 @@ namespace Strategy
 		if (direction)
 			comm->sendCommand(botid, vl, vr); //maybe add mutex
 		else {
-			cout << "ulta chaloooo" << endl;
+			//cout << "ulta chaloooo" << endl;
 			int vl1 = (-1)*vr;
 			int vr1 = (-1)*vl;
 			comm->sendCommand(botid, vl1, vr1);
@@ -47,12 +48,42 @@ namespace Strategy
 	}
 
 	void SkillSet::_splineGoToPointInitTraj(int botid, Pose start, Pose end, float finalvel){
-
+		counter = 0;
 		if(traj)delete traj;
 		direction = _isFrontDirected(start, end);
 		if (!direction) 
 			start.setTheta(start.theta() - PI);
 		traj = TrajectoryGenerators::cubic(start, end ,0,0,0,0); //may need to modify vle,vls,vre,vrs
+		
+		if(algoController)delete algoController;
+		algoController = new ControllerWrapper(traj, 0, 0, PREDICTION_PACKET_DELAY);
+		
+		/*while(!predictedPoseQ.empty())predictedPoseQ.pop_front();
+		for (int i = 0; i < PREDICTION_PACKET_DELAY; i++) {
+			predictedPoseQ.push_back(Pose(bs.homeX[BOT_ID_TESTING], bs.homeY[BOT_ID_TESTING], bs.homeTheta[BOT_ID_TESTING]));
+		}*/
+		_splineGoToPointTrack(botid,start,end,finalvel);
+	}
+	
+	void SkillSet::_splineGoToPointCheckTraj(int botid, Pose start, Pose end, float finalvel, int initTraj){
+
+		if(initTraj==1)
+			_splineGoToPointInitTraj(botID, start, end, finalvel);
+			
+		if(counter < 100)
+			_splineGoToPointTrack(botid,start,end,finalvel);
+		
+		
+		if(counter > 100){
+			delete traj;
+			counter = 0;
+		}
+		int vl,vr;
+		algoController->genControls(start, end, vl, vr, finalvel);		
+		direction = _isFrontDirected(start, end);
+		if (!direction) 
+			start.setTheta(start.theta() - PI);
+		traj = TrajectoryGenerators::cubic(start, end ,vl,vr,0,0); //may need to modify vle,vls,vre,vrs
 		
 		if(algoController)delete algoController;
 		algoController = new ControllerWrapper(traj, 0, 0, PREDICTION_PACKET_DELAY);
@@ -71,9 +102,10 @@ namespace Strategy
     finalvel  = param.GoToPointP.finalVelocity;
 	Pose start(state->homePos[botID].x, state->homePos[botID].y, state->homeAngle[botID]);
 	Pose end(param.SplineGoToPointP.x, param.SplineGoToPointP.y, param.SplineGoToPointP.finalSlope);
+	_splineGoToPointCheckTraj(botID, start, end, finalvel, param.SplineGoToPointP.initTraj);
 	
-	if(param.SplineGoToPointP.initTraj)_splineGoToPointInitTraj(botID, start, end, finalvel);
-	else _splineGoToPointTrack(botID, start, end, finalvel);
+//	if(param.SplineGoToPointP.initTraj)_splineGoToPointInitTraj(botID, start, end, finalvel);
+//	else _splineGoToPointTrack(botID, start, end, finalvel);
 	
    }
 }

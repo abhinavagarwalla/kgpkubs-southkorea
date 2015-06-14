@@ -51,7 +51,10 @@ public:
 	paramGoal2.Goalie2P.initTraj = 1;
     
 	TDWDefender dwDefend2(&state, 2);
+	TDWDefender2015 dwDefend20152(&state, 2);
 	Tactic::Param paramDWDefend;
+	Tactic::Param paramDWDefend2015;
+	
     //tCharge
     TCharge tCharge2(&state, 2);
     TCharge tCharge1(&state, 1);
@@ -66,11 +69,15 @@ public:
     
     //tCover Bot
     TCoverGoal tcover0(&state, 0);
-    TCoverGoal tcover2(&state,2);
+    TCoverGoal tcover1(&state,1);
 	TCoverGoal tcover3(&state,3);
     Tactic::Param paramcover;
     paramcover.CoverGoalP.distFromGoal = -2*DBOX_WIDTH;
     paramList[Tactic::CoverGoal].CoverGoalP.distFromGoal = -2*DBOX_WIDTH;
+	
+	//CoverGoal2015
+	TCoverGoal2015 tcover20152(&state,2);
+	Tactic::Param paramcover2015;
 	
     //tStop Bot
     TStop tS0(&state, 0);
@@ -147,6 +154,8 @@ public:
     TAttack tAttack4(&state, 4);
     Tactic::Param pAttack;
     paramList[Tactic::Attack].AttackP.rotateOnError = true;
+	
+	
     
     // TestgotoPoint
     Strategy::Testgotopoint ttest1(&state,1);
@@ -275,7 +284,7 @@ public:
 	  //tAttack2.execute(pAttack);
     //tAttack4.execute(pAttack); 
 
-	 //tVelocity1.execute(pVelocity);
+	// tVelocity1.execute(pVelocity);
 	//tVelocity2.execute(pVelocity);
 	/*	tVelocity2.execute(pVelocity_2);
    	tVelocity3.execute(pVelocity_3);  
@@ -283,35 +292,38 @@ public:
 		*/		//tVelocity1.execute(pVelocity);
 				//tVelocity3.execute(pVelocity);
 				//tAttackDuo12.execute(pAttack);
-
-        tGoalie2.execute(paramGoal);
+    //   tVelocity1.execute(pVelocity);
+	  //  tVelocity2.execute(pVelocity_2);
+       tGoalie2.execute(paramGoal);
         //tGoalOur2.execute(paramGoal);
         //tDefendLine1.execute(pDefendL1);
 				//tGoalOur2.execute(paramGoal);
 	//	tGoalOur3.execute(paramGoal);
-       /*
+       /* 
 		if(loopcount++ > 3){
 			sppoint.executeSkill(SkillSet::SplineGoToPoint, params1);
-			params1.SplineGoToPointP.initTraj = 0;
+			para ms1.SplineGoToPointP.initTraj = 0;
 			loopcount = loopcount%100 + 3;
 		}
 		*/
         //tPosition
 				//tcover3.execute(paramcover);
        // tAttack3.execute(paramcover);
-   //     tcover0.execute(paramcover);
+      //  tcover1.execute(paramcover);
 		//dwDefend2.execute(paramDWDefend);
-		if(loopcount++ >5){
+	    //dwDefend20152.execute(paramDWDefend2015);
+		//tcover20152.execute(paramcover2015);
+		/*if(loopcount++ >5){
 			//dwpoint.executeSkill(SkillSet::DWGoToPoint,params3) ;
 			//params3.DWGoToPointP.initTraj = 0;
-			//sppoint.executeSkill(SkillSet::SplineGoToPoint,params1) ;
-			//params1.SplineGoToPointP.initTraj = 0;
+		//	sppoint.executeSkill(SkillSet::SplineGoToPoint,params1) ;
+		//	params1.SplineGoToPointP.initTraj = 0;
 			loopcount = loopcount%10+5;
 		}
-
+        */
         //goTopointStraight.executeSkill(SkillSet::GoToBallStraight,param1);
         //goToBallStraight.executeSkill(SkillSet::GoToBallStraight,param9)
-     //   tAttack2.execute(pAttack);
+        //tAttack2.execute(pAttack);
 			//	tReceive3.execute(pReceive);
 				//tReceive1.execute(pReceive);
 	//	tAttack3.execute(pAttack);

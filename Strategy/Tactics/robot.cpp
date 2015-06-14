@@ -57,6 +57,8 @@ namespace Strategy
 	tacticList[Tactic::GoalKick]						= new TGoalKick(state,botID);
 	tacticList[Tactic::Shoot]                  = new TShoot(state,botID);
 		tacticList[Tactic::DWDefender]		   = new TDWDefender(state, botID);
+		tacticList[Tactic::DWDefender2015]         = new TDWDefender2015(state,botID);
+		tacticList[Tactic::CoverGoal2015]           = new TCoverGoal2015(state,botID);
 		//tacticList[Tactic::Clear]								= new TClear(state,botID);
 		//tacticList[Tactic::AttackDuo] = new TAttackDuo() -- how the fuck am i supposed to add two bot ids ??? :-(
     // Initialization check

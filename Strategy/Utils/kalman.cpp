@@ -10,6 +10,7 @@
 #include <limits>
 #include <set>
 #include <iostream>
+#include <fstream>
 
 #define DEBUG_KALMAN 1
 const int botcenterbluecenterdist =75; //Ankit: for botCentreTransform
@@ -102,15 +103,23 @@ namespace Strategy
     ballPosK.x     = 1;
     ballPosK.y     = 1;
 	
+	 for(int i = 0 ; i<=5;i++){
+		 QueueVel.push_back(Vector2D<float>(0,0));
+		 QueuePos.push_back(Vector2D<float>(0,0));
+		}
+	 
+	  myfile.open ("exmple.txt");
+	  
 	for (int i = 0; i < MAX_BS_Q; i++) {
         bsQ.push(std::make_pair(BeliefState(), 0));
     }
-	for(int i = 0 ; i<10;i++)
+	for(int i = 1 ; i<5;i++)
 		ballPosQueue.push_back(Vector2D<float>(0,0));
   }
 
   Kalman::~Kalman()
   {
+	myfile.close();
     fclose(kalmanlog);
   }
 	int Kalman::getClosestBotID(int x, int y, float angle, std::set<int> &uniqueBotIDs)
@@ -264,8 +273,29 @@ namespace Strategy
 	  ballAcceleration.x         = (ballVelocity.x - lastVelocityx) / delTime;
       ballAcceleration.y         = (ballVelocity.y - lastVelocityy) / delTime;
       //printf("Ball: %f %f %f %f %lf\n", ballPose.x, ballPose.y, ballVelocity.x, ballVelocity.y, delTime);
-      
-      checkValidX(ballPose.x, ballVelocity.x, newx);
+// //       QueueVel.pop_front();
+////	//	QueueVel.push_back(ballVelocity);
+//		QueuePos.push_back(ballPose);
+//		QueuePos.pop_front();
+				
+		float Xsum2=0, Xsum1=0, TimeDiffSum = 10*delTime, TimeDiffSqSum = 30*delTime*delTime, n=4, lambda = 0.01, Ysum2=0,Ysum1=0;
+
+		for(int i=3;i>=0;i--)
+		{
+			Xsum1+=(delTime*(4-i)*ballPosQueue[i].x);
+			Xsum2+=(ballPosQueue[i].x);
+			Ysum1+=(delTime*(4-i)*ballPosQueue[i].y);
+			Ysum2+=(ballPosQueue[i].y);
+		}
+
+		//std::cout << n*Xsum1 << " dbsakejb" << TimeDiffSum*Xsum2 << std::endl;
+		int Xv_lambda = ((n*Xsum1 -TimeDiffSum*Xsum2)/(n*(lambda + TimeDiffSqSum) - TimeDiffSum*TimeDiffSum));
+		int Yv_lambda = ((n*Ysum1 -TimeDiffSum*Ysum2)/(n*(lambda + TimeDiffSqSum) - TimeDiffSum*TimeDiffSum));
+	
+		myfile  << Xv_lambda << "\t" << Yv_lambda << "\t" << ballVelocity.x << "\t" << ballVelocity.y << std::endl;
+     	ballVelocity.x = -Xv_lambda;
+		ballVelocity.y = -Yv_lambda;
+		checkValidX(ballPose.x, ballVelocity.x, newx);
       checkValidY(ballPose.y, ballVelocity.y, newy);
       ballLastUpdateTime         = timeCapture;
     }

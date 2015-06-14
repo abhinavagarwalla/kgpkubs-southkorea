@@ -77,32 +77,29 @@ namespace Strategy
 				(state->homeAngle[botID] <= (PI/2 + PI/6) && state->homeAngle[botID] >= (PI/2 - PI/6))
 				);
 	}
-
-
 //bool approaching_from_corner();
-
-
 
  void execute(const Param& tParam)
   {
     Vector2D<int> botDestination ;
    float ang1;
-	   if(state->ballVel.x> (-50)) 
+	   if(state->ballVel.x> (-10)) 
 		   ang1 = 0;
 	   else
 			ang1 = atan(state->ballVel.y/state->ballVel.x);
 		
-		botDestination.y = state->ballPos.y -((state->ballPos.x)-(-HALF_FIELD_MAXX + DBOX_WIDTH))*tan(ang1);
+		botDestination.y = state->ballPos.y + SGN(state->ballVel.y)*2*BOT_RADIUS - ((state->ballPos.x)-(-HALF_FIELD_MAXX + DBOX_WIDTH + BOT_RADIUS))*tan(ang1);
 
 	//`botDestination.y = state->ballPos.y - ((state->ballPos.x) - (-HALF_FIELD_MAXX + DBOX_WIDTH + BOT_RADIUS*1.6))*ang1 ; //tan(ang1)
-		cout << botDestination.y << " " << ang1 << " " << state->ballVel.x << "vel x " << state->ballVel.y << " " << state->ballPos.x << " " << state->ballPos.y << endl;
+		cout << " fdsafw               "  << state->ballVel.x << "   " << state->ballVel.y  << endl;//<< " " << state->ballPos.x << " " << state->ballPos.y << endl;
 		botDestination.x = (-HALF_FIELD_MAXX + GOAL_DEPTH+ 1.6*BOT_RADIUS);
 		
 		float botBallDist = Vector2D<int>::dist(state->ballPos, state->homePos[botID]);
-		
-		botDestination.y = botDestination.y + SGN(state->ballVel.y)*((2*BOT_RADIUS));
+		cout << "vbsfvgiejv             " <<state->ballPos.y << "   " << botDestination.y << endl;
+	//	botDestination.y = botDestination.y + SGN(state->ballVel.y)*((2*BOT_RADIUS));
 		//if(botBallDist < 1500)
-			//botDestination.y = botDestination.y + SGN(botDestination.y - state->homePos[botID].y)*2*((int)((botBallDist/1500)*BOT_RADIUS));
+	  //botDestination.y = botDestination.y + SGN(botDestination.y - state->homePos[botID].y)*2*((int)((botBallDist/1500)*BOT_RADIUS));
+	//  botDestination.y = botDestination.y + SGN(botDestination.y - state->homePos[botID].y)*2*BOT_RADIUS;
 	  float dist = Vector2D<int>::dist(botDestination, state->homePos[botID]);	
 	 if(botDestination.y >=  (OUR_GOAL_MAXY - 0.7*BOT_RADIUS))
 		   botDestination.y = OUR_GOAL_MAXY - 0.7*BOT_RADIUS;
