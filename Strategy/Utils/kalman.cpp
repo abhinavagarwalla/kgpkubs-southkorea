@@ -179,17 +179,17 @@ namespace Strategy
   //  strategyToRealConversion(p2);
 
 	float vl,vr;
-	//cout << "vlvr" << delX << " " << delY << endl;
+	///cout << "vlvr" << timeMs << endl;
     double delTheta = normalizeAngle(Theta1 - Theta2); // assuming |delTheta| < PI, which is safe to assume
                                                            // for ~ 16 ms of rotation at any speed (even 120,-120?).
     assert(timeMs > 0);
     // w * timeMs = delTheta
-    double w = delTheta / (timeMs * 0.001);
+    double w = delTheta / (timeMs);// * 0.001);
     if (delTheta < 1e-2 && delTheta > -1e-2) {  // be realistic
         // bot should be headed straight, but again confusion
         // so taking projection of (delX, delY) along (cos(theta), sin(theta)) as displacement.
         double dispLength = delX*cos(Theta1) + delY*sin(Theta2);
-        vl = dispLength / (timeMs * 0.001);
+        vl = dispLength / (timeMs);// * 0.001);
         vl = vl / ticksToCmS;
         vr = vl;
 		Vector2D<float> v(vl,vr);
@@ -230,10 +230,7 @@ namespace Strategy
     std::set<int> uniqueBotIDs;
 	
 	double nowTime = detection.t_capture();
-	double timeMs = (nowTime - bsQ.front().second)*1000.0;
-	if(timeMs <= 0){
-		timeMs = 0.001;
-	}
+
 	//Adding Ball Info
     SSL_DetectionBall ball;
     if (ballsNum > 0)
@@ -243,6 +240,7 @@ namespace Strategy
       int newx = ball.x() - CENTER_X;
       int newy = ball.y() - CENTER_Y;
       double delTime = timeCapture - ballLastUpdateTime;
+
       float garbage;
       #if GR_SIM_COMM || FIRASSL_COMM
       linearTransform(newx, newy, garbage);
@@ -340,6 +338,10 @@ namespace Strategy
         botcenterTransform(newx, newy, newangle);
         #endif
         double           delTime = timeCapture - homeLastUpdateTime[id];
+		double timeMs = delTime ; //(nowTime - bsQ.front().second)*1000.0;
+		if(timeMs <= 0){
+			timeMs = 0.001;
+		}
         static float lastnx = 0;
         homePosSigmaSqK[id].x    = homePosSigmaSqK[id].x * ( 1 - homePosK[id].x) + SIGMA_SQ_NOISE_POS * delTime;
         assert(homePosSigmaSqK[id].x >= 0);
@@ -379,7 +381,7 @@ namespace Strategy
 		//Adding vl,vr calculation from motion-simulation
 		BotPose p1(bsQ.front().first.homePos[id].x, bsQ.front().first.homePos[id].y, bsQ.front().first.homeAngle[id]);
         BotPose p2(newx - lastPoseX, newy - lastPoseY, newangle - lastAngle);
-		homeVlVr[id] = calcBotVelocity(homePose[id].x - lastPoseX, homePose[id].y - lastPoseY, newangle, lastAngle, timeMs);
+		homeVlVr[id] = calcBotVelocity((homePose[id].x - lastPoseX)/fieldXConvert , (homePose[id].y - lastPoseY)/fieldYConvert, newangle, lastAngle, timeMs);
 //        if(id == 1)
 //          printf("%f %f %f %f\n", homePose[1].x, homePosK[1].x, homePosSigmaSqK[1].x, homeVelocity[1].x);
         checkValidX(homePose[id].x, homeVelocity[id].x, newx);
@@ -478,6 +480,10 @@ namespace Strategy
         botcenterTransform(newx, newy, newangle);
         #endif
         double           delTime = timeCapture - homeLastUpdateTime[id];
+		double timeMs = delTime ; //(nowTime - bsQ.front().second)*1000.0;
+		if(timeMs <= 0){
+			timeMs = 0.001;
+		}
         homePosSigmaSqK[id].x    = homePosSigmaSqK[id].x * ( 1 - homePosK[id].x) + SIGMA_SQ_NOISE_POS * delTime;
         homePosK[id].x           = homePosSigmaSqK[id].x / (homePosSigmaSqK[id].x + SIGMA_SQ_OBSVN_POS);
         float  predictedPoseX    = homePose[id].x + homeVelocity[id].x * (delTime);
@@ -516,7 +522,7 @@ namespace Strategy
 		//Adding vl,vr calculation from motion-simulation
 		BotPose p1(bsQ.front().first.homePos[id].x, bsQ.front().first.homePos[id].y, bsQ.front().first.homeAngle[id]);
         BotPose p2(newx, newy, newangle);
-		homeVlVr[id] = calcBotVelocity(homePose[id].x - lastPoseX, homePose[id].y - lastPoseY, newangle, lastAngle, timeMs);
+		homeVlVr[id] = calcBotVelocity((homePose[id].x - lastPoseX)/fieldXConvert, (homePose[id].y - lastPoseY)/fieldYConvert, newangle, lastAngle, timeMs);
       }
 	  
       // Blue robot info

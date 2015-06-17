@@ -158,8 +158,6 @@ public:
     TAttack tAttack4(&state, 4);
     Tactic::Param pAttack;
     paramList[Tactic::Attack].AttackP.rotateOnError = true;
-	
-	
     
     // TestgotoPoint
     Strategy::Testgotopoint ttest1(&state,1);
@@ -167,7 +165,7 @@ public:
 	//SplineGoToPoint
 	Strategy::SParam params1;
 	params1.SplineGoToPointP.finalVelocity = 0;
-	params1.SplineGoToPointP.x = 0;
+	params1.SplineGoToPointP.x = HALF_FIELD_MAXX - 10*BOT_RADIUS;
 	params1.SplineGoToPointP.y = 0;
 	params1.SplineGoToPointP.finalSlope = 0 ;
 	params1.SplineGoToPointP.initTraj = 1;
@@ -316,13 +314,13 @@ public:
       //  tcover1.execute(paramcover);
 		//dwDefend2.execute(paramDWDefend);
 	    //dwDefend20152.execute(paramDWDefend2015);
-		tcover20152.execute(paramcover2015);
+	//	tcover20152.execute(paramcover2015);
 		//tcoverleft2.execute(paramcoverleft);
 		if(loopcount++ >5){
 			//dwpoint.executeSkill(SkillSet::DWGoToPoint,params3) ;
 			//params3.DWGoToPointP.initTraj = 0;
-			//sppoint.executeSkill(SkillSet::SplineGoToPoint,params1) ;
-			//params1.SplineGoToPointP.initTraj = 0;
+			sppoint.executeSkill(SkillSet::SplineGoToPoint,params1) ;
+			params1.SplineGoToPointP.initTraj = 0;
 			loopcount = loopcount%10+5;
 		}
         

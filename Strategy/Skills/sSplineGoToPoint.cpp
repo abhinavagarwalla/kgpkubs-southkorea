@@ -19,10 +19,10 @@ namespace Strategy
 		double sinTheta = sin(botPos.theta());
 		double testx = botPos.x() + r * cosTheta;
 		double testy = botPos.y() + r * sinTheta;
-		if(((vle + vre)/2 ) > 30)
+/*		if(((vle + vre)/2 ) > 30)
 			return true;
 		if((( vle + vre)/2)< -30)
-			return false;
+			return false;*/
 		double v1 = testx / tan(botPos.theta()) + testy - botPos.x() / tan(botPos.theta()) - botPos.y();
 		double v2 = endPos.x() / tan(botPos.theta()) + endPos.y() - botPos.x() / tan(botPos.theta()) - botPos.y();
 		return ((v1 * v2) >= 0) ? true : false;
