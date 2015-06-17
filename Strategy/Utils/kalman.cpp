@@ -67,6 +67,20 @@ namespace Strategy
 {
   Kalman::Kalman()
   {
+/*	KF = KalmanFilter(4, 2, 0);
+	KF.transitionMatrix = *(Mat_<float>(4, 4) << 1,0,1,0,   0,1,0,1,  0,0,1,0,  0,0,0,1);
+	measurement = Mat_<float>(2,1); measurement.setTo(Scalar(0));
+	 
+	KF.statePre.at<float>(0) = 0;
+	KF.statePre.at<float>(1) = 0;
+	KF.statePre.at<float>(2) = 0;
+	KF.statePre.at<float>(3) = 0;
+	setIdentity(KF.measurementMatrix);
+	setIdentity(KF.processNoiseCov, Scalar::all(1e-4));
+	setIdentity(KF.measurementNoiseCov, Scalar::all(10));
+	setIdentity(KF.errorCovPost, Scalar::all(.1));*/
+	//cv::KalmanFilter kf(4, 2, 0);
+
     kalmanlog = fopen("kalman.log", "w");
     t.start();
     mutex = new Util::CS();
@@ -108,7 +122,7 @@ namespace Strategy
 		 QueuePos.push_back(Vector2D<float>(0,0));
 		}
 	 
-	  myfile.open ("exmple.txt");
+	  myfile.open ("ballPos2.txt");
 	  
 	for (int i = 0; i < MAX_BS_Q; i++) {
         bsQ.push(std::make_pair(BeliefState(), 0));
@@ -160,14 +174,13 @@ namespace Strategy
     p.y /= fieldYConvert;
   }
   
-  Vector2D<float> Kalman::calcBotVelocity(BotPose p1, BotPose p2, float timeMs) {
-    strategyToRealConversion(p1);
-    strategyToRealConversion(p2);
+  Vector2D<float> Kalman::calcBotVelocity(double delX, double delY , double Theta1, double Theta2, float timeMs) {
+ //   strategyToRealConversion(p1);
+  //  strategyToRealConversion(p2);
 
 	float vl,vr;
-    double delX = p2.x - p1.x;
-    double delY = p2.y - p1.y;
-    double delTheta = normalizeAngle(p2.theta - p1.theta); // assuming |delTheta| < PI, which is safe to assume
+	//cout << "vlvr" << delX << " " << delY << endl;
+    double delTheta = normalizeAngle(Theta1 - Theta2); // assuming |delTheta| < PI, which is safe to assume
                                                            // for ~ 16 ms of rotation at any speed (even 120,-120?).
     assert(timeMs > 0);
     // w * timeMs = delTheta
@@ -175,7 +188,7 @@ namespace Strategy
     if (delTheta < 1e-2 && delTheta > -1e-2) {  // be realistic
         // bot should be headed straight, but again confusion
         // so taking projection of (delX, delY) along (cos(theta), sin(theta)) as displacement.
-        double dispLength = delX*cos(p1.theta) + delY*sin(p1.theta);
+        double dispLength = delX*cos(Theta1) + delY*sin(Theta2);
         vl = dispLength / (timeMs * 0.001);
         vl = vl / ticksToCmS;
         vr = vl;
@@ -183,8 +196,8 @@ namespace Strategy
         return v;
     }
     // we calculate 2 rho's, based on delX and delY, and take average
-    double rho1 = delX / (sin(p2.theta) - sin(p1.theta));
-    double rho2 = -delY / (cos(p2.theta) - cos(p1.theta));
+    double rho1 = delX / (sin(Theta2) - sin(Theta1));
+    double rho2 = -delY / (cos(Theta2) - cos(Theta1));
     // try harmonic mean?
 //    double rho = (rho1 + rho2) / 2;
     double rho = 2*rho1*rho2 / (rho1 + rho2);
@@ -292,7 +305,7 @@ namespace Strategy
 		int Xv_lambda = ((n*Xsum1 -TimeDiffSum*Xsum2)/(n*(lambda + TimeDiffSqSum) - TimeDiffSum*TimeDiffSum));
 		int Yv_lambda = ((n*Ysum1 -TimeDiffSum*Ysum2)/(n*(lambda + TimeDiffSqSum) - TimeDiffSum*TimeDiffSum));
 	
-		myfile  << Xv_lambda << "\t" << Yv_lambda << "\t" << ballVelocity.x << "\t" << ballVelocity.y << std::endl;
+		//myfile  << Xv_lambda << "\t" << Yv_lambda << "\t" << ballVelocity.x << "\t" << ballVelocity.y << std::endl;
      	ballVelocity.x = -Xv_lambda;
 		ballVelocity.y = -Yv_lambda;
 		checkValidX(ballPose.x, ballVelocity.x, newx);
@@ -365,8 +378,8 @@ namespace Strategy
         
 		//Adding vl,vr calculation from motion-simulation
 		BotPose p1(bsQ.front().first.homePos[id].x, bsQ.front().first.homePos[id].y, bsQ.front().first.homeAngle[id]);
-        BotPose p2(newx, newy, newangle);
-		homeVlVr[id] = calcBotVelocity(p1, p2, timeMs);
+        BotPose p2(newx - lastPoseX, newy - lastPoseY, newangle - lastAngle);
+		homeVlVr[id] = calcBotVelocity(homePose[id].x - lastPoseX, homePose[id].y - lastPoseY, newangle, lastAngle, timeMs);
 //        if(id == 1)
 //          printf("%f %f %f %f\n", homePose[1].x, homePosK[1].x, homePosSigmaSqK[1].x, homeVelocity[1].x);
         checkValidX(homePose[id].x, homeVelocity[id].x, newx);
@@ -435,7 +448,6 @@ namespace Strategy
 		//Adding vl,vr calculation from motion-simulation
 		BotPose p1(bsQ.front().first.awayPos[id].x, bsQ.front().first.awayPos[id].y, bsQ.front().first.awayAngle[id]);
         BotPose p2(newx, newy, newangle);
-		homeVlVr[id] = calcBotVelocity(p1, p2, timeMs);
 		
         checkValidX(awayPose[id].x, awayVelocity[id].x, newx);
         checkValidY(awayPose[id].y, awayVelocity[id].y, newy);
@@ -504,7 +516,7 @@ namespace Strategy
 		//Adding vl,vr calculation from motion-simulation
 		BotPose p1(bsQ.front().first.homePos[id].x, bsQ.front().first.homePos[id].y, bsQ.front().first.homeAngle[id]);
         BotPose p2(newx, newy, newangle);
-		homeVlVr[id] = calcBotVelocity(p1, p2, timeMs);
+		homeVlVr[id] = calcBotVelocity(homePose[id].x - lastPoseX, homePose[id].y - lastPoseY, newangle, lastAngle, timeMs);
       }
 	  
       // Blue robot info
@@ -573,13 +585,29 @@ namespace Strategy
 		//Adding vl,vr calculation from motion-simulation
 		BotPose p1(bsQ.front().first.awayPos[id].x, bsQ.front().first.awayPos[id].y, bsQ.front().first.awayAngle[id]);
         BotPose p2(newx, newy, newangle);
-		homeVlVr[id] = calcBotVelocity(p1, p2, timeMs);
+		//homeVlVr[id] = calcBotVelocity(newx - lastPoseX, newy - lastPoseY, newangle, lastAngle, timeMs);
       }
     }
 
 	bsQ.pop();
 	bsQ.push(std::make_pair(BeliefState(), nowTime));
 
+// Opencv Kalman
+	/* Mat prediction = KF.predict();
+	 Point predictPt(prediction.at<float>(0),prediction.at<float>(1));
+              
+ 	ball = detection.balls(0);
+	 measurement(0) = ball.x();
+	 measurement(1) = ball.y(); 
+  
+  cout << "vsd" << measurement(0) << endl;
+ // The update phase 
+	Mat estimated = KF.correct(measurement);
+ 
+	Point statePt(estimated.at<float>(0),estimated.at<float>(1));
+	Point measPt(measurement(0),measurement(1));
+	
+	myfile << "FRom Kalman " << statePt.x << " " << statePt.y << "From state " <<  ball.x() << " " << ball.y() << endl;*/
     mutex->leave();
   }
 

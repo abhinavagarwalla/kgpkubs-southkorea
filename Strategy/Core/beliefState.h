@@ -79,8 +79,8 @@ namespace Strategy
     
     bool pr_ourFreeKick;
     bool pr_oppFreeKick;
-		bool pr_ourFreeBall;
-		bool pr_oppFreeBall;
+	bool pr_ourFreeBall;
+	bool pr_oppFreeBall;
     bool pr_ourGoalKick;
     bool pr_oppGoalKick;
     bool pr_ourPenaltyKick;

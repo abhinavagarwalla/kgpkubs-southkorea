@@ -26,10 +26,10 @@ namespace Strategy
 //		vl = (int)(0.8*vl);
 //		vr = (int)(0.8*vr);
 //	}
-//	if(dist < 500.0){
-//		vl = (int)((dist/500)*vl);
-//		vr = (int)((dist/500)*vr);
-//	}
+	if(dist < 500.0){
+		vl = (int)((dist/500)*vl);
+		vr = (int)((dist/500)*vr);
+	}
 //	/*if(dist < 500.0){
 //		vl = (int)(0.6*vl);
 //		vr = (int)(0.6*vr);

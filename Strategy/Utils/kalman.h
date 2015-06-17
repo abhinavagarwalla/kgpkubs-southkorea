@@ -9,8 +9,11 @@
 #include <utility>
 #include <set>
 #include <fstream>
+#include "opencv2/video/tracking.hpp"
+#include "opencv2/highgui/highgui.hpp"
 
 using namespace std;
+using namespace cv;
 // Forward Declarations
 namespace Util
 {
@@ -36,7 +39,9 @@ namespace Strategy
   private:
     FILE* kalmanlog;
 		int getClosestBotID(int x, int y, float angle, std::set<int> &uniqueBotIDs); /* Arpit: returns the closest opp bot to this location. */
-  public:
+	public:
+
+	/* (phi, delta_phi) */
     Kalman();
     
     ~Kalman();
@@ -96,8 +101,16 @@ namespace Strategy
 	}BotPose;
 	ofstream myfile;
  
+	Mat_<float> measurement;
+  	KalmanFilter KF;
 	void strategyToRealConversion(BotPose &p);
-	Vector2D<float> calcBotVelocity(BotPose p1, BotPose p2, float timeMs);	
+	Vector2D<float> calcBotVelocity(double delX, double delY, double Theta1, double Theta2, float timeMs);
+	Point ballPos;
+	static inline cv::Point calcPoint(cv::Point2f center, double R, double angle)
+	{
+		return center + cv::Point2f((float)cos(angle), (float)-sin(angle))*(float)R;
+	}
+	
   };
 }
 

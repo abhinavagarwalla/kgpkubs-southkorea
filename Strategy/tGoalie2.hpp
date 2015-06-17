@@ -73,8 +73,8 @@ namespace Strategy
     }
 	
 	bool isAngleSet() {
-		return ((state->homeAngle[botID] >= (-PI/2 -PI/6) && state->homeAngle[botID] <= (-PI/2 + PI/6)) ||
-				(state->homeAngle[botID] <= (PI/2 + PI/6) && state->homeAngle[botID] >= (PI/2 - PI/6))
+		return ((state->homeAngle[botID] >= (-PI/2 -PI/10) && state->homeAngle[botID] <= (-PI/2 + PI/10)) ||
+				(state->homeAngle[botID] <= (PI/2 + PI/10) && state->homeAngle[botID] >= (PI/2 - PI/10))
 				);
 	}
 //bool approaching_from_corner();
@@ -88,8 +88,8 @@ namespace Strategy
 	   else
 			ang1 = atan(state->ballVel.y/state->ballVel.x);
 		
-		botDestination.y = state->ballPos.y + SGN(state->ballVel.y)*2*BOT_RADIUS - ((state->ballPos.x)-(-HALF_FIELD_MAXX + DBOX_WIDTH + BOT_RADIUS))*tan(ang1);
-
+		botDestination.y = state->ballPos.y + SGN(state->ballVel.y)*2*BOT_RADIUS  - ((state->ballPos.x)-(-HALF_FIELD_MAXX + DBOX_WIDTH + BOT_RADIUS))*tan(ang1);
+ //SGN(state->ballVel.y)*2*BOT_RADIUS 
 	//`botDestination.y = state->ballPos.y - ((state->ballPos.x) - (-HALF_FIELD_MAXX + DBOX_WIDTH + BOT_RADIUS*1.6))*ang1 ; //tan(ang1)
 		cout << " fdsafw               "  << state->ballVel.x << "   " << state->ballVel.y  << endl;//<< " " << state->ballPos.x << " " << state->ballPos.y << endl;
 		botDestination.x = (-HALF_FIELD_MAXX + GOAL_DEPTH+ 1.6*BOT_RADIUS);

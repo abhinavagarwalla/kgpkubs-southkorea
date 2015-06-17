@@ -17,7 +17,9 @@
 #include "tDWDefender.hpp"
 #include "tDWDefender2015.hpp"
 #include "tCoverGoal2015.hpp"
+#include "tCoverGoalPairLeft.hpp"
 #include "tGoalie2.hpp"
+#include "tReceiveBall2015.hpp"
 
 //#include "tDragToGoal.hpp"
 #include "tBackup.hpp"

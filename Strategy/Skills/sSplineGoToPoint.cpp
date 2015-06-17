@@ -13,23 +13,28 @@ using namespace Util;
 namespace Strategy
 {
 	
-	bool SkillSet::_isFrontDirected(Pose botPos, Pose endPos) {
+	bool SkillSet::_isFrontDirected(Pose botPos, Pose endPos, float vle, float vre) {
 		int r = 10;
 		double cosTheta = cos(botPos.theta());
 		double sinTheta = sin(botPos.theta());
 		double testx = botPos.x() + r * cosTheta;
 		double testy = botPos.y() + r * sinTheta;
+		if(((vle + vre)/2 ) > 30)
+			return true;
+		if((( vle + vre)/2)< -30)
+			return false;
 		double v1 = testx / tan(botPos.theta()) + testy - botPos.x() / tan(botPos.theta()) - botPos.y();
 		double v2 = endPos.x() / tan(botPos.theta()) + endPos.y() - botPos.x() / tan(botPos.theta()) - botPos.y();
 		return ((v1 * v2) >= 0) ? true : false;
 	}
 		
-	void SkillSet::_splineGoToPointTrack(int botid, Pose start, Pose end, float finalvel){
+	void SkillSet::_splineGoToPointTrack(int botid, Pose start, Pose end, float finalvel, float vls, float vrs){
 		
 		counter++;	
+	//	std::cout << "here v cnds" << std::endl;
 		if(!algoController){
 			if(traj)
-				algoController = new ControllerWrapper(traj, 0, 0, PREDICTION_PACKET_DELAY);
+				algoController = new ControllerWrapper(traj, vls, vrs, PREDICTION_PACKET_DELAY);
 		}
 		int vl,vr;
 		if(!direction)
@@ -47,65 +52,37 @@ namespace Strategy
 		}
 	}
 
-	void SkillSet::_splineGoToPointInitTraj(int botid, Pose start, Pose end, float finalvel){
+	void SkillSet::_splineGoToPointInitTraj(int botid, Pose start, Pose end, float finalvel, float vls, float vrs){
+	
 		counter = 0;
 		if(traj)delete traj;
-		direction = _isFrontDirected(start, end);
+		direction = _isFrontDirected(start, end, vls, vrs);
 		if (!direction) 
 			start.setTheta(start.theta() - PI);
-		traj = TrajectoryGenerators::cubic(start, end ,0,0,0,0); //may need to modify vle,vls,vre,vrs
+		traj = TrajectoryGenerators::cubic(start, end ,vls,vrs,0,0); //may need to modify vle,vls,vre,vrs
 		
 		if(algoController)delete algoController;
-		algoController = new ControllerWrapper(traj, 0, 0, PREDICTION_PACKET_DELAY);
+		algoController = new ControllerWrapper(traj, vls, vrs, PREDICTION_PACKET_DELAY);
 		
 		/*while(!predictedPoseQ.empty())predictedPoseQ.pop_front();
 		for (int i = 0; i < PREDICTION_PACKET_DELAY; i++) {
 			predictedPoseQ.push_back(Pose(bs.homeX[BOT_ID_TESTING], bs.homeY[BOT_ID_TESTING], bs.homeTheta[BOT_ID_TESTING]));
 		}*/
-		_splineGoToPointTrack(botid,start,end,finalvel);
+		_splineGoToPointTrack(botid,start,end,finalvel, vls, vrs);
 	}
-	
-	void SkillSet::_splineGoToPointCheckTraj(int botid, Pose start, Pose end, float finalvel, int initTraj){
-
-		if(initTraj==1)
-			_splineGoToPointInitTraj(botID, start, end, finalvel);
-			
-		if(counter < 100)
-			_splineGoToPointTrack(botid,start,end,finalvel);
-		
-		
-		if(counter > 100){
-			delete traj;
-			counter = 0;
-		}
-		int vl,vr;
-		algoController->genControls(start, end, vl, vr, finalvel);		
-		direction = _isFrontDirected(start, end);
-		if (!direction) 
-			start.setTheta(start.theta() - PI);
-		traj = TrajectoryGenerators::cubic(start, end ,vl,vr,0,0); //may need to modify vle,vls,vre,vrs
-		
-		if(algoController)delete algoController;
-		algoController = new ControllerWrapper(traj, 0, 0, PREDICTION_PACKET_DELAY);
-		
-		/*while(!predictedPoseQ.empty())predictedPoseQ.pop_front();
-		for (int i = 0; i < PREDICTION_PACKET_DELAY; i++) {
-			predictedPoseQ.push_back(Pose(bs.homeX[BOT_ID_TESTING], bs.homeY[BOT_ID_TESTING], bs.homeTheta[BOT_ID_TESTING]));
-		}*/
-		_splineGoToPointTrack(botid,start,end,finalvel);
-	}
-	
   void SkillSet::splineGoToPoint(const SParam& param)
   {
 	Vector2D<int> dpoint;
     float finalvel;
+	 std::cout << "counter " << state->homeVlVr[botID].x << " " << state->homeVlVr[botID].y  << std::endl;
     finalvel  = param.GoToPointP.finalVelocity;
 	Pose start(state->homePos[botID].x, state->homePos[botID].y, state->homeAngle[botID]);
 	Pose end(param.SplineGoToPointP.x, param.SplineGoToPointP.y, param.SplineGoToPointP.finalSlope);
-	_splineGoToPointCheckTraj(botID, start, end, finalvel, param.SplineGoToPointP.initTraj);
-	
-//	if(param.SplineGoToPointP.initTraj)_splineGoToPointInitTraj(botID, start, end, finalvel);
-//	else _splineGoToPointTrack(botID, start, end, finalvel);
+	if(param.SplineGoToPointP.initTraj == 1 || counter > 50){
+		_splineGoToPointInitTraj(botID, start, end, finalvel, state->homeVlVr[botID].x, state->homeVlVr[botID].y);
+	}
+	else 
+		_splineGoToPointTrack(botID, start, end, finalvel, state->homeVlVr[botID].x, state->homeVlVr[botID].y);
 	
    }
 }
