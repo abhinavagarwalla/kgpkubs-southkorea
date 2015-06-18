@@ -110,7 +110,7 @@ namespace Strategy
 	private:
 		ControllerWrapper *algoController;
 		Trajectory* traj;
-		int counter;
+		int counter, interceptCounter;
 		std::queue<Pose> predictedPoseQ;
 	public:
 		enum SkillID

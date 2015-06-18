@@ -289,7 +289,7 @@ namespace Strategy
 //		QueuePos.push_back(ballPose);
 //		QueuePos.pop_front();
 				
-		float Xsum2=0, Xsum1=0, TimeDiffSum = 10*delTime, TimeDiffSqSum = 30*delTime*delTime, n=4, lambda = 0.01, Ysum2=0,Ysum1=0;
+		float Xsum2=0, Xsum1=0, TimeDiffSum = 10*delTime, TimeDiffSqSum = 30*delTime*delTime, n=4, lambda = 0.001, Ysum2=0,Ysum1=0;
 
 		for(int i=3;i>=0;i--)
 		{
@@ -303,7 +303,7 @@ namespace Strategy
 		int Xv_lambda = ((n*Xsum1 -TimeDiffSum*Xsum2)/(n*(lambda + TimeDiffSqSum) - TimeDiffSum*TimeDiffSum));
 		int Yv_lambda = ((n*Ysum1 -TimeDiffSum*Ysum2)/(n*(lambda + TimeDiffSqSum) - TimeDiffSum*TimeDiffSum));
 	
-		//myfile  << Xv_lambda << "\t" << Yv_lambda << "\t" << ballVelocity.x << "\t" << ballVelocity.y << std::endl;
+		myfile  << Xv_lambda << "\t" << Yv_lambda << "\t" << ballVelocity.x << "\t" << ballVelocity.y << std::endl;
      	ballVelocity.x = -Xv_lambda;
 		ballVelocity.y = -Yv_lambda;
 		checkValidX(ballPose.x, ballVelocity.x, newx);

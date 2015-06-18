@@ -131,8 +131,8 @@ public:
 	pVelocity_1.VelocityP.vr = 20;
 	
 	Tactic::Param pVelocity_2;
-	pVelocity_2.VelocityP.vl = 100;
-	pVelocity_2.VelocityP.vr = 100;
+	pVelocity_2.VelocityP.vl = 60;
+	pVelocity_2.VelocityP.vr = 60;
 	Tactic::Param pVelocity_3;
 	pVelocity_3.VelocityP.vl = 60;
 	pVelocity_3.VelocityP.vr = 60;
@@ -166,7 +166,7 @@ public:
 	Strategy::SParam params1;
 	params1.SplineGoToPointP.finalVelocity = 0;
 	params1.SplineGoToPointP.x = HALF_FIELD_MAXX - 10*BOT_RADIUS;
-	params1.SplineGoToPointP.y = 0;
+	params1.SplineGoToPointP.y = HALF_FIELD_MAXY/2;
 	params1.SplineGoToPointP.finalSlope = 0 ;
 	params1.SplineGoToPointP.initTraj = 1;
 	SkillSet sppoint(&state, 2); 
@@ -185,7 +185,7 @@ public:
 	
 	Strategy::SParam params3 ;
 	params3.DWGoToPointP.x = ForwardX(HALF_FIELD_MAXX/2);
-	params3.DWGoToPointP.y = 0;
+	params3.DWGoToPointP.y = HALF_FIELD_MAXY/2;
 	params3.DWGoToPointP.finalSlope = 0;
 
     Tactic::Param ptestpoint;
@@ -295,7 +295,7 @@ public:
 				//tVelocity3.execute(pVelocity);
 				//tAttackDuo12.execute(pAttack);
     //   tVelocity1.execute(pVelocity);
-	 //   tVelocity2.execute(pVelocity_2);
+	  //  tVelocity2.execute(pVelocity_2);
      //tGoalie2.execute(paramGoal);
         //tGoalOur2.execute(paramGoal);
         //tDefendLine1.execute(pDefendL1);
@@ -316,12 +316,14 @@ public:
 	    //dwDefend20152.execute(paramDWDefend2015);
 	//	tcover20152.execute(paramcover2015);
 		//tcoverleft2.execute(paramcoverleft);
-		if(loopcount++ >5){
+		if(loopcount++ >30){
 			//dwpoint.executeSkill(SkillSet::DWGoToPoint,params3) ;
 			//params3.DWGoToPointP.initTraj = 0;
-			sppoint.executeSkill(SkillSet::SplineGoToPoint,params1) ;
-			params1.SplineGoToPointP.initTraj = 0;
-			loopcount = loopcount%10+5;
+			//sppoint.executeSkill(SkillSet::SplineGoToPoint,params1) ;
+			//params1.SplineGoToPointP.initTraj = 0;
+			sball.executeSkill(SkillSet::SplineInterceptBall,params4) ;
+			params4.SplineInterceptBallP.initTraj = 0;
+			loopcount = loopcount%10+30;
 		}
         
         //goTopointStraight.executeSkill(SkillSet::GoToBallStraight,param1);

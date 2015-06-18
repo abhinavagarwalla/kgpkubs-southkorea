@@ -12,7 +12,6 @@ using namespace Util;
 
 namespace Strategy
 {
-	
 	bool SkillSet::_isFrontDirected(Pose botPos, Pose endPos, float vle, float vre) {
 		int r = 10;
 		double cosTheta = cos(botPos.theta());
