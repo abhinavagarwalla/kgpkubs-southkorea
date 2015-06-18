@@ -46,6 +46,7 @@ namespace Strategy
 	  DWDefender2015,
 	  CoverGoal2015,
 	  CoverGoalPairLeft,
+	  CoverGoalPairRight,
 	  ReceiveBall2015,
       MAX_TACTICS          // Total number of tactics. All Implemented Tactics above this point
     };
@@ -131,7 +132,7 @@ namespace Strategy
       struct type11
       {
         int distFromGoal;
-      } CoverGoalP,CoverGoal2015P,CoverGoalPairLeft; //tactic needs to be renamed to TDefendGoal
+      } CoverGoalP,CoverGoal2015P,CoverGoalPairLeft,CoverGoalPairRight; //tactic needs to be renamed to TDefendGoal
 
 	  struct type12{
 		  bool initTraj;

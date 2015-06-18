@@ -38,13 +38,13 @@ namespace Strategy
 ////		vl = (int)((dist/250)*vl);
 ////		vr = (int)((dist/250)*vr);
 ////	}
-    comm->sendCommand(botid, vl, vr); //maybe add mutex
+    comm->sendCommand(botid, vl , vr); //maybe add mutex
   }
 
   void SkillSet::_dwGoToPointInitTraj(int botid, Pose start, Pose end, float finalvel){
     
     if(algoController)delete algoController;
-    algoController = new ControllerWrapper(&Controllers::DynamicWindow, 0, 0, PREDICTION_PACKET_DELAY);
+    algoController = new ControllerWrapper(&Controllers::DynamicWindow, state->homeVlVr[botID].x, state->homeVlVr[botID].y, PREDICTION_PACKET_DELAY);
   
     _dwGoToPointTrack(botid,start,end,finalvel);
   }
@@ -58,6 +58,7 @@ namespace Strategy
 	/*if (dist < 0.5 * BOT_BALL_THRESH) {
 		comm->sendCommand(botID, 0, 0);
 	} else {*/
+	cout << "dw" << param.DWGoToPointP.initTraj << endl;
 	  Pose start(state->homePos[botID].x, state->homePos[botID].y, state->homeAngle[botID]);
 	  Pose end(param.DWGoToPointP.x, param.DWGoToPointP.y, param.DWGoToPointP.finalSlope);
 	  

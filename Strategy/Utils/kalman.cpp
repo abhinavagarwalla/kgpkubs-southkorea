@@ -304,8 +304,8 @@ namespace Strategy
 		int Yv_lambda = ((n*Ysum1 -TimeDiffSum*Ysum2)/(n*(lambda + TimeDiffSqSum) - TimeDiffSum*TimeDiffSum));
 	
 		myfile  << Xv_lambda << "\t" << Yv_lambda << "\t" << ballVelocity.x << "\t" << ballVelocity.y << std::endl;
-     	ballVelocity.x = -Xv_lambda;
-		ballVelocity.y = -Yv_lambda;
+     //	ballVelocity.x = -Xv_lambda;
+	//	ballVelocity.y = -Yv_lambda;
 		checkValidX(ballPose.x, ballVelocity.x, newx);
       checkValidY(ballPose.y, ballVelocity.y, newy);
       ballLastUpdateTime         = timeCapture;

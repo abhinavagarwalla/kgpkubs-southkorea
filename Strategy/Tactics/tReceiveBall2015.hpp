@@ -265,7 +265,7 @@ namespace Strategy
 			sID = SkillSet::GoToPoint;
 			sParam.GoToPointP.y = dest.y;
 			sParam.GoToPointP.x = dest.x;
-								//set acc to you
+								
 			sParam.GoToPointP.align = true;
 			sParam.GoToPointP.finalslope = Vector2D<int>::angle(oppGoal, state->homePos[botID]);
 

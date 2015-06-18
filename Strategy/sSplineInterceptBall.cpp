@@ -22,7 +22,7 @@ namespace Strategy
 		}
 		int vl,vr;
 		Pose dummy(0,0,0);
-		algoController->genControls(start, dummy, vl, vr, 0);
+		algoController->genControls(start, dummy, vl, vr, 60);
 		assert(vl <= 120 && vl >= -120);
 		assert(vr <= 120 && vr >= -120);
 		if (direction)
@@ -47,8 +47,8 @@ namespace Strategy
 		traj = BallInterception::getIntTraj(start, ballPos, ballVel, botVel); //may need to modify vle,vls,vre,vrs
 		
 		if(algoController)delete algoController;
+		//algoController = new ControllerWrapper(traj, 0, 0, PREDICTION_PACKET_DELAY);
 		algoController = new ControllerWrapper(traj, state->homeVlVr[botID].x, state->homeVlVr[botID].y, PREDICTION_PACKET_DELAY);
-		
 		/*while(!predictedPoseQ.empty())predictedPoseQ.pop_front();
 		for (int i = 0; i < PREDICTION_PACKET_DELAY; i++) {
 			predictedPoseQ.push_back(Pose(bs.homeX[BOT_ID_TESTING], bs.homeY[BOT_ID_TESTING], bs.homeTheta[BOT_ID_TESTING]));
@@ -71,9 +71,9 @@ namespace Strategy
 		ballPos.y = state->ballPos.y;
 		ballVel.x = state->ballVel.x;
 		ballVel.y = state->ballVel.y;
-		botVel.x = state->homeVel[botID].x;
-		botVel.y = state->homeVel[botID].y;
-		if(param.SplineInterceptBallP.initTraj || interceptCounter > 40000)_splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr);
+		botVel.x = state->homeVlVr[botID].x;
+		botVel.y = state->homeVlVr[botID].y;
+		if(param.SplineInterceptBallP.initTraj || interceptCounter > 50000)_splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr);
 		else _splineInterceptBallTrack(botID, start, ballPos, ballVel, botVel, final_vl, final_vr);	
 	}
 }

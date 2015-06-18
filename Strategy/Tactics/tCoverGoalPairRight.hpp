@@ -1,5 +1,5 @@
-#ifndef TTCoverGoalPairLeft_HPP
-#define TTCoverGoalPairLeft_HPP
+#ifndef TTCoverGoalPairRight_HPP
+#define TTCoverGoalPairRight_HPP
 
 #include <list>
 #include "beliefState.h"
@@ -11,7 +11,7 @@
 
 #define DEBUG 1
 namespace Strategy{
-class TCoverGoalPairLeft : public Tactic{
+class TCoverGoalPairRight : public Tactic{
 public:
     int state1;
      float movementError[10]; // records for previous 10 frames
@@ -22,11 +22,11 @@ public:
 	enum{
 		DEFENDING,
 		BLOCKING,
-		BOTH_BLOCKING ,
+		BOTH_BLOCKING,
 		CLEARING,
 		ATTACKING
 	}iState;
-    TCoverGoalPairLeft(const BeliefState* state, int botID) :
+    TCoverGoalPairRight(const BeliefState* state, int botID) :
       Tactic(Tactic::Stop, state, botID)
     {
       state1 = 0;
@@ -39,14 +39,14 @@ public:
 	  iState = DEFENDING;
     } // TGoalKeeping
 
-    ~TCoverGoalPairLeft()
+    ~TCoverGoalPairRight()
     { } // ~TGoalKeeping
     inline bool isActiveTactic(void) const
     {
       return false;
     }
    
-    // change choose best bot based on the left condition 
+   // change choose best  bot 
     int chooseBestBot(std::list<int>& freeBots, const Tactic::Param* tParam, int prevID) const
     {
       int minv = *(freeBots.begin());
@@ -76,14 +76,14 @@ public:
 				(state->homeAngle[botID] <= (PI/2 + PI/6) && state->homeAngle[botID] >= (PI/2 - PI/6))
 				);
 	}
-   
+
    int nearestOppBot(int destx)
    {
 	int id = 4 ;
 	int minDis = HALF_FIELD_MAXX ;
     int distx ;	
  	for( int i=0;i< 5;i++)
-	{
+	{   
 		distx = abs(destx - state->awayPos[i].x) ; 
 		if(distx < minDis)
 		{
@@ -95,12 +95,12 @@ public:
 	   
 	return id ;   
    }
-
-    void execute(const Param& tParam)//////////////////////////////////
+   
+    void execute(const Param& tParam)
     {
-	int oppID ;
+	int oppID ; 	
 	float distBotBall = Vector2D<int>::dist(state->ballPos,state->homePos[botID]);
-	int oppInRegion[4]={0},minRegion=0,targetX = INT_MAX,targetY = 0;//-SGN(state->ballPos.y)*BOT_RADIUS;
+	int oppInRegion[4]={0},minRegion=0,targetX = INT_MAX,targetY = 0;//
 	float ang1 = state->ballVel.x == 0? PI/2 :atan(state->ballVel.y/state->ballVel.x);
 	float goalAngR,goalAngL,divisor;
 	int yL,yR;
@@ -116,123 +116,121 @@ public:
 	Vector2D<int> dest;
 	dest.x = ForwardX(-(HALF_FIELD_MAXX-GOAL_DEPTH)*0.8);
 
+
+	
 	//cout<< " here"<<iState<<std::endl;
 	switch (iState)
 	{
 		
-	case DEFENDING :
-	
+	case DEFENDING:
+		
 		if(state->ballPos.x < dest.x && abs(state->ballPos.y) < OUR_GOAL_MAXY)
 		{
 		   iState = BOTH_BLOCKING ;	
 		   break ;
 		}
-		if(state->ballPos.x < dest.x && (state->ballPos.y < OUR_GOAL_MINY))
+		
+		if(state->ballPos.x < dest.x && (state->ballPos.y > OUR_GOAL_MAXY))
 		{
 		  iState = BLOCKING ;
 		  break ;
 		}
-		if(state->ballPos.x < dest.x + 2*BOT_RADIUS && (state->ballPos.y >OUR_GOAL_MAXY))
+		if(state->ballPos.x < dest.x + 2*BOT_RADIUS && (state->ballPos.y < OUR_GOAL_MINY))
 		{
 		   iState = CLEARING ;
 		   break ;
 		}
+		
 		if( state->ballPos.x > dest.x)
 		{
 			if(state->ballVel.x > 0 || abs(abs(ang1) - PI/2) < PI/12)
 			{
 				if(state->ballPos.y > OUR_GOAL_MAXY)
-					dest.y = OUR_GOAL_MAXY + BOT_RADIUS;
+					dest.y = OUR_GOAL_MAXY -2*BOT_RADIUS;
 				else if(state->ballPos.y < OUR_GOAL_MINY)
-					dest.y = OUR_GOAL_MINY + 2*BOT_RADIUS;
+					dest.y = OUR_GOAL_MINY - BOT_RADIUS;
 				else
-					dest.y = state->ballPos.y +1*BOT_RADIUS;
+					dest.y = state->ballPos.y -1*BOT_RADIUS;
 			}
 			else 
 			{
-				dest.y = predictPosY + 1*BOT_RADIUS;
-				//cout<< " here"<<std::endl;
+				dest.y = predictPosY -1*BOT_RADIUS;
 			}
 		}
-
-		if(abs(dest.y-state->homePos[botID].y)<0.3*BOT_RADIUS)
-			break;
+		
 		sParam.DWGoToPointP.x = dest.x;
 		sParam.DWGoToPointP.y = dest.y;
 		skillSet->executeSkill(SkillSet::DWGoToPoint, sParam);
 		break;
 		
 	case CLEARING :
-		 // CHANGE THE COND. FOR CLEARING .. INSTEAD OF GOTOBALL .. USE PREDICTION OR GO FROM BACK
-		if(state->ballPos.x < dest.x && abs(state->ballPos.y) < OUR_GOAL_MAXY)
+	 // CHANGE THE COND. FOR CLEARING .. INSTEAD OF GOTOBALL .. USE PREDICTION OR GO FROM BACK 
+	    if(state->ballPos.x < dest.x && abs(state->ballPos.y) < OUR_GOAL_MAXY)
 		{
 		   iState = BOTH_BLOCKING ;	
 		   break ;
 		}
+		
 		if(state->ballPos.x > dest.x + 2*BOT_RADIUS )
 		{
 			iState = DEFENDING;
 			break;
 		}
-		
-		if(state->ballPos.x < dest.x && (state->ballPos.y < OUR_GOAL_MINY))
+		if(state->ballPos.x < dest.x && (state->ballPos.y > OUR_GOAL_MAXY))
 		{
 		  iState = BLOCKING ;
 		  break ;
 		}
-		// clear the ball away 
-		// currently its just going to the ball .. change the algo..to go from the back 
+		
 		        sParam.GoToPointP.x = state->ballPos.x;
 				sParam.GoToPointP.y = state->ballPos.y;
 				skillSet->executeSkill(SkillSet::GoToPoint, sParam);
 				break;
-		
-			
 
 	case BLOCKING :
-	
+		
 		if(state->ballPos.x < dest.x && abs(state->ballPos.y) < OUR_GOAL_MAXY)
 		{
 		   iState = BOTH_BLOCKING ;	
 		   break ;
 		}
+		
 		if(state->ballPos.x > dest.x + 2*BOT_RADIUS )
 		{
 			iState = DEFENDING;
 			break;
 		}
 		
-		if(state->ballPos.x < dest.x && (state->ballPos.y > OUR_GOAL_MAXY))
+		if(state->ballPos.x < dest.x && (state->ballPos.y < OUR_GOAL_MINY))
 		{
 		   iState = CLEARING ;
 		   break ;
 		}
-		
-		oppID = nearestOppBot(dest.x) ;
+		 
+		    oppID = nearestOppBot(dest.x) ;
 			std::cout<<"ID = "<<oppID<<std::endl;
 			if(abs(state->awayPos[oppID].y) > OUR_GOAL_MAXY)
 				sParam.DWGoToPointP.y = SGN(state->awayPos[oppID].y)*OUR_GOAL_MAXY ;
 			else
-				sParam.DWGoToPointP.y = state->awayPos[oppID].y ;
+				sParam.DWGoToPointP.y = state->awayPos[oppID].y ; 
 			sParam.DWGoToPointP.x = dest.x;
 			skillSet->executeSkill(SkillSet::DWGoToPoint, sParam);
-			break;
+			break; 
 			
-    case BOTH_BLOCKING :
-	    
-		if(state->ballPos.x > dest.x + 2*BOT_RADIUS )
+	case BOTH_BLOCKING :
+	     if(state->ballPos.x > dest.x + 2*BOT_RADIUS )
 		{
 			iState = DEFENDING;
 			break;
 		}
 		
-		if(state->ballPos.x < dest.x && (state->ballPos.y > OUR_GOAL_MAXY))
+		if(state->ballPos.x < dest.x && (state->ballPos.y < OUR_GOAL_MINY))
 		{
 		   iState = CLEARING ;
 		   break ;
 		}
 		
-		if(state->ballPos.x < dest.x && (state->ballPos.y < OUR_GOAL_MINY))
+		if(state->ballPos.x < dest.x && (state->ballPos.y > OUR_GOAL_MAXY))
 		{
 		  iState = BLOCKING ;
 		  break ;
@@ -240,7 +238,7 @@ public:
 		
 		oppID = nearestOppBot(dest.x) ;
 			std::cout<<"ID = "<<oppID<<std::endl;
-			if(state->awayPos[oppID].y > 0 )
+			if(state->awayPos[oppID].y < 0 )
 			{
 			  if(abs(state->awayPos[oppID].y) > OUR_GOAL_MAXY)
 				sParam.DWGoToPointP.y = SGN(state->awayPos[oppID].y)*OUR_GOAL_MAXY ;
@@ -248,14 +246,16 @@ public:
 				sParam.DWGoToPointP.y = state->awayPos[oppID].y ;
 			}
 			else
-			  sParam.DWGoToPointP.y = OUR_GOAL_MAXY ;
+			  sParam.DWGoToPointP.y = OUR_GOAL_MINY ;
 		    
 			sParam.DWGoToPointP.x = dest.x;
 			skillSet->executeSkill(SkillSet::DWGoToPoint, sParam);
 			break;
-	  
+		
+		
+		
 	}
-  }
+	}
 
 
 }; // class TDefense

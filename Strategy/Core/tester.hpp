@@ -82,6 +82,8 @@ public:
 	//CoverGoalPair
 	TCoverGoalPairLeft tcoverleft2(&state,2);
 	Tactic::Param paramcoverleft;
+	TCoverGoalPairRight tcoverright0(&state,0);
+	Tactic::Param paramcoverright;
 	
     //tStop Bot
     TStop tS0(&state, 0);
@@ -178,14 +180,14 @@ public:
 	SkillSet sball(&state, 2); 
 	
 	Strategy::SParam params2;
-	SkillSet dwpoint(&state, 1);
+	SkillSet dwpoint(&state, 2);
 	params2.GoToPointP.x = ForwardX(HALF_FIELD_MAXX);
 	params2.GoToPointP.y = 0;
 	params2.GoToPointP.finalslope = 0;
 	
 	Strategy::SParam params3 ;
-	params3.DWGoToPointP.x = ForwardX(HALF_FIELD_MAXX/2);
-	params3.DWGoToPointP.y = HALF_FIELD_MAXY/2;
+	params3.DWGoToPointP.x = 0;//ForwardX(HALF_FIELD_MAXX/2);
+	params3.DWGoToPointP.y = 0;//HALF_FIELD_MAXY/2;
 	params3.DWGoToPointP.finalSlope = 0;
 
     Tactic::Param ptestpoint;
@@ -281,22 +283,26 @@ public:
         //printf("mid %d\n",state.pr_ballMidField);
         //printf("dbox %d\n",state.pr_ball_in_opp_dbox);    
         //ttest1.execute(ptestpoint);
-      //  tVelocity2.execute(pVelocity);
-	  // tS0.execute(paramStop);
-	  //tAttack2.execute(pAttack);
-    //tAttack4.execute(pAttack); 
+        //  tVelocity2.execute(pVelocity);
+	    // tS0.execute(paramStop);
+	    //tAttack2.execute(pAttack);
+        //tAttack4.execute(pAttack); 
 
 	// tVelocity1.execute(pVelocity);
-	//tVelocity2.execute(pVelocity);
+	//tVelocity0.execute(pVelocity);
 	/*	tVelocity2.execute(pVelocity_2);
    	tVelocity3.execute(pVelocity_3);  
 	  tVelocity4.execute(pVelocity_4);
-		*/		//tVelocity1.execute(pVelocity);
+	*/	
+	//tVelocity1.execute(pVelocity);
 				//tVelocity3.execute(pVelocity);
 				//tAttackDuo12.execute(pAttack);
-    //   tVelocity1.execute(pVelocity);
-	  //  tVelocity2.execute(pVelocity_2);
-     //tGoalie2.execute(paramGoal);
+        //  tVelocity0.execute(pVelocity);
+	  // tVelocity2.execute(pVelocity);
+    
+	
+	
+	//tGoalie2.execute(paramGoal);
         //tGoalOur2.execute(paramGoal);
         //tDefendLine1.execute(pDefendL1);
 				//tGoalOur2.execute(paramGoal);
@@ -314,16 +320,18 @@ public:
       //  tcover1.execute(paramcover);
 		//dwDefend2.execute(paramDWDefend);
 	    //dwDefend20152.execute(paramDWDefend2015);
-	//	tcover20152.execute(paramcover2015);
-		//tcoverleft2.execute(paramcoverleft);
-		if(loopcount++ >30){
+		//tcover20152.execute(paramcover2015);
+		tcoverleft2.execute(paramcoverleft);
+		tcoverright0.execute(paramcoverright);
+		//dwpoint.executeSkill(SkillSet::DWGoToPoint,params3) ;
+		if(loopcount++ >10){
 			//dwpoint.executeSkill(SkillSet::DWGoToPoint,params3) ;
 			//params3.DWGoToPointP.initTraj = 0;
 			//sppoint.executeSkill(SkillSet::SplineGoToPoint,params1) ;
 			//params1.SplineGoToPointP.initTraj = 0;
-			sball.executeSkill(SkillSet::SplineInterceptBall,params4) ;
-			params4.SplineInterceptBallP.initTraj = 0;
-			loopcount = loopcount%10+30;
+		//	sball.executeSkill(SkillSet::SplineInterceptBall,params4) ;
+		//	params4.SplineInterceptBallP.initTraj = 0;
+			loopcount = loopcount%10+10;
 		}
         
         //goTopointStraight.executeSkill(SkillSet::GoToBallStraight,param1);
