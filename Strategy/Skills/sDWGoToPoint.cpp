@@ -21,7 +21,7 @@ namespace Strategy
 	float dist = sqrt(((start.x() - end.x())*(start.x() - end.x())) + ((start.y() - end.y())*(start.y() - end.y())));
     assert(vl <= 120 && vl >= -120);
     assert(vr <= 120 && vr >= -120);
-	cout << "\n\n dist " << dist << " " << end.y() << endl;
+	//cout << "\n\n dist " << dist << " " << end.y() << endl;
 //		if(dist < 1500.0){
 //		vl = (int)(0.8*vl);
 //		vr = (int)(0.8*vr);
@@ -58,7 +58,7 @@ namespace Strategy
 	/*if (dist < 0.5 * BOT_BALL_THRESH) {
 		comm->sendCommand(botID, 0, 0);
 	} else {*/
-	cout << "dw" << param.DWGoToPointP.initTraj << endl;
+//	cout << "dw" << param.DWGoToPointP.initTraj << endl;
 	  Pose start(state->homePos[botID].x, state->homePos[botID].y, state->homeAngle[botID]);
 	  Pose end(param.DWGoToPointP.x, param.DWGoToPointP.y, param.DWGoToPointP.finalSlope);
 	  

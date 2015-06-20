@@ -82,6 +82,7 @@ namespace Strategy
 
 void execute(const Param& tParam)
 {
+	bool isFirstRun=true;
 			//cout<<"\n \n" <<"istate"<< iState;
 			static Vector2D<float> lastVel[10];
 			static int index = 0;
@@ -103,13 +104,13 @@ void execute(const Param& tParam)
 	float ang1 = atan(state->ballVel.y/state->ballVel.x);
 	float distBotBall = Vector2D<int>::dist(state->ballPos,state->homePos[botID]);
 	float distOppBall = Vector2D<int>::dist(state->ballPos,state->awayPos[state->oppBotNearestToBall]);
-
+    cout<<"iState :: "<<iState<<std::endl;
 	switch(iState)
 	{
 	case DEFENDING :
 	//	cout<< 1;
 		
-		if( distBotBall < 1.1*BOT_RADIUS )//&& abs(abs(state->homeAngle[botID]) - PI/2 ) < PI/12)
+		if( distBotBall < 1.5*BOT_BALL_THRESH )//&& abs(abs(state->homeAngle[botID]) - PI/2 ) < PI/12)
 		{
 			if( fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x))) < PI /4  && state->ballPos.x >= state->homePos[botID].x)
 			{                                      
@@ -144,7 +145,6 @@ void execute(const Param& tParam)
 		else 
 		   if(state->ballPos.x > 0)
 		   {
-			cout << "\n\n\asfhah atrtack\n\n\n" << state->ballPos.x << " " << (-HALF_FIELD_MAXX/4) << endl;
 			int predictPosX = ForwardX(-(HALF_FIELD_MAXX/2)) ;
 			int predictPosY = state->ballPos.y - (state->ballPos.x - predictPosX)*tan(ang1);
 			predictPosY = predictPosY + SGN(predictPosY - state->homePos[botID].y)*2*BOT_RADIUS;
@@ -186,6 +186,7 @@ void execute(const Param& tParam)
 			  else 
 			  {
 				iState =  ATTACKING;
+				isFirstRun = true;
 				break;
 			  }
 			 }
@@ -307,16 +308,25 @@ void execute(const Param& tParam)
 		if(state->ballPos.x > 0 || (state->ballPos.x < state->homePos[botID].x))//(-HALF_FIELD_MAXX/4))
 		{
 			iState = DEFENDING;
+			isFirstRun=false;
 			break;
 		}
 		float ang2 = atan(state->ballPos.y/(state->ballPos.x - ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH) ));
 		float ball_ang = atan(state->ballVel.y/state->ballVel.x);
+		
 		float deltaT = 0.016;
-		sParam.DWGoToPointP.x = state->ballPos.x + deltaT*state->ballVel.x;
-		sParam.DWGoToPointP.y = state->ballPos.y + deltaT*state->ballVel.y;
-		sParam.DWGoToPointP.finalSlope = ang2;
-		//sParam.GoToPointP.align = true;
-		skillSet->executeSkill(SkillSet::DWGoToPoint, sParam);
+		sParam.GoToPointP.x = state->ballPos.x + deltaT*state->ballVel.x;
+		sParam.GoToPointP.y = state->ballPos.y + deltaT*state->ballVel.y;
+		sParam.GoToPointP.finalslope = ang2;
+		sParam.GoToPointP.align = true;
+//		sParam.SplineInterceptBallP.vl = 30;
+//		sParam.SplineInterceptBallP.vr = 30;
+//		if(isFirstRun){
+//			sParam.SplineInterceptBallP.initTraj=true;
+//			isFirstRun=false;
+//		}
+//		else sParam.SplineInterceptBallP.initTraj=false;
+		skillSet->executeSkill(SkillSet::GoToPoint, sParam);
 		break;
      }		
 	}

@@ -125,8 +125,8 @@ public:
 		TVelocity tVelocity2(&state,2);
     
 	Tactic::Param pVelocity;
-	pVelocity.VelocityP.vl = 100;
-	pVelocity.VelocityP.vr = 100;
+	pVelocity.VelocityP.vl = 65;
+	pVelocity.VelocityP.vr = 65;
 	
 	Tactic::Param pVelocity_1;
 	pVelocity_1.VelocityP.vl = 20;
@@ -278,7 +278,7 @@ public:
 		
 			//	printf(" \n\n %d %d \n\n",state.ourGoalCount,state.oppGoalCount);
 		
-        printf("our side %d\n",state.pr_ballOurSide);
+      //  printf("our side %d\n",state.pr_ballOurSide);
         //printf("opp side %d\n",state.pr_ballOppSide);
         //printf("mid %d\n",state.pr_ballMidField);
         //printf("dbox %d\n",state.pr_ball_in_opp_dbox);    
@@ -297,23 +297,20 @@ public:
 	//tVelocity1.execute(pVelocity);
 				//tVelocity3.execute(pVelocity);
 				//tAttackDuo12.execute(pAttack);
-        //  tVelocity0.execute(pVelocity);
+         tVelocity0.execute(pVelocity);
 	  // tVelocity2.execute(pVelocity);
-    
-	
-	
 	//tGoalie2.execute(paramGoal);
         //tGoalOur2.execute(paramGoal);
         //tDefendLine1.execute(pDefendL1);
 				//tGoalOur2.execute(paramGoal);
 	//	tGoalOur3.execute(paramGoal);
-       /* 
-		if(loopcount++ > 3){
-			sppoint.executeSkill(SkillSet::SplineGoToPoint, params1);
-			para ms1.SplineGoToPointP.initTraj = 0;
-			loopcount = loopcount%100 + 3;
-		}
-		*/
+       
+//		if(loopcount++ > 30){
+//			sball.executeSkill(SkillSet::SplineInterceptBall,params4) ;
+//			params4.SplineInterceptBallP.initTraj = 0;
+//			loopcount = loopcount%1000 + 30;
+//		}
+		
         //tPosition
 				//tcover3.execute(paramcover);
        // tAttack3.execute(paramcover);
@@ -321,18 +318,14 @@ public:
 		//dwDefend2.execute(paramDWDefend);
 	    //dwDefend20152.execute(paramDWDefend2015);
 		//tcover20152.execute(paramcover2015);
-		tcoverleft2.execute(paramcoverleft);
-		tcoverright0.execute(paramcoverright);
+	//	tcoverleft2.execute(paramcoverleft);
+	//	tcoverright0.execute(paramcoverright);
 		//dwpoint.executeSkill(SkillSet::DWGoToPoint,params3) ;
-		if(loopcount++ >10){
 			//dwpoint.executeSkill(SkillSet::DWGoToPoint,params3) ;
 			//params3.DWGoToPointP.initTraj = 0;
 			//sppoint.executeSkill(SkillSet::SplineGoToPoint,params1) ;
 			//params1.SplineGoToPointP.initTraj = 0;
-		//	sball.executeSkill(SkillSet::SplineInterceptBall,params4) ;
-		//	params4.SplineInterceptBallP.initTraj = 0;
-			loopcount = loopcount%10+10;
-		}
+
         
         //goTopointStraight.executeSkill(SkillSet::GoToBallStraight,param1);
         //goToBallStraight.executeSkill(SkillSet::GoToBallStraight,param9)
@@ -356,7 +349,7 @@ public:
 		//tBackup0.execute(pBackup);
         //tDefendArc0.execute(pDefendArc);
 //        tDefendLine1.execute(pDefendL1);
-	//	tDefendLine2.execute(pDefendL2);
+	     //tDefendLine2.execute(pDefendL2);
        //tAttack2.execute(pAttack);
 
         SkillSet::comm->writeCombinedPacket();

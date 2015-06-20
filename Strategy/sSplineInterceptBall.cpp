@@ -73,7 +73,7 @@ namespace Strategy
 		ballVel.y = state->ballVel.y;
 		botVel.x = state->homeVlVr[botID].x;
 		botVel.y = state->homeVlVr[botID].y;
-		if(param.SplineInterceptBallP.initTraj || interceptCounter > 50000)_splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr);
+		if(param.SplineInterceptBallP.initTraj || interceptCounter > 100)_splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr);
 		else _splineInterceptBallTrack(botID, start, ballPos, ballVel, botVel, final_vl, final_vr);	
 	}
 }

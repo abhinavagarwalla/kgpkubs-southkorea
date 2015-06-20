@@ -27,7 +27,7 @@ namespace Strategy
 			APPROACH,
 			REATTACK,
 			CHARGE
-		}iState;
+		}iState;		//KD: I did not use any iState.
 		
     inline bool isActiveTactic(void) const
     {
@@ -67,7 +67,7 @@ namespace Strategy
 		Vector2D<int> oppGoal(HALF_FIELD_MAXX, 0);
 		float n;
 			
-		if(state->ballVel.y < 200) n = 1.05;
+		if(state->ballVel.y < 200) n = 1.05;		//KD: Constants from simurosot. Must be changed after testing.
 		else if(state->ballVel.y < 400) n = 1.1;
 		else if(state->ballVel.y < 800) n = 1.2;
 		else if(state->ballVel.y < 1000) n = 1.3;
