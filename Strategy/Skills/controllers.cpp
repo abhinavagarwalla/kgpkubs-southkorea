@@ -94,31 +94,12 @@ MiscData CMU(Pose s, Pose e, int &vl, int &vr, double prevSpeed, double prevOmeg
 //QString outputFilename = "/home/robocup/FileLog.txt STorage/FileLogQT6.txt";
 //QFile outputFile(outputFilename);
 
-
-int va=-1;
 MiscData DynamicWindow(Pose s, Pose e, int &vl, int &vr, double prevSpeed, double prevOmega, double finalSpeed)
 {
-//    qDebug()<<"prevSpeed = "<<prevSpeed<<" prevOmega = "<<prevOmega;
-//    qDebug()<<"Inside function Dynamic Window";
-//    sprintf(buf, "in function Dynamic Window");
-
-
-//    QTextStream outStream(&outputFile);
-//    if(va==-1)
-//    {
-//        outputFile.open(QIODevice::WriteOnly);
-//        outStream<<"\n\n\n\n \t\t\t\t The Print of QT Code\n";
-//        outStream<<"old_x \t old_y \t prevSpeed \t prevOmega \t newSpeed \t newOmega \t new_x \t new_y \n";
-//        va=0;
-//    }
-//    va=0;
-//     outputFile.open(QIODevice::Append);
-//     outStream<<" x = "<< s.x()<<" & y = "<< s.y();
-
-    const int del_v_max = 15; //ticks
-    const float step = 1; //ticks
-    const float max_vel =120; //ticks
-    const float a_r_max = 380; //cm/s^2
+    const int del_v_max = 40; //ticks
+    const float step = 2; //ticks
+    const float max_vel =180; //ticks
+    const float a_r_max = 400; //cm/s^2
 //    const float PI= 3.14159;
     const float t=0.016;
     const float k=5;

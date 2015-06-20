@@ -82,7 +82,7 @@ const std::string STRATEGY_GUI_MULTICAST_ADDR = "224.5.23.1" ;
 
 // Parameters useful for camera's data transformation.
 const double d          = 6.7; //distance between wheels in cm
-const double ticksToCmS = 1.224; //still only approximate... v = v_ticks * ticksToCmS
+const double ticksToCmS = 1.54; //still only approximate... v = v_ticks * ticksToCmS
 const double fieldXConvert = 23.79; // now im always using xconvert as standard conversion from strategy -> cm and vice versa.
 const double fieldYConvert = 22.02;
 // NOTE(arpit): Uncertainties should be non-zero when simulating. Currently 0 since bot data is fetched from vision.
@@ -93,7 +93,7 @@ const double thetaUncertainty = 0;//3;
 const int numPacketDelay = 0; // num of packets to delay in update
 
 const double vwmax      = 200; // cm/s^2
-const double vsat       = ticksToCmS*100.; // cm/s
+const double vsat       = ticksToCmS*130.; // cm/s
 const double atmax      = 200*ticksToCmS; // cm/s^2, need to measure this, need to take inertia into account
 const double awmax      = 1000; // 1/s^2, no idea how to measure this, need to take inertia into account
 

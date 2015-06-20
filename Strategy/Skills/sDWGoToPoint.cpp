@@ -19,8 +19,8 @@ namespace Strategy
     int vl,vr;
     algoController->genControls(start, end, vl, vr, finalvel);
 	float dist = sqrt(((start.x() - end.x())*(start.x() - end.x())) + ((start.y() - end.y())*(start.y() - end.y())));
-    assert(vl <= 120 && vl >= -120);
-    assert(vr <= 120 && vr >= -120);
+    assert(vl <= 180 && vl >= -180);
+    assert(vr <= 180 && vr >= -180);
 	//cout << "\n\n dist " << dist << " " << end.y() << endl;
 //		if(dist < 1500.0){
 //		vl = (int)(0.8*vl);
@@ -38,7 +38,7 @@ namespace Strategy
 ////		vl = (int)((dist/250)*vl);
 ////		vr = (int)((dist/250)*vr);
 ////	}
-    comm->sendCommand(botid, vl , vr); //maybe add mutex
+    comm->sendCommand(botid, vl/2 , vr/2); //maybe add mutex
   }
 
   void SkillSet::_dwGoToPointInitTraj(int botid, Pose start, Pose end, float finalvel){
