@@ -327,8 +327,8 @@ public:
        
 		if(loopcount++ > 10){
 		//	cout << params1.SplineGoToPointP.initTraj << "vcdzs" << endl;
-			sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
-			params4.SplineGoToPointP.initTraj = 0;
+		//	sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
+		//	params4.SplineGoToPointP.initTraj = 0;
 			loopcount = loopcount%1000 + 11;
 		}
 		
