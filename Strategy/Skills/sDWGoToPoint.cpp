@@ -21,7 +21,7 @@ namespace Strategy
 	float dist = sqrt(((start.x() - end.x())*(start.x() - end.x())) + ((start.y() - end.y())*(start.y() - end.y())));
     assert(vl <= 180 && vl >= -180);
     assert(vr <= 180 && vr >= -180);
-	//cout << "\n\n dist " << dist << " " << end.y() << endl;
+	cout << "\n\n dist " << dist << " " << end.y() << endl;
 //		if(dist < 1500.0){
 //		vl = (int)(0.8*vl);
 //		vr = (int)(0.8*vr);

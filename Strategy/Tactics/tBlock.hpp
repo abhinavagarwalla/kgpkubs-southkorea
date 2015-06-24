@@ -28,7 +28,37 @@ namespace Strategy
     {
       return false;
     }
-
+	
+	//ChooseBestBot
+	/*			Commented. Test remaining
+	    int chooseBestBot(std::list<int>& freeBots, const Tactic::Param* tParam, int prevID) const
+    {
+		bool choose_state = 1;
+      int minv =  (freeBots.begin());
+	  int minv_t = (freeBots.begin());
+      int mindis = 10000000;
+	  int mindis_t = 10000000;
+      for (std::list<int>::iterator it = freeBots.begin(); it != freeBots.end(); ++it)
+      {
+        // TODO make the bot choosing process more sophisticated, the logic below returns the 1st available bot
+        if(ForwardX(state->homePos[*it].x) < ForwardX(state->ballPos.x) && Vector2D<int>::dist(state->homePos[*it], state->ballPos) < mindis)
+        {
+          mindis = Vector2D<int>::dist(state->homePos[*it], state->ballPos);;
+          minv = *it;
+		  choose_state = 0;
+        }
+		else if( choose_state && Vector2D<int>::dist(state->homePos[*it], state->ballPos) < mindis_t)
+		{
+			mindis_t = Vector2D<int>::dist(state->homePos[*it], state->ballPos);
+          minv_t = *it;
+		}
+      }
+	  if( choose_state)
+		  return minv_t;
+      return minv;
+    } // chooseBestBot
+	*/
+	
     int chooseBestBot(std::list<int>& freeBots, const Tactic::Param* tParam, int prevID) const
     {
       int minv = *(freeBots.begin());

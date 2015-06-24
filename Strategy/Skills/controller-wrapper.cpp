@@ -15,6 +15,7 @@ MiscData ControllerWrapper::genControls_(Pose s, Pose e, int &vl, int &vr, doubl
     uq.pop_front();
     return m;
 }
+
 MiscData ControllerWrapper::genControls_(Pose s, int &vl, int &vr, double time, bool useTime) {
     assert(ctrlType == TRACKCTRL);
     Pose x = s;
@@ -92,3 +93,16 @@ MiscData ControllerWrapper::genControlsTrajSim(Pose s, int &vl, int &vr, double 
     return genControls_(s, vl, vr, t, true);
 }
 
+pair<int, int> ControllerWrapper::getDelayedVel()
+{
+    //qDebug() << "cfswdvgewsr" << uq.size() << "dfwgv" << endl;
+    return uq.front();
+}
+
+Pose ControllerWrapper::getNewStartPose(){
+    double elapsedS;
+    struct timeval nowTime;
+    gettimeofday(&nowTime, NULL);
+    elapsedS = (nowTime.tv_sec-startTime.tv_sec)+(nowTime.tv_usec-startTime.tv_usec)/1000000.0;
+    return tracker.getNewStartPose(elapsedS);
+}

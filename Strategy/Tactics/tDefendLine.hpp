@@ -39,15 +39,29 @@ namespace Strategy
     int chooseBestBot(std::list<int>& freeBots, const Tactic::Param* tParam, int prevID) const
     {
       int minv = *(freeBots.begin());
-      int mindis = 10000;
-      Vector2D<int>target((tParam->DefendLineP.x1+tParam->DefendLineP.x2)/2,(tParam->DefendLineP.y1+tParam->DefendLineP.y2)/2);
+      int mindis = INT_MAX ,dist;
+	  float a,b;
+	  if( tParam->DefendLineP.x1 - tParam->DefendLineP.x2 == 0)
+	  {
+		  a=1; b=0;
+	  }
+	  else if(tParam->DefendLineP.y1 -tParam->DefendLineP.y2 == 0)
+	  {
+		  a=0; b=1;
+	  }
+	  else
+	  { 
+		  a= -(tParam->DefendLineP.y1 -tParam->DefendLineP.y2)/(tParam->DefendLineP.x1 - tParam->DefendLineP.x2);
+		  b=1;
+	  }
+      //Vector2D<int>target((tParam->DefendLineP.x1+tParam->DefendLineP.x2)/2,(tParam->DefendLineP.y1+tParam->DefendLineP.y2)/2);
 
       for(std::list<int>::iterator it = freeBots.begin(); it != freeBots.end(); ++it)
       {
-        int dis_from_target = Vector2D<int>::dist(state->homePos[*it],target);
-        if(dis_from_target < mindis)
+        dist = abs(a*state->homePos[*it].x + b*state->homePos[*it].y);
+        if(dist < mindis)
         {
-          mindis = dis_from_target;
+          mindis = dist;
           minv = *it;
         }
       }

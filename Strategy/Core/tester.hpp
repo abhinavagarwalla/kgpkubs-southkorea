@@ -46,12 +46,13 @@ public:
 	TGoalKeepingOurSide tGoalOur4(&state, 4);
     Tactic::Param paramGoal;
 	
-	TGoalie2 tGoalie2(&state, 2);
-	Tactic::Param paramGoal2;
-	paramGoal2.Goalie2P.initTraj = 1;
-    
+	TGoalie2 tGoalie2(&state, 0);
+     
+	TShoot tShoot4(&state , 4) ;
+	Tactic::Param paramShoot;
+	
 	TDWDefender dwDefend2(&state, 2);
-	TDWDefender2015 dwDefend20152(&state, 2);
+	TDWDefender2015 dwDefend20152(&state, 0);
 	Tactic::Param paramDWDefend;
 	Tactic::Param paramDWDefend2015;
 	
@@ -76,7 +77,7 @@ public:
     paramList[Tactic::CoverGoal].CoverGoalP.distFromGoal = -2*DBOX_WIDTH;
 	
 	//CoverGoal2015
-	TCoverGoal2015 tcover20152(&state,2);
+	TCoverGoal2015 tcover20152(&state,0);
 	Tactic::Param paramcover2015;
 	
 	//CoverGoalPair
@@ -125,8 +126,8 @@ public:
 		TVelocity tVelocity2(&state,2);
     
 	Tactic::Param pVelocity;
-	pVelocity.VelocityP.vl = 65;
-	pVelocity.VelocityP.vr = 65;
+	pVelocity.VelocityP.vl = 35;
+	pVelocity.VelocityP.vr = 35;
 	
 	Tactic::Param pVelocity_1;
 	pVelocity_1.VelocityP.vl = 20;
@@ -158,9 +159,13 @@ public:
     TAttack tAttack2(&state, 2);
     TAttack tAttack3(&state, 3);
     TAttack tAttack4(&state, 4);
+	
+	TAttack2015 tAttack20154(&state , 4) ;
+	TAttack2015 tAttack20153(&state , 3) ;
+	
     Tactic::Param pAttack;
     paramList[Tactic::Attack].AttackP.rotateOnError = true;
-    
+    paramList[Tactic::Attack2015].AttackP.rotateOnError = true;
     // TestgotoPoint
     Strategy::Testgotopoint ttest1(&state,1);
 	
@@ -168,10 +173,10 @@ public:
 	Strategy::SParam params1;
 	params1.SplineGoToPointP.finalVelocity = 0;
 	params1.SplineGoToPointP.x = HALF_FIELD_MAXX - 10*BOT_RADIUS;
-	params1.SplineGoToPointP.y = HALF_FIELD_MAXY/2;
+	params1.SplineGoToPointP.y = 0;
 	params1.SplineGoToPointP.finalSlope = 0 ;
 	params1.SplineGoToPointP.initTraj = 1;
-	SkillSet sppoint(&state, 2); 
+	SkillSet sppoint(&state, 0); 
 	
 	Strategy::SParam params4;
 	params4.SplineInterceptBallP.vl = 70;
@@ -182,9 +187,14 @@ public:
 	Strategy::SParam params2;
 	SkillSet dwpoint(&state, 0);
 	SkillSet dwpoint_old(&state, 2);
-	params2.GoToPointP.x = 0 ;//ForwardX(HALF_FIELD_MAXX);
-	params2.GoToPointP.y = 0;
+	params2.GoToPointP.x = HALF_FIELD_MAXX-GOAL_DEPTH-6*BOT_RADIUS ;//ForwardX(HALF_FIELD_MAXX);
+	params2.GoToPointP.y = OUR_GOAL_MAXY;
 	params2.GoToPointP.finalslope = 0;
+	
+	Strategy::SParam params2_old ;
+	params2_old.GoToPointP.x = HALF_FIELD_MAXX-GOAL_DEPTH-6*BOT_RADIUS;
+	params2_old.GoToPointP.y = OUR_GOAL_MINY;//HALF_FIELD_MAXY/2;
+	params2_old.GoToPointP.finalslope = 0;
 	
 	Strategy::SParam params3 ;
 	params3.DWGoToPointP.x = HALF_FIELD_MAXX-GOAL_DEPTH-4*BOT_RADIUS;
@@ -196,6 +206,7 @@ public:
 	params3_old.DWGoToPointP.finalSlope = 0;
 
 	SkillSet simplegoto(&state, 0);
+	SkillSet simplegoto_old(&state, 2);
     Tactic::Param ptestpoint;
 	   
     TestbotRace ttest2(&state,2);
@@ -304,18 +315,19 @@ public:
 				//tVelocity3.execute(pVelocity);
 				//tAttackDuo12.execute(pAttack);
          //tVelocity0.execute(pVelocity);
-	  // tVelocity2.execute(pVelocity);
-	//tGoalie2.execute(paramGoal);
-        //tGoalOur2.execute(paramGoal);
+	 //  tVelocity0.execute(pVelocity);
+	    //  tGoalie2.execute(paramGoal);
+    //   tGoalOur0.execute(paramGoal);
         //tDefendLine1.execute(pDefendL1);
-				//tGoalOur2.execute(paramGoal);
+			//	tGoalOur2.execute(paramGoal);
 	//	tGoalOur3.execute(paramGoal);
        
-//		if(loopcount++ > 30){
-//			sball.executeSkill(SkillSet::SplineInterceptBall,params4) ;
-//			params4.SplineInterceptBallP.initTraj = 0;
-//			loopcount = loopcount%1000 + 30;
-//		}
+		if(loopcount++ > 10){
+		//	cout << params1.SplineGoToPointP.initTraj << "vcdzs" << endl;
+			sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
+			params1.SplineGoToPointP.initTraj = 0;
+			loopcount = loopcount%1000 + 11;
+		}
 		
         //tPosition
 				//tcover3.execute(paramcover);
@@ -334,8 +346,8 @@ public:
 			//sppoint.executeSkill(SkillSet::SplineGoToPoint,params1) ;
 			//params1.SplineGoToPointP.initTraj = 0;
 			
-			simplegoto.executeSkill(SkillSet::GoToPoint, params2);
-        
+		//	simplegoto.executeSkill(SkillSet::GoToPoint, params2);
+			//simplegoto_old.executeSkill(SkillSet::GoToPoint, params2_old);
         //goTopointStraight.executeSkill(SkillSet::GoToBallStraight,param1);
         //goToBallStraight.executeSkill(SkillSet::GoToBallStraight,param9)
         //tAttack2.execute(pAttack);
@@ -344,12 +356,14 @@ public:
 	//	tAttack3.execute(pAttack);
 	 //tAttack1.execute(pAttack);
         //tAttack4.execute(pAttack);
-        //tcover0.execute(paramcover);
+      //  tcover0.execute(paramcover);
         //tcover3.execute(paramcover);
 //        goTopointStraight.executeSkill(SkillSet::GoToBallStraight,param1);
         //goToBallStraight.executeSkill(SkillSet::GoToBallStraight,param9);
         // goTopointStraight.executeSkill(SkillSet::GoToPointStraight,param1);
      //tCharge1.execute(pCharge);
+	   //     tAttack20154.execute(pAttack) ;
+		  //tShoot4.execute(paramShoot) ;
 		//	tAttack4.execute(pAttack);
 		//	tAttack2.execute(pAttack);
 		//	tAttack1.execute(pAttack);

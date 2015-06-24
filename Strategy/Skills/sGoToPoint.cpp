@@ -16,8 +16,11 @@ namespace Strategy
     dpoint.y  = param.GoToPointP.y;
     finalvel  = param.GoToPointP.finalVelocity;
     //Util::Logger::toStdOut("Going to point : (%d , %d) from (%d, %d)",dpoint.x,dpoint.y, state->homePos[botID].x, state->homePos[botID].y);
-    float dist = (state->homePos[botID] - Vector2D<int>(dpoint)).absSq();
-    //if(goalie==true)
+    float dist = Vector2D<int>::dist(state->homePos[botID] , dpoint);
+    if(dist < 1.5*BOT_RADIUS){
+		comm->sendCommand(botID,0,0);
+		return;
+	}
     if(!param.GoToPointP.align )//|| dist < 9 * BOT_BALL_THRESH * BOT_BALL_THRESH)
       _goToPoint(botID, dpoint, finalvel, param.GoToPointP.finalslope, 0,param.GoToPointP.increaseSpeed);
     else

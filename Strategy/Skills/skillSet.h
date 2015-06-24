@@ -84,7 +84,7 @@ namespace Strategy
       struct type7
       {
         bool align;
-      } GoToBallP;
+      } GoToBallP , GoBehindBallP;
       struct type8
       {
         float x;
@@ -104,6 +104,7 @@ namespace Strategy
         float vr;
 		bool initTraj;
       }SplineInterceptBallP;
+
     };
   class SkillSet
   {
@@ -126,6 +127,7 @@ namespace Strategy
 			SplineGoToPoint,
 			DWGoToPoint,
 			SplineInterceptBall,
+			GoBehindBall ,
 			MAX_SKILLS
 		};
 	
@@ -160,9 +162,10 @@ namespace Strategy
     void turnToAngle(const SParam& param);
     void defendPoint(const SParam& param);
 	void chargeBall(const SParam& param);
+	void goBehindBall(const SParam &param) ;
     void splineGoToPoint(const SParam& param);
 	void _splineGoToPointTrack(int botid, Pose start, Pose end, float finalvel, float vls, float vrs);
-	void _splineGoToPointInitTraj(int botid, Pose start, Pose end, float finalvel, float vls, float vrs);
+	void _splineGoToPointInitTraj(int botid, Pose start, Pose end, float finalvel, float vls, float vrs, int flag);
 	bool _isFrontDirected(Pose botPos, Pose endPos, float vls, float vrs);
 	void dwGoToPoint(const SParam& param);
 	void _dwGoToPointTrack(int botid, Pose start, Pose end, float finalvel);

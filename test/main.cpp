@@ -6,12 +6,12 @@
 int main(int argc, char **argv)
 {
 	Serial s0, s1;
-	if(!s0.Open("/dev/ttyUSB1", 38400))
+	if(!s0.Open("/dev/ttyUSB0", 38400))
 	{
 		perror("Could not Open Serial Port s0 :");
 		exit(0);
 	}
-	if(!s1.Open("/dev/ttyUSB0", 38400))
+	if(!s1.Open("/dev/ttyUSB1", 38400))
 	{
 		perror("Could not Open Serial Port s1 :");
 		exit(0);

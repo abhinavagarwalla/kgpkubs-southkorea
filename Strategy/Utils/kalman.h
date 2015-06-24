@@ -102,7 +102,7 @@ namespace Strategy
 	ofstream myfile;
  
 //	Mat_<float> measurement;
-//  	KalmanFilter KF;
+ // 	KalmanFilter KF;
 //	void strategyToRealConversion(BotPose &p);
 //	Vector2D<float> calcBotVelocity(double delX, double delY, double Theta1, double Theta2, float timeMs);
 //	Point ballPos;

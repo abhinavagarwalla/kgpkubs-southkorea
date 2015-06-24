@@ -48,24 +48,44 @@ namespace Strategy
 		}
 		int chooseBestBot(std::list<int>& freeBots, const Tactic::Param* tParam, int prevID) const
 		{
-		  assert(tParam != 0);
-		  int minv   = *(freeBots.begin());
-		  int mindis = 1000000000;
-		  Vector2D<int> tGoToPoint(tParam->PositionP.x, tParam->PositionP.y);
-		  
-		  for (std::list<int>::iterator it = freeBots.begin(); it != freeBots.end(); ++it)
-		  {
-			// TODO make the bot choosing process more sophisticated, the logic below returns the 1st available bot
-			float dis_from_point = (state->homePos[*it] - tGoToPoint).absSq();
-			if(dis_from_point < mindis)
+			assert(tParam != 0);
+			int minv1   =-1,minv2  = *(freeBots.begin()) , dist;
+			int mindis1 = INT_MAX,mindis2 = INT_MAX;
+			if(state->ballPos.x > -HALF_FIELD_MAXX/2)
 			{
-			  mindis = dis_from_point;
-			  minv = *it;
+				for(std::list<int>::iterator it = freeBots.begin(); it != freeBots.end(); ++it)
+				{
+					dist = abs(state->homePos[*it].x +HALF_FIELD_MAXX/2);
+					if(state->homePos[*it].x < -HALF_FIELD_MAXX/2 && dist < mindis1 )
+					{
+						minv1 = *it;
+						mindis1 = dist;
+					}
+					else if( dist < mindis2)
+					{
+						minv2 = *it;
+						mindis2 = dist;
+					}
+				}
 			}
-		  }
-		  printf("%d assigned Position\n", minv);
-		  return minv;
-		} // chooseBestBot
+			else
+			{
+				for(std::list<int>::iterator it = freeBots.begin(); it != freeBots.end(); ++it)
+				{
+					dist = Vector2D<int>::dist(state->homePos[*it],state->ballPos);
+					if(dist < mindis2)
+					{
+						mindis2 = dist;
+						minv2 = *it;
+					}
+				}
+			}
+			if(minv1 ==-1)
+				return minv2;
+			else
+				return minv1;
+		}
+			// chooseBestBot
 	
     bool pointxInField(Vector2D<int> final)
     {

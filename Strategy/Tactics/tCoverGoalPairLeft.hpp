@@ -47,6 +47,68 @@ public:
     }
    
     // change choose best bot based on the left condition 
+				//Commented. Test remaining
+	 int chooseBestBot(std::list<int>& freeBots, const Tactic::Param* tParam, int prevID) const
+		{
+			int minv = *(freeBots.begin());
+			int minv1, minv2;
+			int mindis = 1000000000;
+			int mindis_t = 1000000000;
+			int it_t = -1 ; 
+			Point2D<int> goalPos(ForwardX(-(HALF_FIELD_MAXX)), 0);
+			for (std::list<int>::iterator it = freeBots.begin(); it != freeBots.end(); ++it)
+			{
+				
+				float botBallDist = 1000000000;
+				float botBallDist_t = 1000000000;
+				const int factor = 0.2;
+				float perpend_dist = ForwardX(state->homePos[*it].x - ForwardX(-HALF_FIELD_MAXX));//state->home_goalpoints[2] is center of our goal
+				Vector2D<int> goal;
+				goal.x = OUR_GOAL_X;
+				goal.y = 0;
+				float dist_from_goal = Vector2D<int>::dist(state->homePos[*it], goal);
+				if(dist_from_goal + factor * perpend_dist < mindis)
+				{
+					mindis_t = mindis;
+					mindis = dist_from_goal + factor * perpend_dist;
+					minv2 = minv1;
+					minv1 = *it;
+				}
+				else if(dist_from_goal + factor*perpend_dist < mindis_t)
+				{
+					mindis_t = dist_from_goal + factor * perpend_dist;
+					minv2 = *it;
+				}
+				if(state->ballPos.x < ForwardX(-(HALF_FIELD_MAXX-GOAL_DEPTH)*0.8 + 2*BOT_RADIUS) && (state->ballPos.y >OUR_GOAL_MAXY))
+				{
+					botBallDist = Vector2D<int>::dist(state->ballPos, state->homePos[*it]);
+					if(botBallDist < botBallDist_t /*&& state->ballPos.y > OUR_GOAL_MAXY*/ && state->ballPos.y > state->homePos[*it].y && abs(state->ballPos.x - state->homePos[*it].x ) <= 2*BOT_RADIUS)
+					{
+							botBallDist_t = botBallDist;
+							it_t = *it;
+					}
+					else if( botBallDist < botBallDist_t && state->ballPos.y < OUR_GOAL_MINY && state->ballPos.y < state->homePos[*it].y /*&& abs(state->ballPos.x - state->homePos[it].x ) <= 2*BOT_RADIUS*/)
+					{
+						botBallDist_t = botBallDist;
+						if( minv1 == *it)
+							it_t = minv2;
+						else if( minv2 == *it)
+							it_t = minv1;
+					}
+				}
+			}
+			if(it_t == -1)
+			{
+				if( state->homePos[minv1].y > state->homePos[minv2].y)
+					minv = minv1;
+				else minv = minv2;
+			}
+			else return it_t;
+			
+			return minv;
+		} // chooseBestBot
+	 
+	/*
     int chooseBestBot(std::list<int>& freeBots, const Tactic::Param* tParam, int prevID) const
     {
       int minv = *(freeBots.begin());
@@ -69,7 +131,7 @@ public:
       
       return minv;
     } // chooseBestBot
-
+*/
 	
 	bool isAngleSet() {
 		return ((state->homeAngle[botID] >= (-PI/2 -PI/6) && state->homeAngle[botID] <= (-PI/2 + PI/6)) ||

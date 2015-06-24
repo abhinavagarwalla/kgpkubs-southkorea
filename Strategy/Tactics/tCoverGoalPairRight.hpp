@@ -47,6 +47,40 @@ public:
     }
    
    // change choose best  bot 
+   			//Commented. Test remaining
+    int chooseBestBot(std::list<int>& freeBots, const Tactic::Param* tParam, int prevID) const
+		{
+			int minv = *(freeBots.begin());
+			int mindis = 1000000000;
+			Point2D<int> goalPos(ForwardX(-(HALF_FIELD_MAXX)), 0);
+			float ang1 = state->ballVel.x == 0? PI/2 :atan(state->ballVel.y/state->ballVel.x);	//KD
+			for (std::list<int>::iterator it = freeBots.begin(); it != freeBots.end(); ++it)
+			{
+				const int factor = 0.2;
+				float perpend_dist = ForwardX(state->homePos[*it].x - ForwardX(-HALF_FIELD_MAXX));//state->home_goalpoints[2] is center of our goal
+				Vector2D<int> goal;
+				goal.x = OUR_GOAL_X;
+				goal.y = 0;
+				float dist_from_goal = Vector2D<int>::dist(state->homePos[*it], goal);
+				if(dist_from_goal + factor * perpend_dist < mindis)
+				{
+					mindis = dist_from_goal + factor * perpend_dist;
+					minv = *it;
+				}
+/*				if(state->ballPos.x < ForwardX(-(HALF_FIELD_MAXX-GOAL_DEPTH)*0.8) + 2*BOT_RADIUS && (state->ballPos.y >OUR_GOAL_MAXY))
+				{
+					botBallDist = Vector2D<int>::dist(state->ballPos, state->homePos[it]);
+					if( botBallDist < botBallDist_t && state->ballPos.y < OUR_GOAL_MINY && state->ballPos.y < state->homePos[it].y && abs(state->ballPos.x - state->homePos[it].x ) <= 2*BOT_RADIUS)
+					{
+						botBallDist_t = botBallDist;
+						it_t = it;
+					}
+				}	*/
+			}
+			return minv;
+		} // chooseBestBot 
+	/*
+   
     int chooseBestBot(std::list<int>& freeBots, const Tactic::Param* tParam, int prevID) const
     {
       int minv = *(freeBots.begin());
@@ -69,7 +103,7 @@ public:
       
       return minv;
     } // chooseBestBot
-
+*/
 	
 	bool isAngleSet() {
 		return ((state->homeAngle[botID] >= (-PI/2 -PI/6) && state->homeAngle[botID] <= (-PI/2 + PI/6)) ||

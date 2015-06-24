@@ -75,12 +75,12 @@ namespace Strategy
       
       if (!isGoalKeeperInPosition())
       {
-        sID = SkillSet::GoToPoint;
+        sID = SkillSet::DWGoToPoint;
   //     sParam.DWGoToPointP.align = false;
-        sParam.GoToPointP.finalslope =- PI / 2;
-        sParam.GoToPointP.x = ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*1.2) /*/4*/;
-        sParam.GoToPointP.y = 0;
-        sParam.GoToPointP.finalVelocity = 0;
+        sParam.DWGoToPointP.finalSlope =- PI / 2;
+        sParam.DWGoToPointP.x = ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*1.2) /*/4*/;
+        sParam.DWGoToPointP.y = 0;
+       // sParam.GoToPointP.finalVelocity = 0;
       }
       else
       {
@@ -88,19 +88,19 @@ namespace Strategy
 		  {
 			  sID = SkillSet::Spin;
 			  if(state->ballPos.y < 0 )
-				  sParam.SpinP.radPerSec = +MAX_BOT_OMEGA   ;
-			else
 				  sParam.SpinP.radPerSec = -MAX_BOT_OMEGA   ;
+			else
+				  sParam.SpinP.radPerSec = +MAX_BOT_OMEGA   ;
 		  }
 		  else
 		  {
-			  sID = SkillSet::GoToPoint;
-			  sParam.GoToPointP.x = ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*1.2) /*/4*/;
+			  sID = SkillSet::DWGoToPoint;
+			  sParam.DWGoToPointP.x = ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*1.2) /*/4*/;
 			  int temp = getBotDestPointY();
-			  sParam.GoToPointP.y = temp;
+			  sParam.DWGoToPointP.y = temp;
 //			  sParam.DWGoToPointP.align = false;
-			  sParam.GoToPointP.finalVelocity = 0;
-			  sParam.GoToPointP.finalslope = -PI / 2;
+			 // sParam.GoToPointP.finalVelocity = 0;
+			  sParam.DWGoToPointP.finalSlope = -PI / 2;
 		  }
       }
       skillSet->executeSkill(sID, sParam);

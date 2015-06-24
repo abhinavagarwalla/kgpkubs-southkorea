@@ -79,7 +79,7 @@ namespace Strategy
 	setIdentity(KF.processNoiseCov, Scalar::all(1e-4));
 	setIdentity(KF.measurementNoiseCov, Scalar::all(10));
 	setIdentity(KF.errorCovPost, Scalar::all(.1));*/
-	//cv::KalmanFilter kf(4, 2, 0);
+	//cv::KalmanFilter kf(3, 2, 0);
 
     kalmanlog = fopen("kalman.log", "w");
     t.start();

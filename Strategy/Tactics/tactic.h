@@ -34,7 +34,8 @@ namespace Strategy
       ReceiveBall,          // Receive Pass
       Defend,               // Defend the ball from coming to our side
       Attack,               // Attck the ball towards the goal      
-      Stop,                 // Stop the bot
+      Attack2015,
+	  Stop,                 // Stop the bot
       Velocity,             // Move at a fixed velocity     
       Backup,
 	  TestgotoPoint,
@@ -128,7 +129,7 @@ namespace Strategy
       struct type10
       {
         bool rotateOnError;
-      } AttackP ;     
+      } AttackP , Attack2015P;     
       struct type11
       {
         int distFromGoal;

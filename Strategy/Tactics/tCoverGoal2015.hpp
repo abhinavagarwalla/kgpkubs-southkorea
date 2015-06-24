@@ -45,6 +45,28 @@ public:
     }
     
 	// choose best vbot to be changed
+	
+				//Commented. Test remaining
+	int chooseBestBot(std::list<int>& freeBots, const Tactic::Param* tParam, int prevID) const
+    {
+      int minv = *(freeBots.begin());
+      int mindis = 1000000000;
+		int factor = 0.2;
+	  int destX = ForwardX(-(HALF_FIELD_MAXX-GOAL_DEPTH)*0.80);
+      for (std::list<int>::iterator it = freeBots.begin(); it != freeBots.end(); ++it)
+      {
+		Point2D<int> our_goal(-HALF_FIELD_MAXX + GOAL_DEPTH, 0) ;
+        float dist = Vector2D<int>::dist(state->homePos[*it], our_goal) ;
+		float perpend_dist = ForwardX(state->homePos[*it].x - ForwardX(-HALF_FIELD_MAXX));
+        if(dist + factor * perpend_dist < mindis)
+        {
+          mindis =  dist + factor * perpend_dist < mindis;
+          minv = *it;
+        }
+      }
+	  return minv;
+	}
+	  /*
     int chooseBestBot(std::list<int>& freeBots, const Tactic::Param* tParam, int prevID) const
     {
       int minv = *(freeBots.begin());
@@ -63,7 +85,7 @@ public:
       
       return minv;
     } // chooseBestBot
-
+*/
 	
 	bool isAngleSet() {
 		return ((state->homeAngle[botID] >= (-PI/2 -PI/6) && state->homeAngle[botID] <= (-PI/2 + PI/6)) ||
@@ -149,10 +171,10 @@ public:
 	else if(goalieyR - (state->homePos[goalieID].y -BOT_RADIUS) <1.5*BOT_RADIUS)
 		yR = goalieyL;
 	
-	int predictPosY = state->ballPos.y - (state->ballPos.x - predictPosX)*tan(ang1);
+	int predictPosY = state->ballPos.y - (state->ballPos.x - predictPosX)*tan(ang1) + SGN(state->ballVel.y)*BOT_RADIUS;
 	int goaliePredictPosY = state->ballPos.y - (state->ballPos.x - (-HALF_FIELD_MAXX+GOAL_DEPTH))*tan(ang1);
 
-
+    oppBallDist = HALF_FIELD_MAXX ;   // TO BE CHANGED AFTER TETING
 
 	// add the info of away bots 
 	
@@ -166,7 +188,7 @@ public:
 	     iState = BLOCKING ;
 		 break ;
 	 }
-	 if( distBotBall < 3*BOT_BALL_THRESH && ( oppBallDist > 4*BOT_BALL_THRESH))
+	 if( distBotBall < 2*BOT_BALL_THRESH && ( oppBallDist > 4*BOT_BALL_THRESH))
    	 {
 		iState = CLEARING;
 		cout << "here 2 " << predictPosX << endl;
@@ -203,10 +225,11 @@ public:
 			dest.y = yR + BOT_RADIUS;
 		}
 	}
-	sParam.DWGoToPointP.x = dest.x;
-	sParam.DWGoToPointP.y = dest.y;
+	sParam.GoToPointP.x = dest.x;
+	sParam.GoToPointP.y = dest.y;
+	sParam.GoToPointP.finalslope = -PI/2;
 	cout<<dest.x <<" "<<dest.y<<std::endl;
-	skillSet->executeSkill(SkillSet::DWGoToPoint, sParam);
+	skillSet->executeSkill(SkillSet::GoToPoint, sParam);
 	break;
 				
 	case CLEARING :
@@ -217,7 +240,7 @@ public:
 		 break ;
 	    }
 		
-		if( distBotBall > 3*BOT_BALL_THRESH)
+		if( distBotBall > 2*BOT_BALL_THRESH)
 		{
 			iState = DEFENDING;
 			break;
@@ -268,10 +291,13 @@ public:
 			skillSet->executeSkill(SkillSet::DWGoToPoint, sParam);
 			break;
 		}*/
-
-			sParam.DWGoToPointP.y = state->awayPos[oppID].y ;
-			sParam.DWGoToPointP.x = dest.x;
-			skillSet->executeSkill(SkillSet::DWGoToPoint, sParam);
+		if(abs(state->awayPos[oppID].y) > OUR_GOAL_MAXY)
+			sParam.GoToPointP.y = SGN(state->awayPos[oppID].y)*OUR_GOAL_MAXY;
+		else
+			sParam.GoToPointP.y = state->awayPos[oppID].y ;
+			sParam.GoToPointP.finalslope = -PI/2;
+			sParam.GoToPointP.x = dest.x;
+			skillSet->executeSkill(SkillSet::GoToPoint, sParam);
 			break;
 		
     

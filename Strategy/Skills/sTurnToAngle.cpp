@@ -45,9 +45,9 @@ namespace Strategy
     
     if(fabs(turnAngleLeft) > DRIBBLER_BALL_ANGLE_RANGE/2) {
 #if FIRA_COMM || FIRASSL_COMM
-    comm->sendCommand(botID, vl, vr);        
+    comm->sendCommand(botID, vl/2, vr/2);        
 #else
-    comm->sendCommand(botID, vr, vl);
+    comm->sendCommand(botID, vr/2, vl/2);
 #endif
     }else {
       comm->sendCommand(botID, 0, 0);

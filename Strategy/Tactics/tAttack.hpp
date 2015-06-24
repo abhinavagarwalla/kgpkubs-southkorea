@@ -114,6 +114,7 @@ namespace Strategy
 			}
 			avgBallVel.x /= 10.0;
 			avgBallVel.y /= 10.0;
+			
       float dist = Vector2D<int>::dist(state->ballPos, state->homePos[botID]);
       movementError[movementErrorIndex++] = (Vector2D<int>::distSq(prevBotPos, state->homePos[botID])) + (prevBotAngle - state->homeAngle[botID])*(prevBotAngle - state->homeAngle[botID])*50000;
       prevBotPos = state->homePos[botID];
@@ -131,7 +132,7 @@ namespace Strategy
         return;
       }
 
-      {
+      
         if(iState == SPINNING_CW || iState == SPINNING_CCW)
         {
           if(dist > BOT_BALL_THRESH * 1.1)
@@ -295,7 +296,7 @@ namespace Strategy
           }
           skillSet->executeSkill(sID, sParam);
         }
-      }
+      
     }
   }; // class TAttack
 } // namespace Strategy

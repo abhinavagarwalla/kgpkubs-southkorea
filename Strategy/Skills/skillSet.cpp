@@ -50,6 +50,7 @@ SkillSet::SkillSet(const BeliefState* state, const int botID) :
   skillList[DefendPoint] 	= &SkillSet::defendPoint;
   skillList[SplineGoToPoint]= &SkillSet::splineGoToPoint;
   skillList[DWGoToPoint]= &SkillSet::dwGoToPoint;
+  skillList[GoBehindBall]   = &SkillSet::goBehindBall ;
 	skillList[ChargeBall]   = &SkillSet::chargeBall;
 	skillList[SplineInterceptBall] = &SkillSet::splineInterceptBall;
   // Initialization check
@@ -139,7 +140,7 @@ void SkillSet::_goToPoint(int botid, Vector2D<int> dpoint, float finalvel, float
         return;
       }
      finalvel=0;
-      comm->sendCommand(botID, finalvel, finalvel);
+		  comm->sendCommand(botID, finalvel, finalvel);
       return;
       // This part of the function is just for safety.
       // The tactic should actually prevent this call.
@@ -192,7 +193,6 @@ void SkillSet::_goToPoint(int botid, Vector2D<int> dpoint, float finalvel, float
 		{
 			
 		}
-		
-    comm->sendCommand(botID, (t - r), (t + r));
+			comm->sendCommand(botID, (t - r)/2, (t + r)/2);
 }
 }

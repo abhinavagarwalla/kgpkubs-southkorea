@@ -36,20 +36,40 @@ namespace Strategy
 		
     int chooseBestBot(std::list<int>& freeBots, const Tactic::Param* tParam, int prevID) const
     {
-      float minv = *(freeBots.begin());
-      float mindis = 1e12;
-			for(std::list<int>::iterator it = freeBots.begin(); it != freeBots.end(); ++it)
-			{
-				const Vector2D<int> &botpos = state->homePos[*it];
-				
-				int dist = abs(state->homePos[*it].y + SGN(state->ballPos.y)*(HALF_FIELD_MAXY-2*BOT_RADIUS)/2);
-				if(dist  < mindis)
-				{
-					mindis =  dist;
-					minv = *it;
-				}
-			}
-			return minv;
+      int minv1 = -1,minv2 = *(freeBots.begin()),attacker = *(freeBots.begin());
+      int mindis1 = INT_MAX,mindis2 = INT_MAX,attackerSide;
+	  float dist;
+	  for(std::list<int>::iterator it = freeBots.begin(); it != freeBots.end(); ++it)
+	  {
+		  dist = Vector2D<int>::dist(state->homePos[*it],state->ballPos);
+		  if(dist < mindis1)
+		  {
+			  mindis1 = dist;
+			  attacker = *it;
+		  }
+		  
+	  }
+	  mindis1 = INT_MAX;
+	  attackerSide = SGN(state->homePos[attacker].y);
+	  for(std::list<int>::iterator it = freeBots.begin(); it != freeBots.end(); ++it)
+	  {
+		  dist = state->homePos[*it].x;
+		  if(SGN(state->homePos[*it].y) == -attackerSide && dist <mindis1)
+		  {
+			  mindis1 =dist;
+			  minv1 = *it;
+		  }
+		  else if( dist < mindis2)
+		  {
+			  mindis2 = dist;
+			  minv2 = *it;
+		  }
+	  }
+	  if(minv1 == -1)
+		  return minv2;
+		else
+			return minv1;
+	
     } // chooseBestBot)
     void execute(const Param& tParam)
     {

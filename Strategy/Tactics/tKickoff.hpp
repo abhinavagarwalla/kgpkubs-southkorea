@@ -38,7 +38,7 @@ namespace Strategy
 			/*Arpit: tactic explicitly for Kickoff. chooses the farthest bot on the other side of the field. */
 			// no. closest to ball.
       int maxv = *(freeBots.begin());
-      int maxdis = 0;
+      int maxdis = INT_MIN;
       for (std::list<int>::iterator it = freeBots.begin(); it != freeBots.end(); ++it)
       {        
         float dist = (state->homePos[*it].x);
