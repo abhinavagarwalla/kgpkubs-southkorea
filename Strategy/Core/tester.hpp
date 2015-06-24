@@ -160,10 +160,13 @@ public:
     TAttack tAttack3(&state, 3);
     TAttack tAttack4(&state, 4);
 	
-	TAttack2015 tAttack20154(&state , 4) ;
+	TAttack2015 tAttack20150(&state , 0) ;
+	TAttack2015 tAttack20151(&state , 1) ;
+    TAttack2015 tAttack20152(&state , 2) ;
 	TAttack2015 tAttack20153(&state , 3) ;
+	TAttack2015 tAttack20154(&state , 4) ;
 	
-    Tactic::Param pAttack;
+	Tactic::Param pAttack;
     paramList[Tactic::Attack].AttackP.rotateOnError = true;
     paramList[Tactic::Attack2015].AttackP.rotateOnError = true;
     // TestgotoPoint
@@ -182,7 +185,7 @@ public:
 	params4.SplineInterceptBallP.vl = 70;
 	params4.SplineInterceptBallP.vr = 70;
 	params4.SplineInterceptBallP.initTraj = 1;
-	SkillSet sball(&state, 2); 
+	SkillSet sball(&state, 0); 
 	
 	Strategy::SParam params2;
 	SkillSet dwpoint(&state, 0);
@@ -324,8 +327,8 @@ public:
        
 		if(loopcount++ > 10){
 		//	cout << params1.SplineGoToPointP.initTraj << "vcdzs" << endl;
-			sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
-			params1.SplineGoToPointP.initTraj = 0;
+			sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
+			params4.SplineGoToPointP.initTraj = 0;
 			loopcount = loopcount%1000 + 11;
 		}
 		
@@ -338,7 +341,7 @@ public:
 		//tcover20152.execute(paramcover2015);
 	//	tcoverleft2.execute(paramcoverleft);
 	//	tcoverright0.execute(paramcoverright);
-		//dwpoint.executeSkill(SkillSet::DWGoToPoint,params3) ;
+	//  dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
 //			dwpoint.executeSkill(SkillSet::DWGoToPoint,params3) ;
 //			dwpoint_old.executeSkill(SkillSet::DWGoToPoint,params3_old) ;
 //			params3.DWGoToPointP.initTraj = 0;
@@ -346,10 +349,8 @@ public:
 			//sppoint.executeSkill(SkillSet::SplineGoToPoint,params1) ;
 			//params1.SplineGoToPointP.initTraj = 0;
 			
-		//	simplegoto.executeSkill(SkillSet::GoToPoint, params2);
+		   simplegoto.executeSkill(SkillSet::GoToPoint, params2);
 			//simplegoto_old.executeSkill(SkillSet::GoToPoint, params2_old);
-        //goTopointStraight.executeSkill(SkillSet::GoToBallStraight,param1);
-        //goToBallStraight.executeSkill(SkillSet::GoToBallStraight,param9)
         //tAttack2.execute(pAttack);
 			//	tReceive3.execute(pReceive);
 				//tReceive1.execute(pReceive);
@@ -358,13 +359,10 @@ public:
         //tAttack4.execute(pAttack);
       //  tcover0.execute(paramcover);
         //tcover3.execute(paramcover);
-//        goTopointStraight.executeSkill(SkillSet::GoToBallStraight,param1);
-        //goToBallStraight.executeSkill(SkillSet::GoToBallStraight,param9);
-        // goTopointStraight.executeSkill(SkillSet::GoToPointStraight,param1);
      //tCharge1.execute(pCharge);
-	   //     tAttack20154.execute(pAttack) ;
+	      //  tAttack20150.execute(pAttack) ;
 		  //tShoot4.execute(paramShoot) ;
-		//	tAttack4.execute(pAttack);
+		 //	tAttack0.execute(pAttack);
 		//	tAttack2.execute(pAttack);
 		//	tAttack1.execute(pAttack);
 			//tAttack3.execute(pAttack);

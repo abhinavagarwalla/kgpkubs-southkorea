@@ -234,7 +234,7 @@ namespace Strategy
   {
         
 	case APPROACHING:
-	{
+	{ 
 
 	  if(dist<1.1*BOT_BALL_THRESH && state->homePos[botID].x<state->ballPos.x)
 	  {
@@ -243,16 +243,16 @@ namespace Strategy
 	  
 	  } 
 	  
-   if(state->homePos[botID].x>state->ballPos.x && state->homePos[botID].x > -HALF_FIELD_MAXX+GOAL_DEPTH+3*BOT_BALL_THRESH && state->homePos[botID].x < HALF_FIELD_MAXX-GOAL_DEPTH-2*BOT_BALL_THRESH)
-   {
-	   sID = SkillSet::GoBehindBall ;
-	   skillSet->executeSkill(sID, sParam);
-	   break ;
-   }
+      if(state->homePos[botID].x > state->ballPos.x && state->homePos[botID].x > -HALF_FIELD_MAXX+GOAL_DEPTH+3*BOT_BALL_THRESH && state->homePos[botID].x < HALF_FIELD_MAXX-GOAL_DEPTH-2*BOT_BALL_THRESH)
+	  {
+	    sID = SkillSet::GoBehindBall ;
+	    skillSet->executeSkill(sID, sParam);
+	    break ;
+      }
 	  
 		  
-      // shoot();
-	  //  break;
+           // shoot();
+	      //  break;
           sID = SkillSet::GoToPoint;
           sParam.GoToPointP.align = true;
           float ballgoaldist = Vector2D<int>::dist(state->ballPos, Vector2D<int>(OPP_GOAL_X, 0));

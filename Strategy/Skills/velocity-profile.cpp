@@ -144,8 +144,6 @@ vector<Interval> rot_acc_limits(double vold, double kold, double k, double dels,
   }
 }
 
-
-
 vector<ProfileDatapoint> generateVelocityProfile(Spline &p, int numPoints, double vls, double vrs, double vle, double vre)
 {
 
