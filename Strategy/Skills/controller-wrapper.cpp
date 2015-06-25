@@ -1,4 +1,7 @@
 #include "controller-wrapper.hpp"
+#include <iostream>
+
+using namespace std;
 
 MiscData ControllerWrapper::genControls_(Pose s, Pose e, int &vl, int &vr, double finalVel) {
     assert(ctrlType == POINTCTRL);
@@ -95,7 +98,6 @@ MiscData ControllerWrapper::genControlsTrajSim(Pose s, int &vl, int &vr, double 
 
 pair<int, int> ControllerWrapper::getDelayedVel()
 {
-    //qDebug() << "cfswdvgewsr" << uq.size() << "dfwgv" << endl;
     return uq.front();
 }
 

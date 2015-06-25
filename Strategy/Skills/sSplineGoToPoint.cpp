@@ -33,7 +33,7 @@ namespace Strategy
 		//std::cout << "here v cnds" << std::endl;
 		if(!algoController){
 			if(traj)
-				algoController = new ControllerWrapper(traj, vls, vrs, PREDICTION_PACKET_DELAY);
+				algoController = new ControllerWrapper(traj, 0, 0, PREDICTION_PACKET_DELAY);
 		}
 		
 	//	cout << "flag is " << start.x() << " " << start.y() << endl ;
@@ -44,46 +44,35 @@ namespace Strategy
 		algoController->genControls(start, end, vl, vr, finalvel);
 		assert(vl <= 150 && vl >= -150);
 		assert(vr <= 150 && vr >= -150);
-		cout << "cfsw" << counter << " " << vr << " " << vl << endl;
-		if (direction)
-			comm->sendCommand(botid, vl/2, vr/2); //maybe add mutex
-		else {
+		cout << "sending packet" << counter << " " << vr << " " << vl << endl;
+		if (direction){
+			comm->sendCommand(botid, vl, vr); //maybe add mutex
+		}else {
 			//cout << "ulta chaloooo" << endl;
 			int vl1 = (-1)*vr;
 			int vr1 = (-1)*vl;
-			comm->sendCommand(botid, vl1/2, vr1/2);
+			comm->sendCommand(botid, vl1, vr1);
 		}
 	}
 
 	void SkillSet::_splineGoToPointInitTraj(int botid, Pose start, Pose end, float finalvel, float vls, float vrs, int flag){
 	
 		counter = 0;
-		direction = _isFrontDirected(start, end, vls, vrs);
-		if (!direction) 
-			start.setTheta(start.theta() - PI);
-		cout << "flag is " << start.x() << " " << start.y() << endl ;
+		cout << "flag is " << end.x() << " " << end.y() << endl ;
 	//	getchar();
-/*		
-		if(flag == 1){
-			 pair<int,int> delayedVel = algoController->getDelayedVel();
-		     start = algoController->getNewStartPose();
-			 if(traj)
-				delete traj;
-			 traj = TrajectoryGenerators::cubic(start, end ,delayedVel.first, delayedVel.second,0,0);
-		}
-		else{*/
 			if(traj)
 				delete traj;
-			traj = TrajectoryGenerators::cubic(start, end ,  0, 0 ,0,0); //may need to modify vle,vls,vre,vrs
+			traj = TrajectoryGenerators::cubic(start, end ,  vls, vrs , 0, 0); //may need to modify vle,vls,vre,vrs
 		//}
 		
 		if(algoController)
 			delete algoController;
 		
-		algoController = new ControllerWrapper(traj, vls, vrs, PREDICTION_PACKET_DELAY);
+		algoController = new ControllerWrapper(traj, 0, 0, PREDICTION_PACKET_DELAY);
 
-		_splineGoToPointTrack(botid,start,end,finalvel, vls, vrs);
+		_splineGoToPointTrack(botid,start,end,finalvel, 0, 0);
 	}
+	
   void SkillSet::splineGoToPoint(const SParam& param)
   {
 	Vector2D<int> dpoint;
@@ -103,3 +92,4 @@ namespace Strategy
 	//cout << "lksdhbvkiedvi;oe;lqwibdkjs bvak.jb jcl; bvkjola;b fd;";
    }
 }
+

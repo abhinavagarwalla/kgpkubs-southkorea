@@ -103,8 +103,8 @@ namespace Strategy
  
 //	Mat_<float> measurement;
  // 	KalmanFilter KF;
-//	void strategyToRealConversion(BotPose &p);
-//	Vector2D<float> calcBotVelocity(double delX, double delY, double Theta1, double Theta2, float timeMs);
+	void strategyToRealConversion(BotPose &p);
+	Vector2D<float> calcBotVelocity(double delX, double delY, double Theta1, double Theta2, float timeMs);
 //	Point ballPos;
 //	static inline cv::Point calcPoint(cv::double deltaT = 0.016, omega_w =8, omega_u = 3.1623;
 //    KalmanFilter KF(3, 2, 0);    

@@ -167,7 +167,7 @@ namespace Strategy
     }
     return res;
   }
-/*
+  
   void Kalman::strategyToRealConversion(BotPose &p) {
     // converts from strategy to actual coordinates (cm)
     p.x /= fieldXConvert;
@@ -207,7 +207,6 @@ namespace Strategy
 	Vector2D<float> v(vl,vr);
     return v;
   }
-*/
 	
   void Kalman::addInfo(SSL_DetectionFrame &detection)
   {
@@ -306,7 +305,7 @@ namespace Strategy
 		myfile  <<  newx << "\t" << newy << "\t" << ballPose.x << "\t" << ballPose.y << "\t" << ballVelocity.x << "\t" << ballVelocity.y << std::endl;
      //	ballVelocity.x = -Xv_lambda;
 	//	ballVelocity.y = -Yv_lambda;
-		checkValidX(ballPose.x, ballVelocity.x, newx);
+	  checkValidX(ballPose.x, ballVelocity.x, newx);
       checkValidY(ballPose.y, ballVelocity.y, newy);
       ballLastUpdateTime         = timeCapture;
     }
@@ -381,7 +380,7 @@ namespace Strategy
 		//Adding vl,vr calculation from motion-simulation
 		BotPose p1(bsQ.front().first.homePos[id].x, bsQ.front().first.homePos[id].y, bsQ.front().first.homeAngle[id]);
         BotPose p2(newx - lastPoseX, newy - lastPoseY, newangle - lastAngle);
-//		homeVlVr[id] = calcBotVelocity((homePose[id].x - lastPoseX)/fieldXConvert , (homePose[id].y - lastPoseY)/fieldYConvert, newangle, lastAngle, timeMs);
+	//	homeVlVr[id] = calcBotVelocity((homePose[id].x - lastPoseX)/fieldXConvert , (homePose[id].y - lastPoseY)/fieldYConvert, newangle, lastAngle, timeMs);
 //        if(id == 1)
 //          printf("%f %f %f %f\n", homePose[1].x, homePosK[1].x, homePosSigmaSqK[1].x, homeVelocity[1].x);
         checkValidX(homePose[id].x, homeVelocity[id].x, newx);
@@ -522,7 +521,7 @@ namespace Strategy
 		//Adding vl,vr calculation from motion-simulation
 		BotPose p1(bsQ.front().first.homePos[id].x, bsQ.front().first.homePos[id].y, bsQ.front().first.homeAngle[id]);
         BotPose p2(newx, newy, newangle);
-//		homeVlVr[id] = calcBotVelocity((homePose[id].x - lastPoseX)/fieldXConvert, (homePose[id].y - lastPoseY)/fieldYConvert, newangle, lastAngle, timeMs);
+	//	homeVlVr[id] = calcBotVelocity((homePose[id].x - lastPoseX)/fieldXConvert, (homePose[id].y - lastPoseY)/fieldYConvert, newangle, lastAngle, timeMs);
       }
 	  
       // Blue robot info

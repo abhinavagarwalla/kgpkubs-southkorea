@@ -126,8 +126,8 @@ public:
 		TVelocity tVelocity2(&state,2);
     
 	Tactic::Param pVelocity;
-	pVelocity.VelocityP.vl = 35;
-	pVelocity.VelocityP.vr = 35;
+	pVelocity.VelocityP.vl = 60;
+	pVelocity.VelocityP.vr = 60;
 	
 	Tactic::Param pVelocity_1;
 	pVelocity_1.VelocityP.vl = 20;
@@ -176,7 +176,7 @@ public:
 	Strategy::SParam params1;
 	params1.SplineGoToPointP.finalVelocity = 0;
 	params1.SplineGoToPointP.x = HALF_FIELD_MAXX-GOAL_DEPTH-6*BOT_RADIUS;
-	params1.SplineGoToPointP.y = OUR_GOAL_MAXY;
+	params1.SplineGoToPointP.y = 0;
 	params1.SplineGoToPointP.finalSlope = 0 ;
 	params1.SplineGoToPointP.initTraj = 1;
 	SkillSet sppoint(&state, 0); 
@@ -322,7 +322,7 @@ public:
 	//tVelocity1.execute(pVelocity);
 				//tVelocity3.execute(pVelocity);
 				//tAttackDuo12.execute(pAttack);
-         //tVelocity0.execute(pVelocity);
+        // tVelocity0.execute(pVelocity);
 	 //  tVelocity0.execute(pVelocity);
 	    //  tGoalie2.execute(paramGoal);
     //   tGoalOur0.execute(paramGoal);
@@ -330,11 +330,11 @@ public:
 			//	tGoalOur2.execute(paramGoal);
 	//	tGoalOur3.execute(paramGoal);
        
-		if(loopcount++ > 10){
+		if(loopcount++ > 30){
 		//	cout << params1.SplineGoToPointP.initTraj << "vcdzs" << endl;
 			sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 			params1.SplineGoToPointP.initTraj = 0;
-			loopcount = loopcount%1000 + 11;
+			loopcount = loopcount%1000 + 31;
 		}
 		
         //tPosition
@@ -354,7 +354,7 @@ public:
 			//sppoint.executeSkill(SkillSet::SplineGoToPoint,params1) ;
 			//params1.SplineGoToPointP.initTraj = 0;
 			
-	//	  simplegoto.executeSkill(SkillSet::GoToPoint, params3);
+	//   	  simplegoto.executeSkill(SkillSet::GoToPoint, params3);
 			//simplegoto_old.executeSkill(SkillSet::GoToPoint, params2_old);
         //tAttack2.execute(pAttack);
 			//	tReceive3.execute(pReceive);
