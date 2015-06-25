@@ -126,8 +126,8 @@ public:
 		TVelocity tVelocity2(&state,2);
     
 	Tactic::Param pVelocity;
-	pVelocity.VelocityP.vl = 60;
-	pVelocity.VelocityP.vr = 60;
+	pVelocity.VelocityP.vl = 0;
+	pVelocity.VelocityP.vr = 0;
 	
 	Tactic::Param pVelocity_1;
 	pVelocity_1.VelocityP.vl = 20;
@@ -247,7 +247,7 @@ public:
 	  /*unsigned long long int x;
 	   unsigned a, d;
 	   __asm__ volatile("rdtsc" : "=a" (a), "=d" (d));
-	   t2 =  ((unsigned long long)a) | (((unsigned long long)d) << 32);
+	   t2 =  ((unsigned long lsadcaong)a) | (((unsigned long long)d) << 32);
 	   
 	  printf("\n\tTime taken for while loop\t %f\n",(t2-t1)/3200000.);
       t1 = t2;*/ //used to calculate execution time
@@ -330,13 +330,14 @@ public:
 			//	tGoalOur2.execute(paramGoal);
 	//	tGoalOur3.execute(paramGoal);
        
-		if(loopcount++ > 30){
+/*		if(loopcount++ > 10){
 		//	cout << params1.SplineGoToPointP.initTraj << "vcdzs" << endl;
 			sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 			params1.SplineGoToPointP.initTraj = 0;
-			loopcount = loopcount%1000 + 31;
+			loopcount = loopcount%1000 + 11;
 		}
-		
+		else
+			 tVelocity0.execute(pVelocity);*/
         //tPosition
 				//tcover3.execute(paramcover);
        // tAttack3.execute(paramcover);
@@ -354,7 +355,7 @@ public:
 			//sppoint.executeSkill(SkillSet::SplineGoToPoint,params1) ;
 			//params1.SplineGoToPointP.initTraj = 0;
 			
-	//   	  simplegoto.executeSkill(SkillSet::GoToPoint, params3);
+	  	  simplegoto.executeSkill(SkillSet::GoToPoint, params3);
 			//simplegoto_old.executeSkill(SkillSet::GoToPoint, params2_old);
         //tAttack2.execute(pAttack);
 			//	tReceive3.execute(pReceive);

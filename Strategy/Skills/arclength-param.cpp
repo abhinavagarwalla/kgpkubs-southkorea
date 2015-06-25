@@ -528,6 +528,9 @@ double getArcLengthParam(Spline& p, double s, double full, int *itr, int method)
   unsigned long long int t1 = rdtsc();
   //double u_stef = optimise_u(p,s,full,false); // false for steffenson
   unsigned long long int t2 = rdtsc();
+  
+  //std::cout << s  << " " << full << std::endl;
+  //getchar();
 	if (s < 0) s = 0; //hard code
   assert(s >= 0);
   double u = s/full;  // initial guess;

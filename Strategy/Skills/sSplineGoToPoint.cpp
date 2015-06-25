@@ -5,6 +5,7 @@
 #include "pose.h"
 #include "trajectory-generators.cpp"
 #include <iostream>
+#include <fstream>
 
 #define PREDICTION_PACKET_DELAY 4
 static bool direction = true;
@@ -33,7 +34,7 @@ namespace Strategy
 		//std::cout << "here v cnds" << std::endl;
 		if(!algoController){
 			if(traj)
-				algoController = new ControllerWrapper(traj, 0, 0, PREDICTION_PACKET_DELAY);
+				algoController = new ControllerWrapper(traj, vls, vrs, PREDICTION_PACKET_DELAY);
 		}
 		
 	//	cout << "flag is " << start.x() << " " << start.y() << endl ;
@@ -45,6 +46,9 @@ namespace Strategy
 		assert(vl <= 150 && vl >= -150);
 		assert(vr <= 150 && vr >= -150);
 		cout << "sending packet" << counter << " " << vr << " " << vl << endl;
+		std::ofstream outfile;
+		outfile.open("test.txt", std::ios_base::app);
+		outfile << "sending packet" << counter << " " << vr << " " << vl << endl;
 		if (direction){
 			comm->sendCommand(botid, vl, vr); //maybe add mutex
 		}else {
@@ -58,19 +62,18 @@ namespace Strategy
 	void SkillSet::_splineGoToPointInitTraj(int botid, Pose start, Pose end, float finalvel, float vls, float vrs, int flag){
 	
 		counter = 0;
-		cout << "flag is " << end.x() << " " << end.y() << endl ;
-	//	getchar();
+		cout << "flag is " << start.theta() << " " << end.theta() << endl ;
 			if(traj)
 				delete traj;
-			traj = TrajectoryGenerators::cubic(start, end ,  vls, vrs , 0, 0); //may need to modify vle,vls,vre,vrs
-		//}
+				
+		traj = TrajectoryGenerators::cubic(start,  end ,  0, 0 , 0, 0); //may need to modify vle,vls,vre,vrs
 		
 		if(algoController)
 			delete algoController;
 		
 		algoController = new ControllerWrapper(traj, 0, 0, PREDICTION_PACKET_DELAY);
 
-		_splineGoToPointTrack(botid,start,end,finalvel, 0, 0);
+		_splineGoToPointTrack(botid,start,end,finalvel, vls, vrs);
 	}
 	
   void SkillSet::splineGoToPoint(const SParam& param)
@@ -82,7 +85,7 @@ namespace Strategy
 	Pose start(state->homePos[botID].x, state->homePos[botID].y, state->homeAngle[botID]);
 	Pose end(param.SplineGoToPointP.x, param.SplineGoToPointP.y, param.SplineGoToPointP.finalSlope);
 	if(param.SplineGoToPointP.initTraj == 1){
-		_splineGoToPointInitTraj(botID, start, end, finalvel, 0, 0, 0);
+		_splineGoToPointInitTraj(botID, start, end, finalvel, state->homeVlVr[botID].x, state->homeVlVr[botID].y, 0);
 	}
 	else if(counter > 20000){
 		_splineGoToPointInitTraj(botID, start, end, finalvel, state->homeVlVr[botID].x, state->homeVlVr[botID].y, 1);

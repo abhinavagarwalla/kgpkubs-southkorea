@@ -179,9 +179,9 @@ namespace Strategy
   //  strategyToRealConversion(p2);
 
 	float vl,vr;
-	///cout << "vlvr" << timeMs << endl;
     double delTheta = normalizeAngle(Theta1 - Theta2); // assuming |delTheta| < PI, which is safe to assume
-                                                           // for ~ 16 ms of rotation at any speed (even 120,-120?).
+
+	// for ~ 16 ms of rotation at any speed (even 120,-120?).
     assert(timeMs > 0);
     // w * timeMs = delTheta
     double w = delTheta / (timeMs);// * 0.001);
@@ -203,7 +203,8 @@ namespace Strategy
     double rho = 2*rho1*rho2 / (rho1 + rho2);
     vl = w * (rho - d/2.0) / ticksToCmS;
     vr = w * (rho + d/2.0) / ticksToCmS;
-
+  //  cout << "                                  " << vl << " " << vr << endl;
+	
 	Vector2D<float> v(vl,vr);
     return v;
   }
@@ -380,7 +381,7 @@ namespace Strategy
 		//Adding vl,vr calculation from motion-simulation
 		BotPose p1(bsQ.front().first.homePos[id].x, bsQ.front().first.homePos[id].y, bsQ.front().first.homeAngle[id]);
         BotPose p2(newx - lastPoseX, newy - lastPoseY, newangle - lastAngle);
-	//	homeVlVr[id] = calcBotVelocity((homePose[id].x - lastPoseX)/fieldXConvert , (homePose[id].y - lastPoseY)/fieldYConvert, newangle, lastAngle, timeMs);
+		homeVlVr[id] = calcBotVelocity((homePose[id].x - lastPoseX)/fieldXConvert , (homePose[id].y - lastPoseY)/fieldYConvert, newangle, lastAngle, timeMs);
 //        if(id == 1)
 //          printf("%f %f %f %f\n", homePose[1].x, homePosK[1].x, homePosSigmaSqK[1].x, homeVelocity[1].x);
         checkValidX(homePose[id].x, homeVelocity[id].x, newx);
@@ -521,7 +522,7 @@ namespace Strategy
 		//Adding vl,vr calculation from motion-simulation
 		BotPose p1(bsQ.front().first.homePos[id].x, bsQ.front().first.homePos[id].y, bsQ.front().first.homeAngle[id]);
         BotPose p2(newx, newy, newangle);
-	//	homeVlVr[id] = calcBotVelocity((homePose[id].x - lastPoseX)/fieldXConvert, (homePose[id].y - lastPoseY)/fieldYConvert, newangle, lastAngle, timeMs);
+		homeVlVr[id] = calcBotVelocity((homePose[id].x - lastPoseX)/fieldXConvert, (homePose[id].y - lastPoseY)/fieldYConvert, newangle, lastAngle, timeMs);
       }
 	  
       // Blue robot info
