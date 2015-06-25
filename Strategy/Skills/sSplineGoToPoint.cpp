@@ -42,8 +42,8 @@ namespace Strategy
 			start.setTheta(normalizeAngle(start.theta() - PI));
 			
 		algoController->genControls(start, end, vl, vr, finalvel);
-		assert(vl <= 120 && vl >= -120);
-		assert(vr <= 120 && vr >= -120);
+		assert(vl <= 150 && vl >= -150);
+		assert(vr <= 150 && vr >= -150);
 		cout << "cfsw" << counter << " " << vr << " " << vl << endl;
 		if (direction)
 			comm->sendCommand(botid, vl/2, vr/2); //maybe add mutex
@@ -93,7 +93,7 @@ namespace Strategy
 	Pose start(state->homePos[botID].x, state->homePos[botID].y, state->homeAngle[botID]);
 	Pose end(param.SplineGoToPointP.x, param.SplineGoToPointP.y, param.SplineGoToPointP.finalSlope);
 	if(param.SplineGoToPointP.initTraj == 1){
-		_splineGoToPointInitTraj(botID, start, end, finalvel, state->homeVlVr[botID].x, state->homeVlVr[botID].y, 0);
+		_splineGoToPointInitTraj(botID, start, end, finalvel, 0, 0, 0);
 	}
 	else if(counter > 20000){
 		_splineGoToPointInitTraj(botID, start, end, finalvel, state->homeVlVr[botID].x, state->homeVlVr[botID].y, 1);

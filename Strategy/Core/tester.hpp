@@ -172,37 +172,42 @@ public:
     // TestgotoPoint
     Strategy::Testgotopoint ttest1(&state,1);
 	
-	//SplineGoToPoint
+	//params1 for SplineGoToPoint
 	Strategy::SParam params1;
 	params1.SplineGoToPointP.finalVelocity = 0;
-	params1.SplineGoToPointP.x = HALF_FIELD_MAXX - 10*BOT_RADIUS;
-	params1.SplineGoToPointP.y = 0;
+	params1.SplineGoToPointP.x = HALF_FIELD_MAXX-GOAL_DEPTH-6*BOT_RADIUS;
+	params1.SplineGoToPointP.y = OUR_GOAL_MAXY;
 	params1.SplineGoToPointP.finalSlope = 0 ;
 	params1.SplineGoToPointP.initTraj = 1;
 	SkillSet sppoint(&state, 0); 
 	
+	//params4 for spline interception with ball
 	Strategy::SParam params4;
 	params4.SplineInterceptBallP.vl = 70;
 	params4.SplineInterceptBallP.vr = 70;
 	params4.SplineInterceptBallP.initTraj = 1;
 	SkillSet sball(&state, 0); 
 	
+	// params2 for dwgo to point
 	Strategy::SParam params2;
 	SkillSet dwpoint(&state, 0);
 	SkillSet dwpoint_old(&state, 2);
-	params2.GoToPointP.x = HALF_FIELD_MAXX-GOAL_DEPTH-6*BOT_RADIUS ;//ForwardX(HALF_FIELD_MAXX);
-	params2.GoToPointP.y = OUR_GOAL_MAXY;
-	params2.GoToPointP.finalslope = 0;
+	params2.DWGoToPointP.x = HALF_FIELD_MAXX-GOAL_DEPTH-6*BOT_RADIUS ;//ForwardX(HALF_FIELD_MAXX);
+	params2.DWGoToPointP.y = OUR_GOAL_MAXY;
+	params2.DWGoToPointP.finalSlope = 0;
+	
+	// params3 for mergeS curve
+	Strategy::SParam params3 ;
+	params3.GoToPointP.x = HALF_FIELD_MAXX-GOAL_DEPTH-4*BOT_RADIUS;
+	params3.GoToPointP.y = OUR_GOAL_MAXY;//HALF_FIELD_MAXY/2;
+	params3.GoToPointP.finalslope = 0;
 	
 	Strategy::SParam params2_old ;
 	params2_old.GoToPointP.x = HALF_FIELD_MAXX-GOAL_DEPTH-6*BOT_RADIUS;
 	params2_old.GoToPointP.y = OUR_GOAL_MINY;//HALF_FIELD_MAXY/2;
 	params2_old.GoToPointP.finalslope = 0;
 	
-	Strategy::SParam params3 ;
-	params3.DWGoToPointP.x = HALF_FIELD_MAXX-GOAL_DEPTH-4*BOT_RADIUS;
-	params3.DWGoToPointP.y = OUR_GOAL_MAXY;//HALF_FIELD_MAXY/2;
-	params3.DWGoToPointP.finalSlope = 0;
+
 	Strategy::SParam params3_old ;
 	params3_old.DWGoToPointP.x = HALF_FIELD_MAXX-GOAL_DEPTH-4*BOT_RADIUS;
 	params3_old.DWGoToPointP.y = OUR_GOAL_MINY;//HALF_FIELD_MAXY/2;
@@ -253,13 +258,13 @@ public:
 	
 		#ifdef STR_GUI
 		{
-			int test_tactic=0;
+			int test_tactic = 0;
 			if(test_tactic){
 				strCS.enter();
 				//if(strPktSh.which()==1)printf("1\n\n");
 				if(strPktSh.tactic().tid() != prev_tactic_id){
 					prev_tactic_id = strPktSh.tactic().tid();
-					printf("\n\n\n\n\n\n\n");
+					printf("\n\n\n\n\n\n\n");com
 					printf("****************  HELLO  ******************");
 					printf("\n\n\n\n\n\n\n");
 				}
@@ -327,8 +332,8 @@ public:
        
 		if(loopcount++ > 10){
 		//	cout << params1.SplineGoToPointP.initTraj << "vcdzs" << endl;
-		//	sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
-		//	params4.SplineGoToPointP.initTraj = 0;
+			sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
+			params1.SplineGoToPointP.initTraj = 0;
 			loopcount = loopcount%1000 + 11;
 		}
 		
@@ -341,15 +346,15 @@ public:
 		//tcover20152.execute(paramcover2015);
 	//	tcoverleft2.execute(paramcoverleft);
 	//	tcoverright0.execute(paramcoverright);
-	//  dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
-//			dwpoint.executeSkill(SkillSet::DWGoToPoint,params3) ;
+	 // dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
+		//	dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
 //			dwpoint_old.executeSkill(SkillSet::DWGoToPoint,params3_old) ;
 //			params3.DWGoToPointP.initTraj = 0;
 //			params3_old.DWGoToPointP.initTraj = 0;
 			//sppoint.executeSkill(SkillSet::SplineGoToPoint,params1) ;
 			//params1.SplineGoToPointP.initTraj = 0;
 			
-		   simplegoto.executeSkill(SkillSet::GoToPoint, params2);
+	//	  simplegoto.executeSkill(SkillSet::GoToPoint, params3);
 			//simplegoto_old.executeSkill(SkillSet::GoToPoint, params2_old);
         //tAttack2.execute(pAttack);
 			//	tReceive3.execute(pReceive);
@@ -372,9 +377,7 @@ public:
 //        tDefendLine1.execute(pDefendL1);
 	     //tDefendLine2.execute(pDefendL2);
        //tAttack2.execute(pAttack);
-
-        SkillSet::comm->writeCombinedPacket();
-       
+        SkillSet::comm->writeCombinedPacket();       
       }
      else
       {
@@ -392,7 +395,5 @@ public:
     Util::Logger::toStdOut("Exiting process");
 	myfile.close();
     return;
-
   }
-  
 };
