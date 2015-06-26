@@ -118,6 +118,8 @@ namespace Strategy
 				dest.y=dest.y-SGN(dest.y)*HALF_FIELD_MAXY;
 
 			}
+			// comes into play only if there is opponent bot .. uncomment and test in gameplay
+			/*
 			if(Vector2D<int>::dist(state->ballPos,state->homePos[state->oppBotNearestToBall])<2*BOT_BALL_THRESH && state->homePos[botID].x > state->homePos[state->ourBotNearestToBall].x && abs(state->ballPos.y) > HALF_FIELD_MAXY-2*BOT_RADIUS && abs(state->homePos[botID].y)<HALF_FIELD_MAXY-2*BOT_RADIUS)
 					{
 						dest.x=state->homePos[state->ourBotNearestToBall].x-3*BOT_RADIUS;
@@ -128,6 +130,8 @@ namespace Strategy
 						dest.y=state->homePos[state->ourBotNearestToBall].y-SGN(state->homePos[state->ourBotNearestToBall].y)*2.5*BOT_RADIUS;
 						dest.x=state->homePos[botID].x;
 					}
+			 */	
+			 
 			if(dest.x<-HALF_FIELD_MAXX+GOAL_DEPTH+DBOX_WIDTH && abs(dest.y)<OUR_GOAL_MAXY+4*BOT_BALL_THRESH)
 			{
 				dest.x=-HALF_FIELD_MAXX+GOAL_DEPTH+DBOX_WIDTH;
@@ -136,51 +140,54 @@ namespace Strategy
 			
 			
 			
-			float dif=Vector2D<int>::dist(state->ballPos,state->homePos[botID]);
+			float botBallDist = Vector2D<int>::dist(state->ballPos,state->homePos[botID]);
 
 		  
 	    //sprintf(debug,"%d %d %d %d %f %f %f %f \n",dest.x,dest.y,state->ballPos.x,state->ballPos.y,vel,state->ballVel.x,state->ballVel.y,dx);  
 		//Client::debugClient->SendMessages(debug);
 
+		
 
-
-		if((dif>3.5*BOT_BALL_THRESH && state->homePos[botID].x>state->ballPos.x) || (state->homePos[botID].x<state->ballPos.x-0.4*BOT_RADIUS)  )
+		if(( botBallDist > 3.5*BOT_BALL_THRESH && state->homePos[botID].x>state->ballPos.x) || (state->homePos[botID].x<state->ballPos.x-0.4*BOT_RADIUS)  )
 		{
-				if(vel>1800 && state->homePos[botID].x>state->ballPos.x+0.2*BOT_BALL_THRESH && Vector2D<int>::dist(state->homePos[botID],state->ballPos)<1.2*BOT_RADIUS)
+			/*
+		    if(vel>1800 && state->homePos[botID].x>state->ballPos.x && Vector2D<int>::dist(state->homePos[botID],state->ballPos)< BOT_RADIUS)
 			{
 				if(state->ballPos.y>state->homePos[botID].y)
-					comm->sendCommand(botID,MAX_BOT_SPEED,-MAX_BOT_SPEED);
+					comm->sendCommand(botID,-0.5*MAX_BOT_SPEED,0.5*MAX_BOT_SPEED);
 					else
-					 comm->sendCommand(botID,-MAX_BOT_SPEED,MAX_BOT_SPEED);
+					 comm->sendCommand(botID,0.5*MAX_BOT_SPEED,-0.5*MAX_BOT_SPEED);
 				return;
 			}
+			*/
 			_goToPoint(botID,dest,0,atan(-1/tan(Vector2D<int>::angle(state->homePos[botID],state->ballPos))),0,0);
 			return;
 		}
 
 		else
-	{
+	   {
 	    if(state->ballPos.y<state->homePos[botID].y /*&& state->homePos[botID].x<state->ballPos.x*/)
 	       {
 			     vl=MAX_BOT_SPEED/radius*(radius-BOT_RADIUS)*0.8;
 				 vr=MAX_BOT_SPEED/radius*(radius+BOT_RADIUS)*0.8;
-				 comm->sendCommand(botID,vl,vr);
+				 comm->sendCommand(botID,vl/2,vr/2);
 		   }	
 		else
 		{
 				vl=MAX_BOT_SPEED/radius*(radius-BOT_RADIUS);
 				vr=MAX_BOT_SPEED/radius*(radius+BOT_RADIUS);
-			    comm->sendCommand(botID,vr,vl);
+			    comm->sendCommand(botID,vr/2,vl/2);
 		}
-
-		if(state->homePos[botID].x<state->ballPos.x+0.2*BOT_BALL_THRESH && Vector2D<int>::dist(state->homePos[botID],state->ballPos)<1.2*BOT_RADIUS)
+        /*
+		if(state->homePos[botID].x<state->ballPos.x  && Vector2D<int>::dist(state->homePos[botID],state->ballPos)< BOT_RADIUS)
 		{
-			if(state->ballPos.y>state->homePos[botID].y)
-				comm->sendCommand(botID,MAX_BOT_SPEED,-MAX_BOT_SPEED);
+			if(state->ballPos.y < state->homePos[botID].y)
+				comm->sendCommand(botID,0.5*MAX_BOT_SPEED,-0.5*MAX_BOT_SPEED);
 				else
-				 comm->sendCommand(botID,-MAX_BOT_SPEED,MAX_BOT_SPEED);
+				 comm->sendCommand(botID,-0.5*MAX_BOT_SPEED,0.5*MAX_BOT_SPEED);
 			return;
 		}
+		*/
 	 }
 	
   }

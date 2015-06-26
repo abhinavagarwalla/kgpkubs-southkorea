@@ -198,9 +198,9 @@ namespace Strategy
 			factor = 0.4;
 			int targetX=0,targetY=0;					
 			{
-				printf("Ball Veclocity : x = %f  y = %f\n",avgBallVel.x,avgBallVel.y);
+				//printf("Ball Veclocity : x = %f  y = %f\n",avgBallVel.x,avgBallVel.y);
 				int ballBotDist = (int)Vector2D<int>::dist(state->homePos[botID],state->ballPos);
-				printf("delta x = %d   delta y = %d\n",(int)(factor * state->ballVel.x),(int)(factor * state->ballVel.y));
+			//	printf("delta x = %d   delta y = %d\n",(int)(factor * state->ballVel.x),(int)(factor * state->ballVel.y));
 				targetX = state->ballPos.x + (int)(factor * avgBallVel.x);
 				targetY = state->ballPos.y + (int)(factor * avgBallVel.y);
 			}
@@ -294,6 +294,7 @@ namespace Strategy
             sParam.GoToPointP.increaseSpeed = 1;
 
           }
+		    cout<<" BallPos :: ( "<<state->ballPos.x<<" , "<<state->ballPos.y<<" ) :: "<<"Destination : "<<sParam.GoToPointP.x<<" "<<sParam.GoToPointP.y<<endl ;
           skillSet->executeSkill(sID, sParam);
         }
       

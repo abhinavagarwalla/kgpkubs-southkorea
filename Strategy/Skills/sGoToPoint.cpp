@@ -17,7 +17,7 @@ namespace Strategy
     finalvel  = param.GoToPointP.finalVelocity;
     //Util::Logger::toStdOut("Going to point : (%d , %d) from (%d, %d)",dpoint.x,dpoint.y, state->homePos[botID].x, state->homePos[botID].y);
     float dist = Vector2D<int>::dist(state->homePos[botID] , dpoint);
-    if(dist < 1.5*BOT_RADIUS){
+    if(dist < 1.1*BOT_RADIUS){
 		comm->sendCommand(botID,0,0);
 		return;
 	}

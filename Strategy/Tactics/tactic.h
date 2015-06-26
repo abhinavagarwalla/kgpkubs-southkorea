@@ -35,6 +35,7 @@ namespace Strategy
       Defend,               // Defend the ball from coming to our side
       Attack,               // Attck the ball towards the goal      
       Attack2015,
+	  SupportAttack2015,
 	  Stop,                 // Stop the bot
       Velocity,             // Move at a fixed velocity     
       Backup,

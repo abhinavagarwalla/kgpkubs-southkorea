@@ -381,7 +381,7 @@ namespace Strategy
 		//Adding vl,vr calculation from motion-simulation
 		BotPose p1(bsQ.front().first.homePos[id].x, bsQ.front().first.homePos[id].y, bsQ.front().first.homeAngle[id]);
         BotPose p2(newx - lastPoseX, newy - lastPoseY, newangle - lastAngle);
-		homeVlVr[id] = calcBotVelocity((homePose[id].x - lastPoseX)/fieldXConvert , (homePose[id].y - lastPoseY)/fieldYConvert, newangle, lastAngle, timeMs);
+		homeVlVr[id] = calcBotVelocity((newx - lastPoseX)/fieldXConvert , (newy - lastPoseY)/fieldXConvert, newangle, lastAngle, timeMs);
 //        if(id == 1)
 //          printf("%f %f %f %f\n", homePose[1].x, homePosK[1].x, homePosSigmaSqK[1].x, homeVelocity[1].x);
         checkValidX(homePose[id].x, homeVelocity[id].x, newx);
@@ -522,7 +522,7 @@ namespace Strategy
 		//Adding vl,vr calculation from motion-simulation
 		BotPose p1(bsQ.front().first.homePos[id].x, bsQ.front().first.homePos[id].y, bsQ.front().first.homeAngle[id]);
         BotPose p2(newx, newy, newangle);
-		homeVlVr[id] = calcBotVelocity((homePose[id].x - lastPoseX)/fieldXConvert, (homePose[id].y - lastPoseY)/fieldYConvert, newangle, lastAngle, timeMs);
+		homeVlVr[id] = calcBotVelocity((newx - lastPoseX)/fieldXConvert, (newy - lastPoseY)/fieldXConvert, newangle, lastAngle, timeMs);
       }
 	  
       // Blue robot info

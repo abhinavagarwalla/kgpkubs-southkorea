@@ -82,7 +82,7 @@ const std::string STRATEGY_GUI_MULTICAST_ADDR = "224.5.23.1" ;
 
 // Parameters useful for camera's data transformation.
 const double d          = 6.5; //distance between wheels in cm
-const double ticksToCmS = 1.107; //still only approximate... v = v_ticks * ticksToCmS 1.54
+const double ticksToCmS = 1.139; //still only approximate... v = v_ticks * ticksToCmS 1.54
 const double fieldXConvert = 23.79; // now im always using xconvert as standard conversion from strategy -> cm and vice versa.
 const double fieldYConvert = 22.02;
 // NOTE(arpit): Uncertainties should be non-zero when simulating. Currently 0 since bot data is fetched from vision.

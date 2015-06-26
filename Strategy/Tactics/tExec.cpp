@@ -39,6 +39,7 @@ namespace Strategy
 		tacticList[Tactic::Position][botID]            = new TPosition(state, botID);
 		tacticList[Tactic::Defend][botID]              = new TDefend(state,botID);
 		tacticList[Tactic::Attack][botID]              = new TAttack(state,botID);
+		tacticList[Tactic::SupportAttack2015][botID]	= new TSupportAttack2015(state,botID);
 		tacticList[Tactic::Stop][botID]                = new TStop(state, botID);
 		tacticList[Tactic::Velocity][botID]            = new TVelocity(state, botID);
 		tacticList[Tactic::Backup][botID]              = new TBackup(state, botID);

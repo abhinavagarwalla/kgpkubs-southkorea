@@ -136,7 +136,7 @@ void SkillSet::_goToPoint(int botid, Vector2D<int> dpoint, float finalvel, float
       {
         SParam param;
         param.TurnToAngleP.finalslope=finalslope;
-       turnToAngle(param);
+        turnToAngle(param);
         return;
       }
      finalvel=0;
@@ -182,10 +182,10 @@ void SkillSet::_goToPoint(int botid, Vector2D<int> dpoint, float finalvel, float
       }
       prevVel=profileFactor;
     }
-    if(profileFactor>1.5*MAX_BOT_SPEED)
-      profileFactor = 1.5*MAX_BOT_SPEED;
-    else if(profileFactor <-1.5*MAX_BOT_SPEED)
-      profileFactor = -1.5*MAX_BOT_SPEED;
+    if(profileFactor>1.2*MAX_BOT_SPEED)
+      profileFactor = 1.2*MAX_BOT_SPEED;
+    else if(profileFactor <-1.2*MAX_BOT_SPEED)
+      profileFactor = -1.2*MAX_BOT_SPEED;
     prevVel=profileFactor;
     r *= 0.5*profileFactor;
     t *= profileFactor;

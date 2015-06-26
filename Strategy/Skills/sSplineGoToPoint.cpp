@@ -45,10 +45,10 @@ namespace Strategy
 		algoController->genControls(start, end, vl, vr, finalvel);
 		assert(vl <= 150 && vl >= -150);
 		assert(vr <= 150 && vr >= -150);
-		cout << "sending packet" << counter << " " << vr << " " << vl << endl;
-		std::ofstream outfile;
-		outfile.open("test.txt", std::ios_base::app);
-		outfile << "sending packet" << counter << " " << vr << " " << vl << endl;
+	//	cout << "sending packet" << counter << " " << vr << " " << vl << endl;
+	//	std::ofstream outfile;
+	//	outfile.open("test.txt", std::ios_base::app);
+		//outfile << "sending packet" << counter << " " << vr << " " << vl << endl;
 		if (direction){
 			comm->sendCommand(botid, vl, vr); //maybe add mutex
 		}else {
@@ -62,16 +62,49 @@ namespace Strategy
 	void SkillSet::_splineGoToPointInitTraj(int botid, Pose start, Pose end, float finalvel, float vls, float vrs, int flag){
 	
 		counter = 0;
-		cout << "flag is " << start.theta() << " " << end.theta() << endl ;
-			if(traj)
-				delete traj;
-				
-		traj = TrajectoryGenerators::cubic(start,  end ,  0, 0 , 0, 0); //may need to modify vle,vls,vre,vrs
+
+	//	cout << vls << " " << vrs << endl;
+	//	getchar();
+		Pose start2(state->homePos[botID].x, state->homePos[botID].y, normalizeAngle(state->homeAngle[botID] - PI));
+		pair<int,int> delayedVel;
+		direction = _isFrontDirected(start, end, vls, vrs);
+		if(direction){
+			if(!flag){
+				if(traj)
+					delete traj;
+				traj = TrajectoryGenerators::cubic(start, end, 0, 0, 0, 0);
+			}
+			else{
+			//	cout << "here" << endl;
+				delayedVel = algoController->getDelayedVel();
+				Pose start = algoController->getNewStartPose();
+				if(traj) 
+					delete traj;
+				traj = TrajectoryGenerators::cubic(start, end, delayedVel.first , delayedVel.second , 0, 0);
+			}
+		}
+		else {
+			if(!flag){
+				if(traj)
+					delete traj;
+				traj = TrajectoryGenerators::cubic(start2, end, 0, 0, 0, 0);
+			}
+			else{
+			//	cout << "here" << endl;
+				delayedVel = algoController->getDelayedVel();
+				Pose start2 = algoController->getNewStartPose();
+				if(traj)
+					delete traj;
+				traj = TrajectoryGenerators::cubic(start2, end, delayedVel.first, delayedVel.second, 0, 0);
+			}
+		}
 		
 		if(algoController)
 			delete algoController;
-		
-		algoController = new ControllerWrapper(traj, 0, 0, PREDICTION_PACKET_DELAY);
+		if(!flag)
+			algoController = new ControllerWrapper(traj, 0 , 0 , PREDICTION_PACKET_DELAY);
+		else
+			algoController = new ControllerWrapper(traj, delayedVel.first , delayedVel.second , PREDICTION_PACKET_DELAY);
 
 		_splineGoToPointTrack(botid,start,end,finalvel, vls, vrs);
 	}
@@ -84,10 +117,11 @@ namespace Strategy
     finalvel  = param.GoToPointP.finalVelocity;
 	Pose start(state->homePos[botID].x, state->homePos[botID].y, state->homeAngle[botID]);
 	Pose end(param.SplineGoToPointP.x, param.SplineGoToPointP.y, param.SplineGoToPointP.finalSlope);
+	
 	if(param.SplineGoToPointP.initTraj == 1){
-		_splineGoToPointInitTraj(botID, start, end, finalvel, state->homeVlVr[botID].x, state->homeVlVr[botID].y, 0);
+		_splineGoToPointInitTraj(botID, start, end, finalvel, 0, 0, 0);
 	}
-	else if(counter > 20000){
+	else if(counter > 20){
 		_splineGoToPointInitTraj(botID, start, end, finalvel, state->homeVlVr[botID].x, state->homeVlVr[botID].y, 1);
 	}
 	else 

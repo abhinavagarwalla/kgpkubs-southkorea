@@ -96,9 +96,9 @@ MiscData CMU(Pose s, Pose e, int &vl, int &vr, double prevSpeed, double prevOmeg
 
 MiscData DynamicWindow(Pose s, Pose e, int &vl, int &vr, double prevSpeed, double prevOmega, double finalSpeed)
 {
-    const int del_v_max = 40; //ticks
+    const int del_v_max = 20; //ticks
     const float step = 2; //ticks
-    const float max_vel =180; //ticks
+    const float max_vel =150; // 180 ticks
     const float a_r_max = 400; //cm/s^2
 //    const float PI= 3.14159;
     const float t=0.016;

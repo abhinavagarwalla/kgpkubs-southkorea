@@ -130,8 +130,8 @@ public:
 	pVelocity.VelocityP.vr = 0;
 	
 	Tactic::Param pVelocity_1;
-	pVelocity_1.VelocityP.vl = 20;
-	pVelocity_1.VelocityP.vr = 20;
+	pVelocity_1.VelocityP.vl = 40;
+	pVelocity_1.VelocityP.vr = 40;
 	
 	Tactic::Param pVelocity_2;
 	pVelocity_2.VelocityP.vl = 60;
@@ -329,15 +329,16 @@ public:
         //tDefendLine1.execute(pDefendL1);
 			//	tGoalOur2.execute(paramGoal);
 	//	tGoalOur3.execute(paramGoal);
-       
-/*		if(loopcount++ > 10){
+    
+		if(loopcount++ > 10){
 		//	cout << params1.SplineGoToPointP.initTraj << "vcdzs" << endl;
 			sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 			params1.SplineGoToPointP.initTraj = 0;
 			loopcount = loopcount%1000 + 11;
 		}
 		else
-			 tVelocity0.execute(pVelocity);*/
+			tVelocity0.execute(pVelocity);
+	 
         //tPosition
 				//tcover3.execute(paramcover);
        // tAttack3.execute(paramcover);
@@ -348,14 +349,15 @@ public:
 	//	tcoverleft2.execute(paramcoverleft);
 	//	tcoverright0.execute(paramcoverright);
 	 // dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
-		//	dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
+	//		dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
 //			dwpoint_old.executeSkill(SkillSet::DWGoToPoint,params3_old) ;
 //			params3.DWGoToPointP.initTraj = 0;
 //			params3_old.DWGoToPointP.initTraj = 0;
 			//sppoint.executeSkill(SkillSet::SplineGoToPoint,params1) ;
 			//params1.SplineGoToPointP.initTraj = 0;
-			
-	  	  simplegoto.executeSkill(SkillSet::GoToPoint, params3);
+			//dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
+	  	  //  simplegoto.executeSkill(SkillSet::GoToPoint, params3);
+		  
 			//simplegoto_old.executeSkill(SkillSet::GoToPoint, params2_old);
         //tAttack2.execute(pAttack);
 			//	tReceive3.execute(pReceive);
@@ -366,9 +368,9 @@ public:
       //  tcover0.execute(paramcover);
         //tcover3.execute(paramcover);
      //tCharge1.execute(pCharge);
-	      //  tAttack20150.execute(pAttack) ;
+	    //  tAttack20150.execute(pAttack) ;
 		  //tShoot4.execute(paramShoot) ;
-		 //	tAttack0.execute(pAttack);
+		   // tAttack0.execute(pAttack);
 		//	tAttack2.execute(pAttack);
 		//	tAttack1.execute(pAttack);
 			//tAttack3.execute(pAttack);

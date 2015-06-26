@@ -28,7 +28,7 @@ namespace Strategy
 	  static int counter = 0 ;
 	  assert(tParam != 0);
       int minv   = *freeBots.begin();
-      int mindis = 1000000000;
+      int mindis = INT_MAX;
       Vector2D<int> tGoToPoint(tParam->PositionP.x, tParam->PositionP.y);
 
       for (std::list<int>::iterator it = freeBots.begin(); it != freeBots.end(); ++it)
