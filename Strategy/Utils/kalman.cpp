@@ -266,6 +266,7 @@ namespace Strategy
 	  ballPosQueue.push_back(ballPose);
 	  ballVelocity.x             = (ballPose.x - lastPoseX) / delTime;
 	  ballVelocity.y             = (ballPose.y - lastPoseY) / delTime;
+	  myfile << newx << " " << ballPose.x << " " << ballVelocity.x << " " << delTime << endl;
 	  //New code for ball Velocity
 /*	  float sumX =0, sumY =0;
 	  float prevPosX = ballPosQueue[0].x;
@@ -303,7 +304,7 @@ namespace Strategy
 		int Xv_lambda = ((n*Xsum1 -TimeDiffSum*Xsum2)/(n*(lambda + TimeDiffSqSum) - TimeDiffSum*TimeDiffSum));
 		int Yv_lambda = ((n*Ysum1 -TimeDiffSum*Ysum2)/(n*(lambda + TimeDiffSqSum) - TimeDiffSum*TimeDiffSum));
 	
-		myfile  <<  newx << "\t" << newy << "\t" << ballPose.x << "\t" << ballPose.y << "\t" << ballVelocity.x << "\t" << ballVelocity.y << std::endl;
+	//	myfile  <<  newx << "\t" << newy << "\t" << ballPose.x << "\t" << ballPose.y << "\t" << ballVelocity.x << "\t" << ballVelocity.y << std::endl;
      //	ballVelocity.x = -Xv_lambda;
 	//	ballVelocity.y = -Yv_lambda;
 	  checkValidX(ballPose.x, ballVelocity.x, newx);

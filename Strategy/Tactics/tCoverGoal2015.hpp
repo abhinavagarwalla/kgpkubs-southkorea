@@ -131,17 +131,75 @@ public:
 	   
 	return id ;   
    }
+   
+	bool isBotInPosition()
+    {
+      if((abs((ForwardX(state->homePos[botID].x)) - (-(HALF_FIELD_MAXX-GOAL_DEPTH)*0.80 + BOT_RADIUS) ) > BOT_RADIUS)&&(abs(state->homePos[botID].y) > OUR_GOAL_MAXY + BOT_RADIUS))
+        return true ;
+	  else
+		  return false ;
+
+    }
+	
+	int getBotDestPointY()
+    {
+      Vector2D<int> ballFinalpos, botDestination, point;
+      int flag=2;
+      
+      float balldistratio = fabs(state->ballPos.x)/(-(HALF_FIELD_MAXX-GOAL_DEPTH)*0.80 + 0.5*BOT_RADIUS)<1 ? fabs(state->ballPos.x)/(-(HALF_FIELD_MAXX-GOAL_DEPTH)*0.80 + 0.5*BOT_RADIUS):1 ;
+      
+      point.y = balldistratio*SGN(state->ballPos.y)*MIN(fabs(state->ballPos.y), OUR_GOAL_MAXY); 
+    
+   //    Workaround for ball velocity 0
+      if( ( ( fabs(state->ballVel.y) + fabs(state->ballVel.x) < 100) ) || (ForwardX(state->ballVel.x)<0 && ForwardX(state->ballVel.x)>(-100)) )
+      {
+       if(ForwardX(state->ballPos.x) > ( -HALF_FIELD_MAXX*0.3))
+        point.y = 0,flag=0;
+      }
+      else if(ForwardX(state->ballVel.x)>0 )
+      {
+        if(ForwardX(state->ballPos.x) > (-HALF_FIELD_MAXX*0.3))
+          point.y = 0,flag =0;
+      }
+      else if (ForwardX(state->ballVel.x) <=(-50) )
+      {
+        if(ForwardX(state->ballPos.x) > (-HALF_FIELD_MAXX*0.8) )
+	     point.y = (state->ballVel.y/state->ballVel.x)*((-(HALF_FIELD_MAXX-GOAL_DEPTH)*0.80 + 0.5*BOT_RADIUS) - (state->ballPos.x)) + state->ballPos.y ,flag = 1; 
+      }
+
+      /* Set Limits on y to not exceed DBOX Y Limits*/
+      if(point.y < OUR_GOAL_MINY )
+       {
+         if(point.y >-HALF_FIELD_MAXY)
+            point.y = OUR_GOAL_MINY ;
+        else
+          point.y = 0;
+       }
+       
+      else if(point.y > OUR_GOAL_MAXY )
+      {
+         if(point.y < HALF_FIELD_MAXY)
+          point.y = OUR_GOAL_MAXY ;
+          else
+          point.y = 0;
+       }
+	   
+
+          
+      return point.y;
+    }
    void execute(const Param& tParam)
    {
-		cout<< "\n kj\n \n"<<iState<<"\n";
+   // set the x position of the covergoal 
+   
 	float distBotBall = Vector2D<int>::dist(state->ballPos,state->homePos[botID]);
-	int oppInRegion[4]={0},minRegion=0,targetX = INT_MAX,targetY =-SGN(state->ballPos.y)*BOT_RADIUS;
+	//int oppInRegion[4]={0},minRegion=0,targetX = INT_MAX,targetY =-SGN(state->ballPos.y)*BOT_RADIUS;
 	float ang1 = state->ballVel.x == 0? PI/2 :atan(state->ballVel.y/state->ballVel.x);
 	float goalAngR,goalAngL,goalieAngR,goalieAngL,divisor,goalAngC;
 	int yL,yR,goalieyR,goalieyL,yC;
-	int predictPosX = ForwardX(-(HALF_FIELD_MAXX-GOAL_DEPTH)*0.80);
+	int predictPosX = ForwardX(-(HALF_FIELD_MAXX-GOAL_DEPTH)*0.80 + 0.5*BOT_RADIUS);
     Vector2D<int> dest;
-	dest.x = ForwardX(-(HALF_FIELD_MAXX-GOAL_DEPTH)*0.80);
+	dest.x = predictPosX ;
     int oppBallDist = Vector2D<int>::dist(state->ballPos , state->awayPos[state->oppBotNearestToBall]) ;
 	divisor = state->ballPos.x - ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH);
 	goalAngL = divisor == 0 ?  PI/2 : atan((state->ballPos.y - OUR_GOAL_MAXY)/(divisor));
@@ -170,32 +228,59 @@ public:
 		yL = goalieyR;
 	else if(goalieyR - (state->homePos[goalieID].y -BOT_RADIUS) <1.5*BOT_RADIUS)
 		yR = goalieyL;
-	
+		
 	int predictPosY = state->ballPos.y - (state->ballPos.x - predictPosX)*tan(ang1) + SGN(state->ballVel.y)*BOT_RADIUS;
 	int goaliePredictPosY = state->ballPos.y - (state->ballPos.x - (-HALF_FIELD_MAXX+GOAL_DEPTH))*tan(ang1);
-
+    
+	if(abs(predictPosY) > OUR_GOAL_MAXY)
+		predictPosY = SGN(predictPosY)*OUR_GOAL_MAXY ;
+  
     oppBallDist = HALF_FIELD_MAXX ;   // TO BE CHANGED AFTER TETING
 
 	// add the info of away bots 
+	// rotation factor based on velocity
+	float factor = 1.3 ;
+		  if(abs(state->ballVel.x) > 4000) 
+			  factor = 3 ;
+		  else
+			  if(abs(state->ballVel.x) > 2500) 
+				  factor = 2.5 ;
+			  else 
+				  if(abs(state->ballVel.x) > 1000)
+					  factor = 2 ;
+					  
 	
 	cout << "here 1 " << predictPosX << endl;
 	switch (iState)
 	{
 	case DEFENDING:
 		cout << "here " << iState<< endl;
-	 if(state->ballPos.x < state->homePos[botID].x)
+	 if(state->ballPos.x < predictPosX )
 	 {
 	     iState = BLOCKING ;
 		 break ;
 	 }
-	 if( distBotBall < 2*BOT_BALL_THRESH && ( oppBallDist > 4*BOT_BALL_THRESH))
+	 if( distBotBall < factor*BOT_BALL_THRESH && ( oppBallDist > 4*BOT_BALL_THRESH))
    	 {
 		iState = CLEARING;
 		cout << "here 2 " << predictPosX << endl;
 		break;
 	 }
-	 if( state->ballPos.x > state->homePos[botID].x)
-	 {
+	 /*
+      if (!isBotInPosition())
+      {
+        sID = SkillSet::DWGoToPoint;
+  //     sParam.DWGoToPointP.align = false;
+        sParam.DWGoToPointP.finalSlope =- PI / 2;
+        sParam.DWGoToPointP.x = dest.x ;
+        sParam.DWGoToPointP.y = 0 ;
+		skillSet->executeSkill(SkillSet::DWGoToPoint, sParam);
+     	break;
+       // sParam.GoToPointP.finalVelocity = 0;
+      }
+	  */
+	  if( state->ballPos.x > state->homePos[botID].x)
+	  { 
 		if(state->ballVel.x >=0)
 		{
 			dest.y = state->ballPos.y;
@@ -204,7 +289,10 @@ public:
 			else if(dest.y < OUR_GOAL_MINY)
 				dest.y = OUR_GOAL_MINY;
 		}
-		else if( goaliePredictPosY > OUR_GOAL_MAXY - BOT_RADIUS)
+		else 
+			dest.y = getBotDestPointY() ; //predictPosY ;
+		 /*
+		if( goaliePredictPosY > OUR_GOAL_MAXY - BOT_RADIUS)
 		{
 			dest.y = yC;//OUR_GOAL_MAXY - 3*BOT_RADIUS
 		}
@@ -224,23 +312,24 @@ public:
 		{
 			dest.y = yR + BOT_RADIUS;
 		}
+		*/
 	}
-	sParam.GoToPointP.x = dest.x;
-	sParam.GoToPointP.y = dest.y;
-	sParam.GoToPointP.finalslope = -PI/2;
+	sParam.DWGoToPointP.x = dest.x;
+	sParam.DWGoToPointP.y = dest.y ;
+	sParam.DWGoToPointP.finalSlope = -PI/2;
 	cout<<dest.x <<" "<<dest.y<<std::endl;
-	skillSet->executeSkill(SkillSet::GoToPoint, sParam);
+	skillSet->executeSkill(SkillSet::DWGoToPoint, sParam);
 	break;
 				
 	case CLEARING :
 		
-		if(state->ballPos.x < state->homePos[botID].x)
+		if(state->ballPos.x < predictPosX )
 	    {
 	     iState = BLOCKING ;
 		 break ;
 	    }
 		
-		if( distBotBall > 2*BOT_BALL_THRESH)
+		if( distBotBall > factor*BOT_BALL_THRESH)
 		{
 			iState = DEFENDING;
 			break;
@@ -262,25 +351,34 @@ public:
 				break;
 			}*/
         //if(fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x))) < PI / 2 + PI / 10 && fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x)))  > PI / 2 - PI / 10)
-                sID = SkillSet::Spin ;
+	//	int mindis = HALF_FIELD_MAXX ;
+		   /*
+		   int mindis = HALF_FIELD_MAXX ;
+	       for(int i = 0 ; i < 5 ; i++)
+		   {
+		      if(i != botID )
+				  if(Vector2D<int>::dist(state->homePos[botID] , state->homePos[i]) < mindis)
+					  mindis = Vector2D<int>::dist(state->homePos[botID] , state->homePos[i]) ;
+		   }
+		   */
+ 
+			    sID = SkillSet::Spin ;
 				if(state->ballPos.y > state->homePos[botID].y)
 					sParam.SpinP.radPerSec = -MAX_BOT_OMEGA ;
 				else
 					sParam.SpinP.radPerSec = MAX_BOT_OMEGA ;
 				skillSet->executeSkill(sID, sParam);
 				break;		
-		
+			  
 				
 
 	 case BLOCKING :
 	 //  write once the opponent is taken into acccount
-		if( state->ballPos.x > -ForwardX((HALF_FIELD_MAXX-GOAL_DEPTH)*0.80) )
+		if( state->ballPos.x > predictPosX )
 		{
 			iState = DEFENDING;
 			break;
 		} 
-		int oppID = nearestOppBot(dest.x) ;
-		
 		// get the opponent id from the function
 		/*else if(abs(predictPosY) < OUR_GOAL_MAXY )
 		{
@@ -291,6 +389,8 @@ public:
 			skillSet->executeSkill(SkillSet::DWGoToPoint, sParam);
 			break;
 		}*/
+	 /*	
+		int oppID = nearestOppBot(dest.x) ;
 		if(abs(state->awayPos[oppID].y) > OUR_GOAL_MAXY)
 			sParam.GoToPointP.y = SGN(state->awayPos[oppID].y)*OUR_GOAL_MAXY;
 		else
@@ -299,8 +399,12 @@ public:
 			sParam.GoToPointP.x = dest.x;
 			skillSet->executeSkill(SkillSet::GoToPoint, sParam);
 			break;
-		
-    
+	  */
+	        sParam.GoToPointP.y = -SGN(state->ballPos.y)*(OUR_GOAL_MAXY);
+			sParam.GoToPointP.finalslope = -PI/2;
+			sParam.GoToPointP.x = dest.x;
+			skillSet->executeSkill(SkillSet::GoToPoint, sParam);
+			break ;
 	}
    }
 

@@ -50,10 +50,16 @@ namespace Strategy
     _addLineToBoundaries(xi,yi);
     // All pts (100,100) closer to (0,0)
     //timepass points
-    LocalAvoidance::closeBoundaries.push_back(std::pair<Point2D<int>, Point2D<int> >(Point2D<int>(2500, -1850), Point2D<int>(-2500, -1800)));
+    LocalAvoidance::closeBoundaries.push_back(std::pair<Point2D<int>, Point2D<int> >(Point2D<int>(2500, -1880), Point2D<int>(-2500, -2000)));
+    LocalAvoidance::closeBoundaries.push_back(std::pair<Point2D<int>, Point2D<int> >(Point2D<int>(-2500, -2000), Point2D<int>(-2500, 1850)));
+    LocalAvoidance::closeBoundaries.push_back(std::pair<Point2D<int>, Point2D<int> >(Point2D<int>(-2500, 1850), Point2D<int>(2590, 1880)));
+    LocalAvoidance::closeBoundaries.push_back(std::pair<Point2D<int>, Point2D<int> >(Point2D<int>(2590, 1880), Point2D<int>(2590, -1880)));
+	/*
+	LocalAvoidance::closeBoundaries.push_back(std::pair<Point2D<int>, Point2D<int> >(Point2D<int>(2500, -1850), Point2D<int>(-2500, -1800)));
     LocalAvoidance::closeBoundaries.push_back(std::pair<Point2D<int>, Point2D<int> >(Point2D<int>(-2500, -1800), Point2D<int>(-2500, 1850)));
     LocalAvoidance::closeBoundaries.push_back(std::pair<Point2D<int>, Point2D<int> >(Point2D<int>(-2500, 1850), Point2D<int>(2450, 1830)));
-    LocalAvoidance::closeBoundaries.push_back(std::pair<Point2D<int>, Point2D<int> >(Point2D<int>(2450, 1830), Point2D<int>(2500, -1850)));
+	LocalAvoidance::closeBoundaries.push_back(std::pair<Point2D<int>, Point2D<int> >(Point2D<int>(2450, 1830), Point2D<int>(2500, -1850)));
+    */
   }
   float area(int x1, int y1, int x2, int y2, int x3, int y3)
     {

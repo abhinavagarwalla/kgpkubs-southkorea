@@ -67,8 +67,8 @@ namespace Strategy
 
     void execute(const Param& tParam)
     {
-      
-      printf("Goalie Bot ID%d \n",botID);
+     
+      cout<<"BallVel :: "<<state->ballVel.x<<std::endl; 
       prevBotPos = state->homePos[botID];
       prevBotAngle = state->homeAngle[botID];
 	  int dist = Vector2D<int>::dist(state->homePos[botID],state->ballPos);
@@ -83,11 +83,22 @@ namespace Strategy
        // sParam.GoToPointP.finalVelocity = 0;
       }
       else
-      {
-		  if(dist < 1.5*BOT_BALL_THRESH)
+      {   
+		  float factor = 1.3 ;
+		  if(abs(state->ballVel.x) > 4000) 
+			  factor = 3 ;
+		  else
+			  if(abs(state->ballVel.x) > 2500) 
+				  factor = 2.5 ;
+			  else 
+				  if(abs(state->ballVel.x) > 1000)
+					  factor = 2 ;
+			
+		// also restrict spinning when opp bot is near
+		  if(dist < factor*BOT_BALL_THRESH)
 		  {
 			  sID = SkillSet::Spin;
-			  if(state->ballPos.y < 0 )
+			  if(state->ballPos.y > state->homePos[botID].y )
 				  sParam.SpinP.radPerSec = -MAX_BOT_OMEGA   ;
 			else
 				  sParam.SpinP.radPerSec = +MAX_BOT_OMEGA   ;

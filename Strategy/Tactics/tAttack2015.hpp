@@ -188,7 +188,7 @@ namespace Strategy
 
  bool isBallInDBox()
  {
-	if((abs(state->ballPos.y)<OUR_GOAL_MAXY+3*BOT_RADIUS)&&(state->ballPos.x < -HALF_FIELD_MAXX+GOAL_DEPTH+DBOX_WIDTH)) 
+	if((abs(state->ballPos.y)<OUR_GOAL_MAXY+ 5*BOT_RADIUS)&&(state->ballPos.x < -HALF_FIELD_MAXX+GOAL_DEPTH+DBOX_WIDTH)) 
 	   return true;
 
 		  return false;
@@ -243,8 +243,9 @@ namespace Strategy
 	  
 	  } 
 	  
-      if(state->homePos[botID].x > state->ballPos.x && state->homePos[botID].x > -HALF_FIELD_MAXX+GOAL_DEPTH+3*BOT_BALL_THRESH && state->homePos[botID].x < HALF_FIELD_MAXX-GOAL_DEPTH-2*BOT_BALL_THRESH)
+      if(state->homePos[botID].x > state->ballPos.x )
 	  {
+	// **************  YAHAN PE SPLINE / BALL INTERCEPTION ******************************************************* 	  
 	    sID = SkillSet::GoBehindBall ;
 	    skillSet->executeSkill(sID, sParam);
 		cout<<"BehindBall"<<endl;
@@ -290,13 +291,15 @@ namespace Strategy
 		  factorx=factory=0.00002;*/
 
           int ballBotDist = (int)Vector2D<int>::dist(state->homePos[botID],state->ballPos);
-          int targetX = state->ballPos.x + (int)ballBotDist * factorx * avgBallVel.x;
-          int targetY = state->ballPos.y + (int)ballBotDist * factory * avgBallVel.y;
+          int targetX = state->ballPos.x ;// + (int)ballBotDist * factorx * avgBallVel.x;
+          int targetY = state->ballPos.y ;//+ (int)ballBotDist * factory * avgBallVel.y;
           int x3 = (targetX * (ballgoaldist + offset) - offset * OPP_GOAL_X) / ballgoaldist;
           int y3 = (targetY * (ballgoaldist + offset)) / ballgoaldist;
-          while(!LocalAvoidance::isPointInField(Point2D<int>(x3, y3))) 
+
+          
+		  while(!LocalAvoidance::isPointInField(Point2D<int>(x3, y3))) 
           {
-                    
+            cout<<"Struggled in while loop "<<std::endl;        
             if(!LocalAvoidance::isPointInField(state->ballPos))
             {
               offset= 0;
@@ -310,11 +313,14 @@ namespace Strategy
               x3 =  (targetX * (ballgoaldist + offset) - offset * OPP_GOAL_X) / ballgoaldist;
               y3 =  (targetY * (ballgoaldist + offset)) / ballgoaldist;
           }
+		  
           offset/=1.25;
          
-          //***************************************
-		   /// log search to place offset at a point not co-inciding with a bot.		         
-          while(1)		        
+          
+	      //***************************************
+		  /// log search to place offset at a point not co-inciding with a bot.		         
+         /*
+		  while(1)		        
           {		
             bool flag = false;		
             for(int i=0; i < HomeTeam::SIZE; i++)		
@@ -347,7 +353,9 @@ namespace Strategy
               break;		
             }		
           }
+		  */
 		  //***************************************
+		  
 		  
           Vector2D<int> offsetpt(x3, y3);
           int dist2 = Vector2D<int>::dist(offsetpt, state->homePos[botID]);
@@ -360,7 +368,9 @@ namespace Strategy
 
           if(ForwardX(state->ballPos.x) < ForwardX(state->homePos[botID].x)) 
             hasAchievedOffset = 0;
-            
+           
+		  // **************  YAHAN PE SPLINE / BALL INTERCEPTION ******************************************************* 
+		  
           sParam.GoToPointP.x = x3;
           sParam.GoToPointP.y = y3;
 		  sParam.GoToPointP.finalslope = Vector2D<int>::angle( Vector2D<int>(OPP_GOAL_X, 0),state->ballPos);
@@ -378,30 +388,16 @@ namespace Strategy
 			sParam.GoToPointP.align = false;
             if(ForwardX(state->ballPos.x) < ForwardX(state->homePos[botID].x) && Vector2D<int>::dist(state->ballPos,state->homePos[botID]) < 1000) 
 		  sParam.GoToPointP.align = true;
-   //resricting     
-	 /*  if((sParam.GoToPointP.x < -HALF_FIELD_MAXX/2)&&(abs(state->ballPos.y)<0.6*HALF_FIELD_MAXY))
-
-		{ 
-			sParam.GoToPointP.x  = ForwardX(-HALF_FIELD_MAXX/2);
-			
-			if(abs(state->ballPos.y) > HALF_FIELD_MAXY*0.6)
-			  sParam.GoToPointP.y = state->ballPos.y - SGN(state->ballPos.y)*2*BOT_RADIUS;
-			else
-              sParam.GoToPointP.y = state->ballPos.y + SGN(state->ballPos.y)*2*BOT_RADIUS;
-
-	    }
-    */
-
-	   
-
-	   /////////////////////////////////////////////////////////////
-// change the condition of postion of X ,Y when the ball is in D-Box
+       //resricting     
+      // change the condition of postion of X ,Y when the ball is in D-Box
 	  if(isBallInDBox()==true)
 	  {
 		  sParam.GoToPointP.x =  -HALF_FIELD_MAXX+GOAL_DEPTH+DBOX_WIDTH+BOT_RADIUS ;
 		  sParam.GoToPointP.y =   SGN(state->ballPos.y)*(OUR_GOAL_MAXY+BOT_RADIUS);
 		  if(Vector2D<int>::dist(state->homePos[botID],state->homePos[0])>2*BOT_BALL_THRESH)
 		  { int id=chooseOppReceiver();
+		  // required only in the game 
+		  /*
 		  if(state->ballPos.x<-HALF_FIELD_MAXX+GOAL_DEPTH+2*BOT_RADIUS && state->awayPos[id].x>-HALF_FIELD_MAXX+GOAL_DEPTH+BOT_RADIUS)
 		  {
 			  if(id!=-1) 
@@ -410,64 +406,13 @@ namespace Strategy
 				  sParam.GoToPointP.y= state->awayPos[id].y;
 			  }
 		  }
-		 }
+		  */
+		  }
 
 	  }
-    /*
-      if (state->homePos[0].x + BOT_RADIUS > state->homePos[botID].x)		// will not disturb GoalKeeper from the back: By KD
-	  {
-	      if (state->ballPos.y > 0)
-           {
-			  sID = SkillSet::GoToPoint;
-			  if (Vector2D<int>::dist(state->homePos[0], state->homePos[botID]) <= 3*BOT_RADIUS)
-			  {
-				sParam.GoToPointP.align = false;
-				sParam.GoToPointP.finalslope = PI/2;
-				sParam.GoToPointP.x = state->homePos[botID].x;
-				sParam.GoToPointP.y = state->homePos[botID].y - 2*BOT_RADIUS;
-			  }
-			  else
-				{
-				sParam.GoToPointP.align = false;
-				sParam.GoToPointP.finalslope = 0;
-				sParam.GoToPointP.x = state->homePos[botID].x + 2*BOT_RADIUS;
-				sParam.GoToPointP.y = state->homePos[botID].y;
-				}
-			}
-			else
-			{
-				sID = SkillSet::GoToPoint;
-				if (Vector2D<int>::dist(state->homePos[0], state->homePos[botID]) <= 3.5*BOT_RADIUS)
-				{
-				    sParam.GoToPointP.align = false;
-					sParam.GoToPointP.finalslope = PI/2;
-					sParam.GoToPointP.x = state->homePos[botID].x;
-					sParam.GoToPointP.y = state->homePos[botID].y + 2*BOT_RADIUS;
-				}
-				else
-				{
-					sParam.GoToPointP.align = false;
-					sParam.GoToPointP.finalslope = 0;
-					sParam.GoToPointP.x = state->homePos[botID].x + 2*BOT_RADIUS;
-					sParam.GoToPointP.y = state->homePos[botID].y;
-				}
-			 }
-				
-		}					//Totally working: Approved. Now it works universally
-        */
-	    if(state->ballPos.x>HALF_FIELD_MAXX-GOAL_DEPTH-2*BOT_RADIUS && state->homePos[botID].x>HALF_FIELD_MAXX-GOAL_DEPTH-2*BOT_RADIUS)
-		{
-		  if(state->ballPos.y>OPP_GOAL_MAXY && state->homePos[botID].y<state->ballPos.y)
-		  {
-			 sParam.GoToPointP.x=HALF_FIELD_MAXX-GOAL_DEPTH-4*BOT_RADIUS;
-			 sParam.GoToPointP.y=state->homePos[botID].y;
-		  }
-		  if(state->ballPos.y<OPP_GOAL_MINY && state->homePos[botID].y>state->ballPos.y)
-		  {
-			sParam.GoToPointP.x=HALF_FIELD_MAXX-GOAL_DEPTH-4*BOT_RADIUS;
-			sParam.GoToPointP.y=state->homePos[botID].y;
-		  }
-		}
+    
+	// write the condition here so that it doesn't hamper the goalie
+
       cout<<" BallPos :: ( "<<state->ballPos.x<<" , "<<state->ballPos.y<<" ) :: "<<"Destination : "<<sParam.GoToPointP.x<<" "<<sParam.GoToPointP.y<<endl ;
 	  skillSet->executeSkill(sID, sParam);
 	  break;
@@ -514,13 +459,19 @@ namespace Strategy
 	case CLOSE_TO_BALL:
 	{
 		cout<<"CLOSE_TO_BALL"<<endl;
-          if(fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x))) < PI / 2 + PI / 10 && fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x)))  > PI / 2 - PI / 10)
-          {
-            if(state->ballPos.y > 0)
-              iState = FIELD_IS_INVERTED? SPINNING_CCW : SPINNING_CW;
-            else
-              iState = FIELD_IS_INVERTED? SPINNING_CW : SPINNING_CCW;
-          }
+           if(fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x))) < PI / 2 + PI / 9 && fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x)))  > PI / 2 - PI / 9)
+           {
+              if(state->ballPos.y > 0)
+                iState = FIELD_IS_INVERTED? SPINNING_CCW : SPINNING_CW;
+			  else
+				iState = FIELD_IS_INVERTED? SPINNING_CW : SPINNING_CCW;
+              break ;
+		   } 
+		   if(dist > 1.5*BOT_BALL_THRESH)
+		   {
+              iState = APPROACHING ;
+			   break ;
+            }
           /* Ball is with bot. So go to goal */
 	        sID = SkillSet::GoToPoint;
 	        int desty = 0;
@@ -538,6 +489,9 @@ namespace Strategy
 			float leftGoalAngle  =  Vector2D<int>::angle(GoalLeftPoint,state->homePos[botID]);
 			float rightGoalAngle =  Vector2D<int>::angle(state->homePos[botID],GoalRightPoint);
             */
+			
+			// **************  YAHAN PE SPLINE ******************************************************* 
+			
 			sParam.GoToPointP.align = false;
             sParam.GoToPointP.x = OPP_GOAL_X;
             sParam.GoToPointP.y = destY;
@@ -555,13 +509,7 @@ namespace Strategy
 			}
             sParam.GoToPointP.increaseSpeed = 1;
             skillSet->executeSkill(sID, sParam);
-            tState = RUNNING;
-            iState = CLOSE_TO_BALL; //ATTACKING;
-            if(dist > 1.1*BOT_BALL_THRESH)
-            {
-              iState = APPROACHING ;
-			
-            }
+           
           break ;
 	}
 				

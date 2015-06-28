@@ -148,7 +148,7 @@ namespace Strategy
 
 		
 
-		if(( botBallDist > 3.5*BOT_BALL_THRESH && state->homePos[botID].x>state->ballPos.x) || (state->homePos[botID].x<state->ballPos.x-0.4*BOT_RADIUS)  )
+		if(( botBallDist > 3*BOT_BALL_THRESH && state->homePos[botID].x>state->ballPos.x) || (state->homePos[botID].x<state->ballPos.x-0.4*BOT_RADIUS)  )
 		{
 			/*
 		    if(vel>1800 && state->homePos[botID].x>state->ballPos.x && Vector2D<int>::dist(state->homePos[botID],state->ballPos)< BOT_RADIUS)
@@ -166,10 +166,11 @@ namespace Strategy
 
 		else
 	   {
+		cout<<"Rotating"<<endl;
 	    if(state->ballPos.y<state->homePos[botID].y /*&& state->homePos[botID].x<state->ballPos.x*/)
 	       {
-			     vl=MAX_BOT_SPEED/radius*(radius-BOT_RADIUS)*0.8;
-				 vr=MAX_BOT_SPEED/radius*(radius+BOT_RADIUS)*0.8;
+			     vl=MAX_BOT_SPEED/radius*(radius-BOT_RADIUS)*0.5;
+				 vr=MAX_BOT_SPEED/radius*(radius+BOT_RADIUS)*0.5;
 				 comm->sendCommand(botID,vl/2,vr/2);
 		   }	
 		else

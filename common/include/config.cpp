@@ -9,7 +9,7 @@ const float MOVING_BALL_VELOCITY       = SELECT(40, 30);
 const float MIN_DIST_FROM_TARGET       = SELECT(30.0, 25.0);
 const int CENTER_X                     = SELECT(0, 0);
 const int CENTER_Y                     = SELECT(0, 0);
-const int HALF_FIELD_MAXX              = SELECT(2700, 2975); //actual 225 (rugged surface at end)
+const int HALF_FIELD_MAXX              = SELECT(2800, 2975); //actual 225 (rugged surface at end) // WAS 2800
 const int HALF_FIELD_MAXY              = SELECT(1900, 2050);
 
 const int OUR_GOAL_MAXY                = SELECT(600,600);

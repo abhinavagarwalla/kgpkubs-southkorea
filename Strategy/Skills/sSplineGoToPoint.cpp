@@ -62,17 +62,14 @@ namespace Strategy
 	void SkillSet::_splineGoToPointInitTraj(int botid, Pose start, Pose end, float finalvel, float vls, float vrs, int flag){
 	
 		counter = 0;
-
-	//	cout << vls << " " << vrs << endl;
-	//	getchar();
 		Pose start2(state->homePos[botID].x, state->homePos[botID].y, normalizeAngle(state->homeAngle[botID] - PI));
-		pair<int,int> delayedVel;
+		pair<int,int> delayedVel = make_pair(vls, vrs);
 		direction = _isFrontDirected(start, end, vls, vrs);
 		if(direction){
 			if(!flag){
 				if(traj)
 					delete traj;
-				traj = TrajectoryGenerators::cubic(start, end, 0, 0, 0, 0);
+				traj = TrajectoryGenerators::cubic(start, end, vls, vrs, 0, 0);
 			}
 			else{
 			//	cout << "here" << endl;
@@ -87,7 +84,7 @@ namespace Strategy
 			if(!flag){
 				if(traj)
 					delete traj;
-				traj = TrajectoryGenerators::cubic(start2, end, 0, 0, 0, 0);
+				traj = TrajectoryGenerators::cubic(start2, end, vls, vrs, 0, 0);
 			}
 			else{
 			//	cout << "here" << endl;
@@ -101,10 +98,9 @@ namespace Strategy
 		
 		if(algoController)
 			delete algoController;
-		if(!flag)
-			algoController = new ControllerWrapper(traj, 0 , 0 , PREDICTION_PACKET_DELAY);
-		else
-			algoController = new ControllerWrapper(traj, delayedVel.first , delayedVel.second , PREDICTION_PACKET_DELAY);
+		
+		
+		algoController = new ControllerWrapper(traj, delayedVel.first , delayedVel.second , PREDICTION_PACKET_DELAY);
 
 		_splineGoToPointTrack(botid,start,end,finalvel, vls, vrs);
 	}
@@ -119,14 +115,13 @@ namespace Strategy
 	Pose end(param.SplineGoToPointP.x, param.SplineGoToPointP.y, param.SplineGoToPointP.finalSlope);
 	
 	if(param.SplineGoToPointP.initTraj == 1){
-		_splineGoToPointInitTraj(botID, start, end, finalvel, 0, 0, 0);
+		_splineGoToPointInitTraj(botID, start, end, finalvel, state->homeVlVr[botID].x, state->homeVlVr[botID].y, 0);
 	}
 	else if(counter > 20){
 		_splineGoToPointInitTraj(botID, start, end, finalvel, state->homeVlVr[botID].x, state->homeVlVr[botID].y, 1);
 	}
 	else 
 		_splineGoToPointTrack(botID, start, end, finalvel, state->homeVlVr[botID].x, state->homeVlVr[botID].y);
-	//cout << "lksdhbvkiedvi;oe;lqwibdkjs bvak.jb jcl; bvkjola;b fd;";
    }
 }
 

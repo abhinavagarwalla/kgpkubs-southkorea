@@ -241,7 +241,7 @@ public:
 		   break ;
 		}
 		 
-		    oppID = nearestOppBot(dest.x) ;
+		    oppID = 4 ; //nearestOppBot(dest.x) ;
 			std::cout<<"ID = "<<oppID<<std::endl;
 			if(abs(state->awayPos[oppID].y) > OUR_GOAL_MAXY)
 				sParam.DWGoToPointP.y = SGN(state->awayPos[oppID].y)*OUR_GOAL_MAXY ;
@@ -270,7 +270,7 @@ public:
 		  break ;
 		}
 		
-		oppID = nearestOppBot(dest.x) ;
+		oppID = 4 ; // nearestOppBot(dest.x) ;
 			std::cout<<"ID = "<<oppID<<std::endl;
 			if(state->awayPos[oppID].y < 0 )
 			{

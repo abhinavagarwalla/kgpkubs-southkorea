@@ -20,7 +20,7 @@ namespace Strategy
     if(dist < 1.1*BOT_RADIUS){
 		comm->sendCommand(botID,0,0);
 		return;
-	}
+	} 
     if(!param.GoToPointP.align )//|| dist < 9 * BOT_BALL_THRESH * BOT_BALL_THRESH)
       _goToPoint(botID, dpoint, finalvel, param.GoToPointP.finalslope, 0,param.GoToPointP.increaseSpeed);
     else
