@@ -130,8 +130,8 @@ public:
 	pVelocity.VelocityP.vr = 0;
 	
 	Tactic::Param pVelocity_1;
-	pVelocity_1.VelocityP.vl = 20;
-	pVelocity_1.VelocityP.vr = 20;
+	pVelocity_1.VelocityP.vl = 40;
+	pVelocity_1.VelocityP.vr = 40;
 	
 	Tactic::Param pVelocity_2;
 	pVelocity_2.VelocityP.vl = 60;
@@ -329,16 +329,19 @@ public:
         //tDefendLine1.execute(pDefendL1);
 			//	tGoalOur2.execute(paramGoal);
 	//	tGoalOur3.execute(paramGoal);
-     /*
-		if(loopcount++ > 10){
-		//	cout << params1.SplineGoToPointP.initTraj << "vcdzs" << endl;
+     
+		if(loopcount++ > 10){		
 		//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 		//	params1.SplineGoToPointP.initTraj = 0;
+		//	sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
+		//	params4.SplineInterceptBallP.initTraj = 0;
+			tAttack20150.execute(pAttack) ;
 			loopcount = loopcount%1000 + 11;
 		}
-		else
-			tVelocity0.execute(pVelocity);
-	 */
+		else{
+		//	getchar();
+			tVelocity0.execute(pVelocity);		
+		}
         //tPosition
 				//tcover3.execute(paramcover);
        // tAttack3.execute(paramcover);
@@ -347,8 +350,8 @@ public:
 	    //dwDefend20152.execute(paramDWDefend2015);
 		 // tcover20152.execute(paramcover2015);
 		 // tGoalOur0.execute(paramGoal);
-	     	tcoverleft2.execute(paramcoverleft);
-	        tcoverright0.execute(paramcoverright);
+	   //  	tcoverleft2.execute(paramcoverleft);
+	    //    tcoverright0.execute(paramcoverright);
 	 // dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
 	//		dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
 //			dwpoint_old.executeSkill(SkillSet::DWGoToPoint,params3_old) ;
@@ -369,7 +372,7 @@ public:
       //  tcover0.execute(paramcover);
         //tcover3.execute(paramcover);
      //tCharge1.execute(pCharge);
-	 //   tAttack20150.execute(pAttack) ;
+	    //tAttack20150.execute(pAttack) ;
 		  //tShoot4.execute(paramShoot) ;
 		  //  tAttack0.execute(pAttack);
 		//	tAttack2.execute(pAttack);

@@ -17,7 +17,9 @@
 #include "config.h"
 #include <iostream>
 #include "beliefState.h"
+
 using namespace std;
+
 MainWidget::MainWidget(Strategy::BeliefState *state_, QWidget *parent) :
   QWidget(parent),
   state(state_)

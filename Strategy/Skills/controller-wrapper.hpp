@@ -27,6 +27,6 @@ public:
     MiscData genControls(Pose s, Pose e, int &vl, int &vr, double finalVel = 0);
     MiscData genControlsTrajSim(Pose s, int &vl, int &vr, double t);
     Pose getNewStartPose();
-    pair<int, int> getDelayedVel();
+    Vector2D<float> getDelayedVel();
 };
 #endif // CONTROLLERWRAPPER_HPP

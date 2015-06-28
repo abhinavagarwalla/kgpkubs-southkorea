@@ -5,6 +5,7 @@
 #include "splines.hpp"
 #include "geometry.hpp"
 #include "trajectory-generators.cpp"
+#include <iostream>
 
 namespace BallInterception {
 
@@ -39,7 +40,7 @@ inline double getBotBallDist(Pose botPos, Vector2D<float> ballPos) {
 inline SplineTrajectory* getIntTraj(Pose botPosStart, Vector2D<float> ballPos, Vector2D<float> ballVel, Vector2D<float> botVel) {
 
     Vector2D<float> predictedBallPos;
-    double error = 0.1;
+    double error = 0.01;
     double T2 = 6.0;
     double T1 = 0.0;
     double S = 1.0;
@@ -57,7 +58,7 @@ inline SplineTrajectory* getIntTraj(Pose botPosStart, Vector2D<float> ballPos, V
         vector<Pose> midPoints;
        // midPoints.push_back(cp1);
        //st = TrajectoryGenerators::cubic(botPosStart, endPose, 0,0, 40,40 , midPoints);
-       st = TrajectoryGenerators::cubic(botPosStart, endPose, botVel.x, botVel.y, 60, 60, midPoints);
+       st = TrajectoryGenerators::cubic(botPosStart, endPose, botVel.x, botVel.y, 0, 0, midPoints);
         double t = st->totalTime();
         if (t < T)
             break;
@@ -86,9 +87,11 @@ inline SplineTrajectory* getIntTraj(Pose botPosStart, Vector2D<float> ballPos, V
 		vector<Pose> midPoints;
        // midPoints.push_back(cp1);
     //   st = TrajectoryGenerators::cubic(botPosStart, endPose, 0,0, 40, 40, midPoints);
-	     st = TrajectoryGenerators::cubic(botPosStart, endPose, botVel.x, botVel.y, 60, 60, midPoints);
+	     st = TrajectoryGenerators::cubic(botPosStart, endPose, botVel.x, botVel.y, 0, 0, midPoints);
 
         double t = st->totalTime();
+		std::cout << "time" << t << std::endl;
+		//getchar();
      //   qDebug() << "mid = " << mid << ", bot-ka-time = " << t;
         if (fabs(t-mid) < error)
             break;
@@ -102,12 +105,6 @@ inline SplineTrajectory* getIntTraj(Pose botPosStart, Vector2D<float> ballPos, V
             break;
         }
     }
-    vector<Pose> midPoints;
-	// vector<Pose> midPoints;
-	 midPoints.push_back(endPose);
-    //   st = TrajectoryGenerators::cubic(botPosStart, endPose, 0,0, 40, 40, midPoints);
-	     st = TrajectoryGenerators::cubic(botPosStart, Pose(HALF_FIELD_MAXX - DBOX_WIDTH, 0, 0), botVel.x, botVel.y, 60, 60, midPoints);
-   // qDebug() << "iterations getinttraj " << iter << endl;
     return st;
 }
 }

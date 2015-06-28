@@ -1,7 +1,10 @@
 #include "tracking.hpp"
 #include <math.h>
 #include <assert.h>
+#include <iostream>
+#include <fstream>
 
+using namespace std;
 double sgn(double x) {
     return (x > 0) - (0 > x);
 }
@@ -9,7 +12,10 @@ double sgn(double x) {
 MiscData Tracker::genControls(Pose s, int &vl, int &vr, int prevVl, int prevVr, double t) {
 
     Pose ref(traj->x(t)*fieldXConvert, traj->y(t)*fieldXConvert, traj->theta(t));
-    double ur1 = traj->v(t);
+	std::ofstream outfile;
+	outfile.open("/home/robocup/tracker.txt", std::ios_base::app);
+   //outfile << s.x() << " " << ref.x() << " " << s.y() << " " << ref.y() << " " << s.theta() << " " << ref.theta()  << " " << prevVl << " " << prevVr<< endl;
+	double ur1 = traj->v(t);
     double ur2 = traj->thetad(t);
     // err coordinates are in cm!
     Error err(ref, s);
@@ -48,7 +54,8 @@ MiscData Tracker::genControls(Pose s, int &vl, int &vr, int prevVl, int prevVr, 
     // jsut for testing, calculate reference vl and vr also
     double vl_ref = (ur1/ticksToCmS - d*ur2/2);
     double vr_ref = (ur1/ticksToCmS + d*ur2/2);
-    return MiscData(ur1, ur2, v1, v2, t, v, w, vl, vr, vl_ref, vr_ref);
+	outfile  << vl << "\t" << vr << "\t" << vl_ref << "\t" << vr_ref << endl;
+    return MiscData(ur1, ur2, v1, v2, t, v, w, vl, vr, vl_ref, vr_ref); //MiscData(ur1, ur2, v1, v2, t, v, w, vl, vr, vl_ref, vr_ref);
 }
 
 Pose Tracker::getNewStartPose(double t){

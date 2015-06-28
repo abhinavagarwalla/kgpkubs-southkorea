@@ -171,7 +171,7 @@ namespace Strategy
 	void _dwGoToPointTrack(int botid, Pose start, Pose end, float finalvel);
 	void _dwGoToPointInitTraj(int botid, Pose start, Pose end, float finalvel);
 	void splineInterceptBall(const SParam& param);
-	void _splineInterceptBallInitTraj(int botid, Pose start, Vector2D<float> ballPos, Vector2D<float> ballVel, Vector2D<float> botVel, float final_vl, float final_vr);
+	void _splineInterceptBallInitTraj(int botid, Pose start, Vector2D<float> ballPos, Vector2D<float> ballVel, Vector2D<float> botVel, float final_vl, float final_vr, int initTraj);
 	void _splineInterceptBallTrack(int botid, Pose start, Vector2D<float> ballPos, Vector2D<float> ballVel, Vector2D<float> botVel, float final_vl, float final_vr);
     void _splineGoToPointCheckTraj(int botid, Pose start, Pose end, float finalvel, int initTraj);
 	// Parameter for skills to be trained

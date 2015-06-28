@@ -63,7 +63,8 @@ namespace Strategy
 		tacticList[Tactic::CoverGoalPairLeft]           = new TCoverGoalPairLeft(state,botID);
 		tacticList[Tactic::CoverGoalPairRight]           = new TCoverGoalPairRight(state,botID);
 		tacticList[Tactic::ReceiveBall2015]         = new TReceiveBall2015(state, botID);
-		//tacticList[Tactic::Clear]								= new TClear(state,botID);
+        tacticList[Tactic::AttackSpline]        = new TAttackSpline(state,botID);
+         //tacticList[Tactic::Clear]								= new TClear(state,botID);
 		//tacticList[Tactic::AttackDuo] = new TAttackDuo() -- how the fuck am i supposed to add two bot ids ??? :-(
     // Initialization check
     for (int tID = 0; tID < Tactic::MAX_TACTICS; ++tID)

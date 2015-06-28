@@ -35,6 +35,7 @@ namespace Strategy
       Defend,               // Defend the ball from coming to our side
       Attack,               // Attck the ball towards the goal      
       Attack2015,
+	  AttackSpline ,
 	  SupportAttack2015,
 	  Stop,                 // Stop the bot
       Velocity,             // Move at a fixed velocity     
@@ -130,7 +131,7 @@ namespace Strategy
       struct type10
       {
         bool rotateOnError;
-      } AttackP , Attack2015P;     
+      } AttackP , Attack2015P , AttackSpline ;     
       struct type11
       {
         int distFromGoal;

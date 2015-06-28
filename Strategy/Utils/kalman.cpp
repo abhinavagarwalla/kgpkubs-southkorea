@@ -21,14 +21,14 @@ bool isIndeterminate(const float pV)
 } 
 inline void linearTransform(int &x, int &y, float &newangle)
 {
-  int tempx, tempy;
+  double tempx, tempy;
   tempx = (y*(-HALF_FIELD_MAXX))/(2050.0);
   tempy = ((x + 3025.0/2)*(HALF_FIELD_MAXY))/(3025.0/2.0);
-  x = tempx;
-  y = tempy;
+  x = (int)tempx;
+  y = (int)tempy;
   newangle = normalizeAngle(newangle+PI/2);
-  //y=tempy-800;
 }
+
 inline void botcenterTransform(int &x, int &y, float &newangle)//ssl vision detects blue center as bot center
 {
   /// Commented. Not needed currently.
@@ -174,12 +174,12 @@ namespace Strategy
     p.y /= fieldYConvert;
   }
   
-  Vector2D<float> Kalman::calcBotVelocity(double delX, double delY , double Theta1, double Theta2, float timeMs) {
+  Vector2D<float> Kalman::calcBotVelocity(double delX, double delY , double newTheta, double oldTheta, float timeMs) {
  //   strategyToRealConversion(p1);
   //  strategyToRealConversion(p2);
 
 	float vl,vr;
-    double delTheta = normalizeAngle(Theta1 - Theta2); // assuming |delTheta| < PI, which is safe to assume
+    double delTheta = normalizeAngle(newTheta - oldTheta); // assuming |delTheta| < PI, which is safe to assume
 
 	// for ~ 16 ms of rotation at any speed (even 120,-120?).
     assert(timeMs > 0);
@@ -188,7 +188,7 @@ namespace Strategy
     if (delTheta < 1e-2 && delTheta > -1e-2) {  // be realistic
         // bot should be headed straight, but again confusion
         // so taking projection of (delX, delY) along (cos(theta), sin(theta)) as displacement.
-        double dispLength = delX*cos(Theta1) + delY*sin(Theta2);
+        double dispLength = delX*cos(oldTheta) + delY*sin(oldTheta);
         vl = dispLength / (timeMs);// * 0.001);
         vl = vl / ticksToCmS;
         vr = vl;
@@ -196,8 +196,8 @@ namespace Strategy
         return v;
     }
     // we calculate 2 rho's, based on delX and delY, and take average
-    double rho1 = delX / (sin(Theta2) - sin(Theta1));
-    double rho2 = -delY / (cos(Theta2) - cos(Theta1));
+    double rho1 = delX / (sin(newTheta) - sin(oldTheta));
+    double rho2 = -delY / (cos(newTheta) - cos(oldTheta));
     // try harmonic mean?
 //    double rho = (rho1 + rho2) / 2;
     double rho = 2*rho1*rho2 / (rho1 + rho2);
@@ -252,13 +252,13 @@ namespace Strategy
 	 
       float  predictedPoseX      = ballPose.x + ballVelocity.x * (delTime);
       float  lastPoseX           = ballPose.x;
-      ballPose.x                 = predictedPoseX + ballPosK.x * (newx - predictedPoseX);
+      ballPose.x                 = newx;//predictedPoseX + ballPosK.x * (newx - predictedPoseX);
       
       ballPosSigmaSqK.y          = ballPosSigmaSqK.y * ( 1 - ballPosK.y) + SIGMA_SQ_NOISE_POS * delTime;
       ballPosK.y                 = ballPosSigmaSqK.y / (ballPosSigmaSqK.y + SIGMA_SQ_OBSVN_POS);
       float  predictedPoseY      = ballPose.y + ballVelocity.y * (delTime);
       float  lastPoseY           = ballPose.y;
-      ballPose.y                 = predictedPoseY + ballPosK.y * (newy - predictedPoseY);
+      ballPose.y                 = newy;//predictedPoseY + ballPosK.y * (newy - predictedPoseY);
       
 	  float lastVelocityx        = ballVelocity.x;
 	  float lastVelocityy        = ballVelocity.y;
@@ -284,11 +284,6 @@ namespace Strategy
 	  //ballVelocity.y = (newy - bsQ.front().first.ballPos.y)/(timeMs * 0.001);
 	  ballAcceleration.x         = (ballVelocity.x - lastVelocityx) / delTime;
       ballAcceleration.y         = (ballVelocity.y - lastVelocityy) / delTime;
-      //printf("Ball: %f %f %f %f %lf\n", ballPose.x, ballPose.y, ballVelocity.x, ballVelocity.y, delTime);
-// //       QueueVel.pop_front();
-////	//	QueueVel.push_back(ballVelocity);
-//		QueuePos.push_back(ballPose);
-//		QueuePos.pop_front();
 				
 		float Xsum2=0, Xsum1=0, TimeDiffSum = 10*delTime, TimeDiffSqSum = 30*delTime*delTime, n=4, lambda = 0.001, Ysum2=0,Ysum1=0;
 
@@ -466,14 +461,16 @@ namespace Strategy
       {
         SSL_DetectionRobot robot = detection.robots_yellow(i);
         int id    = HAL::YellowMarkerMap[robot.robot_id()];
-		//printf("Kalman:: ID%d ",id);
-		//assert(false);
         if(uniqueBotIDs.find(id) != uniqueBotIDs.end())
           continue;
         uniqueBotIDs.insert(id);
-        int newx = robot.x() - CENTER_X;
-        int newy = robot.y() - CENTER_Y;        
-        float newangle = robot.orientation();
+        int newx = robot.x();
+        int newy = robot.y();   
+		float newangle;
+		if(robot.has_orientation())
+			newangle = robot.orientation();
+		else
+			newangle = 0;
         #if GR_SIM_COMM || FIRASSL_COMM
         linearTransform(newx, newy, newangle);
         #endif
@@ -481,15 +478,25 @@ namespace Strategy
         botcenterTransform(newx, newy, newangle);
         #endif
         double           delTime = timeCapture - homeLastUpdateTime[id];
-		double timeMs = delTime ; //(nowTime - bsQ.front().second)*1000.0;
-		if(timeMs <= 0){
-			timeMs = 0.001;
-		}
+	//	double timeMs = delTime ; //(nowTime - bsQ.front().second)*1000.0;
+	//	if(timeMs <= 0){
+	//		timeMs = 0.001;
+	//	}
+		
+		float  lastPoseX         = homePose[id].x;
+		float  lastPoseY         = homePose[id].y;
+		float  lastAngle         = homeAngle[id];
+		homePose[id].x = newx;
+		homePose[id].y = newy;
+		homeAngle[id] = newangle;
+		homeVelocity[id].x = (newx - lastPoseX)/delTime;
+		homeVelocity[id].y = (newy - lastPoseY)/delTime;
+		/*
         homePosSigmaSqK[id].x    = homePosSigmaSqK[id].x * ( 1 - homePosK[id].x) + SIGMA_SQ_NOISE_POS * delTime;
         homePosK[id].x           = homePosSigmaSqK[id].x / (homePosSigmaSqK[id].x + SIGMA_SQ_OBSVN_POS);
         float  predictedPoseX    = homePose[id].x + homeVelocity[id].x * (delTime);
         float  lastPoseX         = homePose[id].x;
-        homePose[id].x           = predictedPoseX + homePosK[id].x * (newx - predictedPoseX);
+        homePose[id].x           = newx;//predictedPoseX + homePosK[id].x * (newx - predictedPoseX);
         float lastVelocityx      = homeVelocity[id].x;
         homeVelocity[id].x       = (homePose[id].x - lastPoseX) / delTime;
         homeAcc[id].x            = (homeVelocity[id].x - lastVelocityx) / delTime;
@@ -498,7 +505,7 @@ namespace Strategy
         homePosK[id].y           = homePosSigmaSqK[id].y / (homePosSigmaSqK[id].y + SIGMA_SQ_OBSVN_POS);
         float  predictedPoseY    = homePose[id].y + homeVelocity[id].y * (delTime);
         float  lastPoseY         = homePose[id].y;
-        homePose[id].y           = predictedPoseY + homePosK[id].y * (newy - predictedPoseY);
+        homePose[id].y           = newy;//predictedPoseY + homePosK[id].y * (newy - predictedPoseY);
 		//assert(homePose[id].x!=NULL);
 		
         float lastVelocityy      = homeVelocity[id].y;
@@ -519,11 +526,9 @@ namespace Strategy
         checkValidY(homePose[id].y, homeVelocity[id].y, newy);
         checkValidA(homeAngle[id], homeOmega[id], newangle);
         homeLastUpdateTime[id]   = timeCapture;
-		
+		*/
 		//Adding vl,vr calculation from motion-simulation
-		BotPose p1(bsQ.front().first.homePos[id].x, bsQ.front().first.homePos[id].y, bsQ.front().first.homeAngle[id]);
-        BotPose p2(newx, newy, newangle);
-		homeVlVr[id] = calcBotVelocity((newx - lastPoseX)/fieldXConvert, (newy - lastPoseY)/fieldXConvert, newangle, lastAngle, timeMs);
+		homeVlVr[id] = calcBotVelocity((newx - lastPoseX)/fieldXConvert, (newy - lastPoseY)/fieldXConvert, newangle, lastAngle, delTime);
       }
 	  
       // Blue robot info
@@ -589,33 +594,12 @@ namespace Strategy
         
         awayLastUpdateTime[id]   = timeCapture;
         //printf("Awaybots %d: %f %f %f %f %lf\n", id, awayPose[id].x, awayPose[id].y, predictedPoseX, awayPosK[id].y, delTime);
-		//Adding vl,vr calculation from motion-simulation
-		BotPose p1(bsQ.front().first.awayPos[id].x, bsQ.front().first.awayPos[id].y, bsQ.front().first.awayAngle[id]);
-        BotPose p2(newx, newy, newangle);
-		//homeVlVr[id] = calcBotVelocity(newx - lastPoseX, newy - lastPoseY, newangle, lastAngle, timeMs);
       }
     }
 
 	bsQ.pop();
 	bsQ.push(std::make_pair(BeliefState(), nowTime));
-
-// Opencv Kalman
-	/* Mat prediction = KF.predict();
-	 Point predictPt(prediction.at<float>(0),prediction.at<float>(1));
-              
- 	ball = detection.balls(0);
-	 measurement(0) = ball.x();
-	 measurement(1) = ball.y(); 
-  
-  cout << "vsd" << measurement(0) << endl;
- // The update phase 
-	Mat estimated = KF.correct(measurement);
- 
-	Point statePt(estimated.at<float>(0),estimated.at<float>(1));
-	Point measPt(measurement(0),measurement(1));
-	
-	myfile << "FRom Kalman " << statePt.x << " " << statePt.y << "From state " <<  ball.x() << " " << ball.y() << endl;*/
-    mutex->leave();
+   mutex->leave();
   }
 
   void Kalman::update(BeliefState& state)

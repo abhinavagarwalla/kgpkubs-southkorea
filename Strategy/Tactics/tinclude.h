@@ -1,6 +1,7 @@
 #include "tactic.h"
 #include "tAttack.hpp"
 #include "tAttack2015.hpp"
+#include "tAttackSpline.hpp"
 #include "tSupportAttack2015.hpp"
 #include "tBlock.hpp"
 #include "tCharge.hpp"
