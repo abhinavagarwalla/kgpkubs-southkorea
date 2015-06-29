@@ -246,27 +246,18 @@ namespace Strategy
       linearTransform(newx, newy, garbage);
 	 // std::cout << "\n\n\nhere linear\n\n\n" << std::endl;
       #endif
-	  
-      ballPosSigmaSqK.x          = ballPosSigmaSqK.x * ( 1 - ballPosK.x) + SIGMA_SQ_NOISE_POS * delTime;
-      ballPosK.x                 = ballPosSigmaSqK.x / (ballPosSigmaSqK.x + SIGMA_SQ_OBSVN_POS);
-	 
-      float  predictedPoseX      = ballPose.x + ballVelocity.x * (delTime);
       float  lastPoseX           = ballPose.x;
-      ballPose.x                 = newx;//predictedPoseX + ballPosK.x * (newx - predictedPoseX);
-      
-      ballPosSigmaSqK.y          = ballPosSigmaSqK.y * ( 1 - ballPosK.y) + SIGMA_SQ_NOISE_POS * delTime;
-      ballPosK.y                 = ballPosSigmaSqK.y / (ballPosSigmaSqK.y + SIGMA_SQ_OBSVN_POS);
-      float  predictedPoseY      = ballPose.y + ballVelocity.y * (delTime);
+      ballPose.x                 = newx;
       float  lastPoseY           = ballPose.y;
-      ballPose.y                 = newy;//predictedPoseY + ballPosK.y * (newy - predictedPoseY);
+      ballPose.y                 = newy;
       
 	  float lastVelocityx        = ballVelocity.x;
 	  float lastVelocityy        = ballVelocity.y;
-		ballPosQueue.pop_front();
-	  ballPosQueue.push_back(ballPose);
+//	  ballPosQueue.pop_front();
+//	  ballPosQueue.push_back(ballPose);
 	  ballVelocity.x             = (ballPose.x - lastPoseX) / delTime;
 	  ballVelocity.y             = (ballPose.y - lastPoseY) / delTime;
-	  myfile << newx << " " << ballPose.x << " " << ballVelocity.x << " " << delTime << endl;
+//	  myfile << newx << " " << ballPose.x << " " << ballVelocity.x << " " << delTime << endl;
 	  //New code for ball Velocity
 /*	  float sumX =0, sumY =0;
 	  float prevPosX = ballPosQueue[0].x;
@@ -339,51 +330,33 @@ namespace Strategy
 			timeMs = 0.001;
 		}
         static float lastnx = 0;
-        homePosSigmaSqK[id].x    = homePosSigmaSqK[id].x * ( 1 - homePosK[id].x) + SIGMA_SQ_NOISE_POS * delTime;
-        assert(homePosSigmaSqK[id].x >= 0);
-        homePosK[id].x           = homePosSigmaSqK[id].x / (homePosSigmaSqK[id].x + SIGMA_SQ_OBSVN_POS);
-        float  predictedPoseX    = homePose[id].x + homeVelocity[id].x * (delTime);
-        float  lastPoseX         = homePose[id].x;
-        homePose[id].x            = predictedPoseX + homePosK[id].x * (newx - predictedPoseX);
-        float lastVelocityx      = homeVelocity[id].x;
-        homeVelocity[id].x       = (homePose[id].x - lastPoseX) / delTime;
-        homeAcc[id].x            = (homeVelocity[id].x - lastVelocityx) / delTime;
-        if(delTime < minDelTime)
-          minDelTime = delTime;
-//        assert(delTime > 0.00000001);
- //       printf("minDelTime = %lf\n", minDelTime);
-        homePosSigmaSqK[id].y    = homePosSigmaSqK[id].y * ( 1 - homePosK[id].y) + SIGMA_SQ_NOISE_POS * delTime;
-        assert(homePosSigmaSqK[id].y >= 0);
-        homePosK[id].y           = homePosSigmaSqK[id].y / (homePosSigmaSqK[id].y + SIGMA_SQ_OBSVN_POS);
-        float  predictedPoseY    = homePose[id].y + homeVelocity[id].y * (delTime);
-        float  lastPoseY         = homePose[id].y;
-        homePose[id].y           = predictedPoseY + homePosK[id].y * (newy - predictedPoseY);
+		float  lastPoseX         = homePose[id].x;
+		float  lastPoseY         = homePose[id].y;
+		float  lastAngle         = homeAngle[id];
+		float lastVelocityx      = homeVelocity[id].x;
         float lastVelocityy      = homeVelocity[id].y;
-        homeVelocity[id].y       = (homePose[id].y - lastPoseY) / delTime;
-        homeAcc[id].y            = (homeVelocity[id].y - lastVelocityy) / delTime;
-                                
-        homeAngleSigmaSqK[id]    = homeAngleSigmaSqK[id] * ( 1 - homeAngleK[id]) + SIGMA_SQ_NOISE_ANGLE * delTime;
-        homeAngleK[id]           = homeAngleSigmaSqK[id] / (homeAngleSigmaSqK[id] + SIGMA_SQ_OBSVN_ANGLE);
-        float  predictedAngle    = homeAngle[id] + homeOmega[id] * (delTime);
-        float  lastAngle         = homeAngle[id];
-        homeAngle[id]            = predictedAngle + homeAngleK[id] * (nearestAngle(newangle, homeAngle[id]) - predictedAngle);
         float lastAngularV       = homeOmega[id];
+		homePose[id].x = newx;
+		homePose[id].y = newy;
+		homeAngle[id] = newangle;
+		homeVelocity[id].x = (newx - lastPoseX)/delTime;
+		homeVelocity[id].y = (newy - lastPoseY)/delTime;
+        homeAcc[id].x            = (homeVelocity[id].x - lastVelocityx) / delTime;
+		homeAcc[id].y           = (homeVelocity[id].y - lastVelocityy) / delTime;
         homeOmega[id]            = (homeAngle[id] - lastAngle) / delTime;
         homeAngularAcc[id]       = (homeOmega[id] - lastAngularV) / delTime;
-        if(homeAngle[id] > PI)  homeAngle[id] -= 2*PI;
-        else if(homeAngle[id] <=-PI) homeAngle[id] += 2*PI;
+		
+        if(homeAngle[id] > PI)  
+			homeAngle[id] -= 2*PI;
+        else if(homeAngle[id] <=-PI) 
+			homeAngle[id] += 2*PI;
         homeLastUpdateTime[id]   = timeCapture;
         
 		//Adding vl,vr calculation from motion-simulation
-		BotPose p1(bsQ.front().first.homePos[id].x, bsQ.front().first.homePos[id].y, bsQ.front().first.homeAngle[id]);
-        BotPose p2(newx - lastPoseX, newy - lastPoseY, newangle - lastAngle);
 		homeVlVr[id] = calcBotVelocity((newx - lastPoseX)/fieldXConvert , (newy - lastPoseY)/fieldXConvert, newangle, lastAngle, timeMs);
-//        if(id == 1)
-//          printf("%f %f %f %f\n", homePose[1].x, homePosK[1].x, homePosSigmaSqK[1].x, homeVelocity[1].x);
         checkValidX(homePose[id].x, homeVelocity[id].x, newx);
         checkValidY(homePose[id].y, homeVelocity[id].y, newy);
-        checkValidA(homeAngle[id], homeOmega[id], newangle);
-    //    printf("homePos from kalman: id: %d, xy: %.0f %.0f\n", id, homePose[id].x, homePose[id].y);
+     //   checkValidA(homeAngle[id], homeOmega[id], newangle);
       }
       // Yellow  Away robot info
       uniqueBotIDs.clear();
@@ -412,40 +385,29 @@ namespace Strategy
 				uniqueBotIDs.insert(id);
         //printf("ID = %d, loc = %d, %d\n", id, newx, newy);
         double           delTime = timeCapture - awayLastUpdateTime[id];
-
-        awayPosSigmaSqK[id].x    = awayPosSigmaSqK[id].x * ( 1 - awayPosK[id].x) + SIGMA_SQ_NOISE_POS * delTime;
-        awayPosK[id].x           = awayPosSigmaSqK[id].x / (awayPosSigmaSqK[id].x + SIGMA_SQ_OBSVN_POS);
-        float  predictedPoseX    = awayPose[id].x + awayVelocity[id].x * (delTime);
-        float  lastPoseX         = awayPose[id].x;
-        awayPose[id].x           = /*newx;*/predictedPoseX + awayPosK[id].x * (newx - predictedPoseX);
-        float lastVelocityx      = awayVelocity[id].x;
-        awayVelocity[id].x       = (awayPose[id].x - lastPoseX) / delTime;
-        awayAcc[id].x            = (awayVelocity[id].x - lastVelocityx) / delTime;
-                                
-        awayPosSigmaSqK[id].y    = awayPosSigmaSqK[id].y * ( 1 - awayPosK[id].y) + SIGMA_SQ_NOISE_POS * delTime;
-        awayPosK[id].y           = awayPosSigmaSqK[id].y / (awayPosSigmaSqK[id].y + SIGMA_SQ_OBSVN_POS);
-        float  predictedPoseY    = /*newy;*/awayPose[id].y + awayVelocity[id].y * (delTime);
-        float  lastPoseY         = awayPose[id].y;
-        awayPose[id].y           = predictedPoseY + awayPosK[id].y * (newy - predictedPoseY);
+		float  lastPoseX         = awayPose[id].x;
+		float  lastPoseY         = awayPose[id].y;
+		float  lastAngle         = awayAngle[id];
+		float lastVelocityx      = awayVelocity[id].x;
         float lastVelocityy      = awayVelocity[id].y;
-        awayVelocity[id].y       = (awayPose[id].y - lastPoseY) / delTime;
-        awayAcc[id].y            = (awayVelocity[id].y - lastVelocityy) / delTime;
-                                
-        awayAngleSigmaSqK[id]    = awayAngleSigmaSqK[id] * ( 1 - awayAngleK[id]) + SIGMA_SQ_NOISE_ANGLE * delTime;
-        awayAngleK[id]           = awayAngleSigmaSqK[id] / (awayAngleSigmaSqK[id] + SIGMA_SQ_OBSVN_ANGLE);
-        float  predictedAngle    = awayAngle[id] + awayOmega[id] * (delTime);
-        float  lastAngle         = awayAngle[id];
-        awayAngle[id]            = /*nearestAngle(newangle, awayAngle[id]);*/predictedAngle + awayAngleK[id] * (nearestAngle(newangle, awayAngle[id]) - predictedAngle);
         float lastAngularV       = awayOmega[id];
+		awayPose[id].x = newx;
+		awayPose[id].y = newy;
+		awayAngle[id] = newangle;
+		awayVelocity[id].x = (newx - lastPoseX)/delTime;
+		awayVelocity[id].y = (newy - lastPoseY)/delTime;
+        awayAcc[id].x            = (awayVelocity[id].x - lastVelocityx) / delTime;
+		awayAcc[id].y           = (awayVelocity[id].y - lastVelocityy) / delTime;
         awayOmega[id]            = (awayAngle[id] - lastAngle) / delTime;
         awayAngularAcc[id]       = (awayOmega[id] - lastAngularV) / delTime;
-        if(awayAngle[id] > PI)        awayAngle[id] -= 2*PI;
-        else if(awayAngle[id] <=-PI)  awayAngle[id] += 2*PI;
+		
+        if(awayAngle[id] > PI)       
+			awayAngle[id] -= 2*PI;
+        else if(awayAngle[id] <=-PI) 
+			awayAngle[id] += 2*PI;
         awayLastUpdateTime[id]   = timeCapture;
 		
 		//Adding vl,vr calculation from motion-simulation
-		BotPose p1(bsQ.front().first.awayPos[id].x, bsQ.front().first.awayPos[id].y, bsQ.front().first.awayAngle[id]);
-        BotPose p2(newx, newy, newangle);
 		
         checkValidX(awayPose[id].x, awayVelocity[id].x, newx);
         checkValidY(awayPose[id].y, awayVelocity[id].y, newy);
@@ -464,8 +426,8 @@ namespace Strategy
         if(uniqueBotIDs.find(id) != uniqueBotIDs.end())
           continue;
         uniqueBotIDs.insert(id);
-        int newx = robot.x();
-        int newy = robot.y();   
+        int newx = robot.x() - CENTER_X;
+        int newy = robot.y() - CENTER_Y;   
 		float newangle;
 		if(robot.has_orientation())
 			newangle = robot.orientation();
@@ -481,52 +443,32 @@ namespace Strategy
 	//	double timeMs = delTime ; //(nowTime - bsQ.front().second)*1000.0;
 	//	if(timeMs <= 0){
 	//		timeMs = 0.001;
-	//	}
-		
+	//	}		
 		float  lastPoseX         = homePose[id].x;
 		float  lastPoseY         = homePose[id].y;
 		float  lastAngle         = homeAngle[id];
+		float lastVelocityx      = homeVelocity[id].x;
+        float lastVelocityy      = homeVelocity[id].y;
+        float lastAngularV       = homeOmega[id];
 		homePose[id].x = newx;
 		homePose[id].y = newy;
 		homeAngle[id] = newangle;
 		homeVelocity[id].x = (newx - lastPoseX)/delTime;
 		homeVelocity[id].y = (newy - lastPoseY)/delTime;
-		/*
-        homePosSigmaSqK[id].x    = homePosSigmaSqK[id].x * ( 1 - homePosK[id].x) + SIGMA_SQ_NOISE_POS * delTime;
-        homePosK[id].x           = homePosSigmaSqK[id].x / (homePosSigmaSqK[id].x + SIGMA_SQ_OBSVN_POS);
-        float  predictedPoseX    = homePose[id].x + homeVelocity[id].x * (delTime);
-        float  lastPoseX         = homePose[id].x;
-        homePose[id].x           = newx;//predictedPoseX + homePosK[id].x * (newx - predictedPoseX);
-        float lastVelocityx      = homeVelocity[id].x;
-        homeVelocity[id].x       = (homePose[id].x - lastPoseX) / delTime;
         homeAcc[id].x            = (homeVelocity[id].x - lastVelocityx) / delTime;
-                                
-        homePosSigmaSqK[id].y    = homePosSigmaSqK[id].y * ( 1 - homePosK[id].y) + SIGMA_SQ_NOISE_POS * delTime;
-        homePosK[id].y           = homePosSigmaSqK[id].y / (homePosSigmaSqK[id].y + SIGMA_SQ_OBSVN_POS);
-        float  predictedPoseY    = homePose[id].y + homeVelocity[id].y * (delTime);
-        float  lastPoseY         = homePose[id].y;
-        homePose[id].y           = newy;//predictedPoseY + homePosK[id].y * (newy - predictedPoseY);
-		//assert(homePose[id].x!=NULL);
-		
-        float lastVelocityy      = homeVelocity[id].y;
-        homeVelocity[id].y       = (homePose[id].y - lastPoseY) / delTime;
-        homeAcc[id].y            = (homeVelocity[id].y - lastVelocityy) / delTime;
-                                
-        homeAngleSigmaSqK[id]    = homeAngleSigmaSqK[id] * ( 1 - homeAngleK[id]) + SIGMA_SQ_NOISE_ANGLE * delTime;
-        homeAngleK[id]           = homeAngleSigmaSqK[id] / (homeAngleSigmaSqK[id] + SIGMA_SQ_OBSVN_ANGLE);
-        float  predictedAngle    = homeAngle[id] + homeOmega[id] * (delTime);
-        float  lastAngle         = homeAngle[id];
-        homeAngle[id]            = predictedAngle + homeAngleK[id] * (nearestAngle(newangle, homeAngle[id]) - predictedAngle);
-        float lastAngularV       = homeOmega[id];
+		homeAcc[id].y           = (homeVelocity[id].y - lastVelocityy) / delTime;
         homeOmega[id]            = (homeAngle[id] - lastAngle) / delTime;
         homeAngularAcc[id]       = (homeOmega[id] - lastAngularV) / delTime;
-        if(homeAngle[id] > PI)  homeAngle[id] -= 2*PI;
-        else if(homeAngle[id] <=-PI) homeAngle[id] += 2*PI;
+        
+		if(homeAngle[id] > PI)
+			homeAngle[id] -= 2*PI;
+        else if(homeAngle[id] <=-PI) 
+			homeAngle[id] += 2*PI;
         checkValidX(homePose[id].x, homeVelocity[id].x, newx);
         checkValidY(homePose[id].y, homeVelocity[id].y, newy);
         checkValidA(homeAngle[id], homeOmega[id], newangle);
         homeLastUpdateTime[id]   = timeCapture;
-		*/
+		
 		//Adding vl,vr calculation from motion-simulation
 		homeVlVr[id] = calcBotVelocity((newx - lastPoseX)/fieldXConvert, (newy - lastPoseY)/fieldXConvert, newangle, lastAngle, delTime);
       }
@@ -534,8 +476,7 @@ namespace Strategy
       // Blue robot info
       uniqueBotIDs.clear();
       for (int i = 0; i < blueNum; ++i)
-      {
-        
+      {        
         SSL_DetectionRobot robot = detection.robots_blue(i);        
         int newx = robot.x() - CENTER_X;
         int newy = robot.y() - CENTER_Y;
@@ -550,44 +491,34 @@ namespace Strategy
 				 * Randomly assigning IDs to each bot. if less no. of bots know, then 0...i ids will be populated, 
 				 * i+1...4 ids will not be used. 
 				 */
-				int id_ = getClosestBotID(newx, newy, newangle, uniqueBotIDs);
-				if(id_ == -1) //means all bots already populated
-					continue;
-				int id = HAL::BlueMarkerMap[id_];
-				uniqueBotIDs.insert(id);
+		int id_ = getClosestBotID(newx, newy, newangle, uniqueBotIDs);
+		if(id_ == -1) //means all bots already populated
+				continue;
+		int id = HAL::BlueMarkerMap[id_];
+		uniqueBotIDs.insert(id);
         //printf("ID = %d, loc = %d, %d\n", id, newx, newy);
 				
 				
         double           delTime = timeCapture - awayLastUpdateTime[id];
-
-        awayPosSigmaSqK[id].x    = awayPosSigmaSqK[id].x * ( 1 - awayPosK[id].x) + SIGMA_SQ_NOISE_POS * delTime;
-        awayPosK[id].x           = awayPosSigmaSqK[id].x / (awayPosSigmaSqK[id].x + SIGMA_SQ_OBSVN_POS);
-        float  predictedPoseX    = awayPose[id].x + awayVelocity[id].x * (delTime);
-        float  lastPoseX         = awayPose[id].x;
-        awayPose[id].x           = /*newx;*/predictedPoseX + awayPosK[id].x * (newx - predictedPoseX);
-        float lastVelocityx      = awayVelocity[id].x;
-        awayVelocity[id].x       = (awayPose[id].x - lastPoseX) / delTime;
-        awayAcc[id].x            = (awayVelocity[id].x - lastVelocityx) / delTime;
-                                
-        awayPosSigmaSqK[id].y    = awayPosSigmaSqK[id].y * ( 1 - awayPosK[id].y) + SIGMA_SQ_NOISE_POS * delTime;
-        awayPosK[id].y           = awayPosSigmaSqK[id].y / (awayPosSigmaSqK[id].y + SIGMA_SQ_OBSVN_POS);
-        float  predictedPoseY    = awayPose[id].y + awayVelocity[id].y * (delTime);//newy;
-        float  lastPoseY         = awayPose[id].y;
-        awayPose[id].y           = predictedPoseY + awayPosK[id].y * (newy - predictedPoseY);
+		float  lastPoseX         = awayPose[id].x;
+		float  lastPoseY         = awayPose[id].y;
+		float  lastAngle         = awayAngle[id];
+		float lastVelocityx      = awayVelocity[id].x;
         float lastVelocityy      = awayVelocity[id].y;
-        awayVelocity[id].y       = (awayPose[id].y - lastPoseY) / delTime;
-        awayAcc[id].y            = (awayVelocity[id].y - lastVelocityy) / delTime;
-                                
-        awayAngleSigmaSqK[id]    = awayAngleSigmaSqK[id] * ( 1 - awayAngleK[id]) + SIGMA_SQ_NOISE_ANGLE * delTime;
-        awayAngleK[id]           = awayAngleSigmaSqK[id] / (awayAngleSigmaSqK[id] + SIGMA_SQ_OBSVN_ANGLE);
-        float  predictedAngle    = awayAngle[id] + awayOmega[id] * (delTime);
-        float  lastAngle         = awayAngle[id];
-        awayAngle[id]            = /*nearestAngle(newangle, awayAngle[id]);*/predictedAngle + awayAngleK[id] * (nearestAngle(newangle, awayAngle[id]) - predictedAngle);
         float lastAngularV       = awayOmega[id];
+		awayPose[id].x = newx;
+		awayPose[id].y = newy;
+		awayAngle[id] = newangle;
+		awayVelocity[id].x = (newx - lastPoseX)/delTime;
+		awayVelocity[id].y = (newy - lastPoseY)/delTime;
+        awayAcc[id].x            = (awayVelocity[id].x - lastVelocityx) / delTime;
+		awayAcc[id].y           = (awayVelocity[id].y - lastVelocityy) / delTime;
         awayOmega[id]            = (awayAngle[id] - lastAngle) / delTime;
         awayAngularAcc[id]       = (awayOmega[id] - lastAngularV) / delTime;
-        if(awayAngle[id] > PI)        awayAngle[id] -= 2*PI;
-        else if(awayAngle[id] <=-PI)  awayAngle[id] += 2*PI;
+        if(awayAngle[id] > PI)        
+			awayAngle[id] -= 2*PI;
+        else if(awayAngle[id] <=-PI)  
+			awayAngle[id] += 2*PI;
         checkValidX(awayPose[id].x, awayVelocity[id].x, newx);
         checkValidY(awayPose[id].y, awayVelocity[id].y, newy);
         checkValidA(awayAngle[id], awayOmega[id], newangle);

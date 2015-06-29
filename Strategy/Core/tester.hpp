@@ -20,7 +20,7 @@ public:
   {
     Util::CS loggerCS;
     Util::Logger logger("timelog.log", Util::Logger::Write, loggerCS);
-    Kalman      kFilter;
+    Kalman      kFilter ;
     VisionThread vThread(&kFilter);
     vThread.start();
 	

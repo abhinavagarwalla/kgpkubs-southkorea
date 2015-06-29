@@ -1,4 +1,5 @@
 // This file contains all the skillSet functons
+
 #include <cassert>
 #include <string>
 #include "skillSet.h"
