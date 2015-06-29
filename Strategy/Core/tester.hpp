@@ -130,8 +130,8 @@ public:
 	pVelocity.VelocityP.vr = 0;
 	
 	Tactic::Param pVelocity_1;
-	pVelocity_1.VelocityP.vl = 40;
-	pVelocity_1.VelocityP.vr = 40;
+	pVelocity_1.VelocityP.vl = 30;
+	pVelocity_1.VelocityP.vr = 30;
 	
 	Tactic::Param pVelocity_2;
 	pVelocity_2.VelocityP.vl = 60;
@@ -159,6 +159,8 @@ public:
     TAttack tAttack2(&state, 2);
     TAttack tAttack3(&state, 3);
     TAttack tAttack4(&state, 4);
+	 
+	TAttackSpline tAttackSpline0(&state , 0);
 	
 	TAttack2015 tAttack20150(&state , 0) ;
 	TAttack2015 tAttack20151(&state , 1) ;
@@ -175,7 +177,7 @@ public:
 	//params1 for SplineGoToPoint
 	Strategy::SParam params1;
 	params1.SplineGoToPointP.finalVelocity = 0;
-	params1.SplineGoToPointP.x = HALF_FIELD_MAXX-GOAL_DEPTH-6*BOT_RADIUS;
+	params1.SplineGoToPointP.x = HALF_FIELD_MAXX - GOAL_DEPTH - 6*BOT_RADIUS;
 	params1.SplineGoToPointP.y = 0;
 	params1.SplineGoToPointP.finalSlope = 0 ;
 	params1.SplineGoToPointP.initTraj = 1;
@@ -192,24 +194,23 @@ public:
 	Strategy::SParam params2;
 	SkillSet dwpoint(&state, 0);
 	SkillSet dwpoint_old(&state, 2);
-	params2.DWGoToPointP.x = HALF_FIELD_MAXX-GOAL_DEPTH-6*BOT_RADIUS ;//ForwardX(HALF_FIELD_MAXX);
+	params2.DWGoToPointP.x = HALF_FIELD_MAXX - GOAL_DEPTH - 6*BOT_RADIUS ;//ForwardX(HALF_FIELD_MAXX);
 	params2.DWGoToPointP.y = OUR_GOAL_MAXY;
 	params2.DWGoToPointP.finalSlope = 0;
 	
 	// params3 for mergeS curve
 	Strategy::SParam params3 ;
-	params3.GoToPointP.x = HALF_FIELD_MAXX-GOAL_DEPTH-4*BOT_RADIUS;
+	params3.GoToPointP.x = HALF_FIELD_MAXX - GOAL_DEPTH - 4*BOT_RADIUS;
 	params3.GoToPointP.y = OUR_GOAL_MAXY;//HALF_FIELD_MAXY/2;
 	params3.GoToPointP.finalslope = 0;
 	
 	Strategy::SParam params2_old ;
-	params2_old.GoToPointP.x = HALF_FIELD_MAXX-GOAL_DEPTH-6*BOT_RADIUS;
-	params2_old.GoToPointP.y = OUR_GOAL_MINY;//HALF_FIELD_MAXY/2;
+	params2_old.GoToPointP.x = HALF_FIELD_MAXX - GOAL_DEPTH - 6*BOT_RADIUS ;
+	params2_old.GoToPointP.y = OUR_GOAL_MINY ;//HALF_FIELD_MAXY/2;
 	params2_old.GoToPointP.finalslope = 0;
-	
 
 	Strategy::SParam params3_old ;
-	params3_old.DWGoToPointP.x = HALF_FIELD_MAXX-GOAL_DEPTH-4*BOT_RADIUS;
+	params3_old.DWGoToPointP.x = HALF_FIELD_MAXX - GOAL_DEPTH - 4*BOT_RADIUS;
 	params3_old.DWGoToPointP.y = OUR_GOAL_MINY;//HALF_FIELD_MAXY/2;
 	params3_old.DWGoToPointP.finalSlope = 0;
 
@@ -319,7 +320,7 @@ public:
    	tVelocity3.execute(pVelocity_3);  
 	  tVelocity4.execute(pVelocity_4);
 	*/	
-	//tVelocity1.execute(pVelocity);
+	          // tVelocity0.execute(pVelocity_1);
 				//tVelocity3.execute(pVelocity);
 				//tAttackDuo12.execute(pAttack);
         // tVelocity0.execute(pVelocity);
@@ -329,19 +330,20 @@ public:
         //tDefendLine1.execute(pDefendL1);
 			//	tGoalOur2.execute(paramGoal);
 	//	tGoalOur3.execute(paramGoal);
-     
+        
 		if(loopcount++ > 10){		
 		//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 		//	params1.SplineGoToPointP.initTraj = 0;
-		//	sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
-		//	params4.SplineInterceptBallP.initTraj = 0;
-			tAttack20150.execute(pAttack) ;
-			loopcount = loopcount%1000 + 11;
+			sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
+			params4.SplineInterceptBallP.initTraj = 0;
+		//	tAttackSpline0.execute(pAttack) ;
+		//	loopcount = loopcount%1000 + 11;
 		}
 		else{
 		//	getchar();
 			tVelocity0.execute(pVelocity);		
 		}
+		
         //tPosition
 				//tcover3.execute(paramcover);
        // tAttack3.execute(paramcover);

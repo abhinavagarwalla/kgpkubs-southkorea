@@ -102,6 +102,9 @@ namespace Strategy
       {
         float vl;
         float vr;
+		float ballVelX;
+		float ballVelY;
+		bool velGiven;
 		bool initTraj;
       }SplineInterceptBallP;
 

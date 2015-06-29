@@ -44,7 +44,7 @@ inline SplineTrajectory* getIntTraj(Pose botPosStart, Vector2D<float> ballPos, V
     double T2 = 6.0;
     double T1 = 0.0;
     double S = 1.0;
-    Vector2D<float> goalCentre(HALF_FIELD_MAXX, 0);
+    Vector2D<float> goalCentre(ForwardX(HALF_FIELD_MAXX - GOAL_DEPTH), 0);
     SplineTrajectory *st = NULL;
     double T = T1;
     while (1) {

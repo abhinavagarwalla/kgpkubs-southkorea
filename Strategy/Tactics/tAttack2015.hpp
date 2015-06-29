@@ -262,9 +262,9 @@ namespace Strategy
          
 		  //******************** changed**********************
 		  float factorx = 0.00005;
-		  if(avgBallVel.x<200  )
+		  if(avgBallVel.x<200 )
 			  factorx=0.00005;
-		  else if(avgBallVel.x<1000  )
+		  else if(avgBallVel.x<1000 )
 			  factorx=0.00005;
 		  else if(avgBallVel.x<1400)
 			  factorx=0.00006;

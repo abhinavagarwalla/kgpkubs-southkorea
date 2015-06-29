@@ -8,11 +8,10 @@
 
 #define PREDICTION_PACKET_DELAY 4
 using namespace Util;
-static bool direction = true;
+static bool direction2 = true;
 
 namespace Strategy
 {
-		
 	void SkillSet::_splineInterceptBallTrack(int botid, Pose start, Vector2D<float> ballPos, Vector2D<float> ballVel, Vector2D<float> botVel, float final_vl, float final_vr){
 		
 	//	cout << "in this" << endl;
@@ -21,12 +20,16 @@ namespace Strategy
 			if(traj)
 				algoController = new ControllerWrapper(traj, state->homeVlVr[botID].x, state->homeVlVr[botID].y, PREDICTION_PACKET_DELAY);
 		}
+		
+		if(!direction2)
+			start.setTheta(normalizeAngle(start.theta() - PI));
+		
 		int vl,vr;
 		Pose dummy(0,0,0);
 		algoController->genControls(start, dummy, vl, vr, 0);
 		assert(vl <= 150 && vl >= -150);
 		assert(vr <= 150 && vr >= -150);
-		if (direction)
+		if (direction2)
 			comm->sendCommand(botid, vl/2, vr/2); //maybe add mutex
 		else {
 			//cout << "ulta chaloooo" << endl;
@@ -44,13 +47,14 @@ namespace Strategy
 			comm->sendCommand(botID, 0, 0);
 			return;
 		}
-		cout << ballVel.x << " " << ballVel.y << endl;
-		//getchar();
 		Pose start2(state->homePos[botID].x, state->homePos[botID].y, normalizeAngle(state->homeAngle[botID] - PI));
-		//direction = _isFrontDirected(start, Pose(state->ballPos.x, state->ballPos.y , Vector2D<int>::angle(state->homePos[botID], state->ballPos)), state->homeVlVr[botID].x, state->homeVlVr[botID].y);
+		Vector2D<int> GoalPoint(ForwardX(HALF_FIELD_MAXX), 0);
+		direction2 = _isFrontDirected(start, Pose(state->ballPos.x, state->ballPos.y , Vector2D<int>::angle(state->ballPos, GoalPoint)), state->homeVlVr[botID].x, state->homeVlVr[botID].y);
 		interceptCounter = 0;	
+		
 		Vector2D<float> delayedVel(botVel.x, botVel.y);
-		if(direction){
+		
+		if(direction2){
 			if(!flag){
 				if(traj)
 					delete traj;
@@ -66,17 +70,17 @@ namespace Strategy
 			}
 		}
 		else {
-			Vector2D<float> botVel2((-1)*botVel.y , (-1)*botVel.x);
+			//Vector2D<float> botVel2((-1)*botVel.y , (-1)*botVel.x);
 			if(!flag){
 				if(traj)
 					delete traj;
-				traj = BallInterception::getIntTraj(start2, ballPos, ballVel, botVel2);
+				traj = BallInterception::getIntTraj(start2, ballPos, ballVel, botVel);
 			}
 			else{
 			//	cout << "here" << endl;
 				delayedVel = algoController->getDelayedVel();
 				Pose start2 = algoController->getNewStartPose();
-
+			   //delayed vel to be reversed
 				if(traj)
 					delete traj;
 				traj = BallInterception::getIntTraj(start, ballPos, ballVel, delayedVel);
@@ -86,15 +90,12 @@ namespace Strategy
 		if(algoController)
 			delete algoController;
 		
-		cout << state->homeVlVr[botID].x << " " << state->homeVlVr[botID].y << endl;
-		if(direction)
+		//cout << state->homeVlVr[botID].x << " " << state->homeVlVr[botID].y << endl;
+		if(direction2)
 			algoController = new ControllerWrapper(traj, state->homeVlVr[botID].x, state->homeVlVr[botID].y, PREDICTION_PACKET_DELAY);
 		else
 			algoController = new ControllerWrapper(traj, (-1)*state->homeVlVr[botID].y, (-1)*state->homeVlVr[botID].x, PREDICTION_PACKET_DELAY);
-		/*while(!predictedPoseQ.empty())predictedPoseQ.pop_front();
-		for (int i = 0; i < PREDICTION_PACKET_DELAY; i++) {
-			predictedPoseQ.push_back(Pose(bs.homeX[BOT_ID_TESTING], bs.homeY[BOT_ID_TESTING], bs.homeTheta[BOT_ID_TESTING]));
-		}*/
+		
 		_splineInterceptBallTrack(botID, start, ballPos, ballVel, botVel, final_vl, final_vr);
 	}
 	
@@ -105,11 +106,17 @@ namespace Strategy
 		Vector2D<float> ballPos, ballVel, botVel;
 		Pose start(state->homePos[botID].x, state->homePos[botID].y, state->homeAngle[botID]);
 			
-		cout << counter << endl;
+		//cout << counter << endl;
 		ballPos.x = state->ballPos.x;
 		ballPos.y = state->ballPos.y;
-		ballVel.x = state->ballVel.x;
-		ballVel.y = state->ballVel.y;
+		if(param.SplineInterceptBallP.velGiven == 0){
+			ballVel.x = state->ballVel.x;
+			ballVel.y = state->ballVel.y;
+		}
+		else{
+			ballVel.x = param.SplineInterceptBallP.ballVelX;
+			ballVel.y = param.SplineInterceptBallP.ballVelY;
+		}
 		botVel.x = state->homeVlVr[botID].x;
 		botVel.y = state->homeVlVr[botID].y;
 		

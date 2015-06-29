@@ -53,7 +53,8 @@ namespace Strategy
 		counter = 0;
 		Pose start2(state->homePos[botID].x, state->homePos[botID].y, normalizeAngle(state->homeAngle[botID] - PI));
 		Vector2D<float> delayedVel(vls, vrs);
-		//	direction = _isFrontDirected(start, end, vls, vrs);
+		direction = _isFrontDirected(start, end, vls, vrs);
+		
 		if(direction){
 			if(!flag){
 				if(traj)
