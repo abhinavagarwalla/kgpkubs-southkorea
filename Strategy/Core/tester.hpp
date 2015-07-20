@@ -23,7 +23,7 @@ public:
     Kalman      kFilter ;
     VisionThread vThread(&kFilter);
     vThread.start();
-	
+//	kFilter.Kalman();
     #ifdef STR_GUI
     Util::CS strCS;
     StrategyPacket strPktSh;
@@ -126,8 +126,8 @@ public:
 		TVelocity tVelocity2(&state,2);
     
 	Tactic::Param pVelocity;
-	pVelocity.VelocityP.vl = 0;
-	pVelocity.VelocityP.vr = 0;
+	pVelocity.VelocityP.vl = 60;
+	pVelocity.VelocityP.vr = 60;
 	
 	Tactic::Param pVelocity_1;
 	pVelocity_1.VelocityP.vl = 30;
@@ -160,13 +160,16 @@ public:
     TAttack tAttack3(&state, 3);
     TAttack tAttack4(&state, 4);
 	 
-	TAttackSpline tAttackSpline0(&state , 0);
+	TAttackSpline tAttackSpline0(&state , 4);
 	
 	TAttack2015 tAttack20150(&state , 0) ;
 	TAttack2015 tAttack20151(&state , 1) ;
     TAttack2015 tAttack20152(&state , 2) ;
 	TAttack2015 tAttack20153(&state , 3) ;
 	TAttack2015 tAttack20154(&state , 4) ;
+	
+    TKickoff tKickoff(&state , 4);
+	TPass tPass(&state , 0);
 	
 	Tactic::Param pAttack;
     paramList[Tactic::Attack].AttackP.rotateOnError = true;
@@ -188,7 +191,7 @@ public:
 	params4.SplineInterceptBallP.vl = 70;
 	params4.SplineInterceptBallP.vr = 70;
 	params4.SplineInterceptBallP.initTraj = 1;
-	SkillSet sball(&state, 0); 
+	SkillSet sball(&state, 4); 
 	
 	// params2 for dwgo to point
 	Strategy::SParam params2;
@@ -214,7 +217,7 @@ public:
 	params3_old.DWGoToPointP.y = OUR_GOAL_MINY;//HALF_FIELD_MAXY/2;
 	params3_old.DWGoToPointP.finalSlope = 0;
 
-	SkillSet simplegoto(&state, 0);
+	SkillSet simplegoto(&state, 4);
 	SkillSet simplegoto_old(&state, 2);
     Tactic::Param ptestpoint;
 	   
@@ -234,10 +237,9 @@ public:
 	int loopcount = 0;
 	unsigned long long int t1=0,t2=0;
 	usleep(1000);
-	
-		
-	ofstream myfile;
-	myfile.open ("ballPosLog.txt");
+			
+//	ofstream myfile;
+//	myfile.open ("ballPosLog.txt");
 	
     while(running)
     {
@@ -255,7 +257,7 @@ public:
 	  
       if(1)
       {
-		  myfile << state.ballPos.x << " -ballPos- " << state.ballPos.y << endl;
+		//  myfile << state.ballPos.x << " -ballPos- " << state.ballPos.y << endl;
 	
 		#ifdef STR_GUI
 		{
@@ -323,28 +325,34 @@ public:
 	          // tVelocity0.execute(pVelocity_1);
 				//tVelocity3.execute(pVelocity);
 				//tAttackDuo12.execute(pAttack);
-        // tVelocity0.execute(pVelocity);
-	      // tVelocity2.execute(pVelocity_1);
+                 // tVelocity0.execute(pVelocity);
+	      //tVelocity2.execute(pVelocity_1);
 	      //tGoalie2.execute(paramGoal);
           // tGoalOur2.execute(paramGoal);
         //tDefendLine1.execute(pDefendL1);
 			//	tGoalOur2.execute(paramGoal);
 	//	tGoalOur3.execute(paramGoal);
-        
-		if(loopcount++ > 10){		
+    //   tAttackSpline0.execute(pAttack) ; 
+		tPass.execute(pAttack);
+		if(loopcount++ > 5){		
 		//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 		//	params1.SplineGoToPointP.initTraj = 0;
-			sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
-			params4.SplineInterceptBallP.initTraj = 0;
-		//	tAttackSpline0.execute(pAttack) ;
-		//	loopcount = loopcount%1000 + 11;
+			//sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
+			//params4.SplineInterceptBallP.initTraj = 0;
+			tAttackSpline0.execute(pAttack) ;
+		//	sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
+		//	params4.SplineInterceptBallP.initTraj = 0;
+			//tKickoff.execute(pAttack) ;
+			loopcount = loopcount%1000 + 11;
 		}
 		else{
 		//	getchar();
-			tVelocity0.execute(pVelocity);		
-		}
-		
-        //tPosition
+			//tVelocity2.execute(pVelocity);		
+		}		
+        
+	    //tPass.execute(pAttack);
+        //tKickoff.execute(pAttack) ;
+		//tPosition
 				//tcover3.execute(paramcover);
        // tAttack3.execute(paramcover);
       //  tcover1.execute(paramcover);
@@ -402,7 +410,7 @@ public:
     }
     vThread.stop();
     Util::Logger::toStdOut("Exiting process");
-	myfile.close();
+//	myfile.close();
     return;
   }
 };

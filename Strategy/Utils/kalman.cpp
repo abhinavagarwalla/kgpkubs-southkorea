@@ -12,6 +12,10 @@
 #include <iostream>
 #include <fstream>
 
+#define SGFILTER_SIZE 5
+#define SGFILTER_DERIV 1
+#define SGFILTER_ORDER 2
+
 #define DEBUG_KALMAN 1
 const int botcenterbluecenterdist =75; //Ankit: for botCentreTransform
 bool isIndeterminate(const float pV)
@@ -122,18 +126,26 @@ namespace Strategy
 		 QueuePos.push_back(Vector2D<float>(0,0));
 		}
 	 
-	  myfile.open ("ballData.txt");
+	  myfileX.open ("/home/robocup/ballDataX.txt");
+	  myfileY.open ("/home/robocup/ballDataY.txt");
 	  
 	for (int i = 0; i < MAX_BS_Q; i++) {
         bsQ.push(std::make_pair(BeliefState(), 0));
     }
 	for(int i = 1 ; i<5;i++)
 		ballPosQueue.push_back(Vector2D<float>(0,0));
+	
+	for(int i = 0; i < 2*SGFILTER_SIZE + 1 ;i++){
+		ballPosX.push_back(0);
+		ballPosTimeX.push_back(0.016);
+		ballPosY.push_back(0);
+		ballPosTimeY.push_back(0.016);
+	}
   }
 
   Kalman::~Kalman()
   {
-	myfile.close();
+	//myfile.close();
     fclose(kalmanlog);
   }
 	int Kalman::getClosestBotID(int x, int y, float angle, std::set<int> &uniqueBotIDs)
@@ -167,25 +179,23 @@ namespace Strategy
     }
     return res;
   }
-  
-  void Kalman::strategyToRealConversion(BotPose &p) {
-    // converts from strategy to actual coordinates (cm)
-    p.x /= fieldXConvert;
-    p.y /= fieldYConvert;
-  }
-  
+
   Vector2D<float> Kalman::calcBotVelocity(double delX, double delY , double newTheta, double oldTheta, float timeMs) {
  //   strategyToRealConversion(p1);
   //  strategyToRealConversion(p2);
 
 	float vl,vr;
     double delTheta = normalizeAngle(newTheta - oldTheta); // assuming |delTheta| < PI, which is safe to assume
-
 	// for ~ 16 ms of rotation at any speed (even 120,-120?).
     assert(timeMs > 0);
     // w * timeMs = delTheta
     double w = delTheta / (timeMs);// * 0.001);
-    if (delTheta < 1e-2 && delTheta > -1e-2) {  // be realistic
+
+	double err = 0.134;
+ //   if (delTheta < 1e-2 && delTheta > -1e-2) {  // be realistic
+	if(fabs(delTheta) < err){	
+	
+	//cout << "here" << endl;
         // bot should be headed straight, but again confusion
         // so taking projection of (delX, delY) along (cos(theta), sin(theta)) as displacement.
         double dispLength = delX*cos(oldTheta) + delY*sin(oldTheta);
@@ -193,18 +203,22 @@ namespace Strategy
         vl = vl / ticksToCmS;
         vr = vl;
 		Vector2D<float> v(vl,vr);
+		cout<<"hete Returning from the loop "<<endl;
+		getchar();
         return v;
     }
     // we calculate 2 rho's, based on delX and delY, and take average
-    double rho1 = delX / (sin(newTheta) - sin(oldTheta));
+  // whatif newTheta == oldTheta 
+    
+	double rho1 = delX / (sin(newTheta) - sin(oldTheta));
     double rho2 = -delY / (cos(newTheta) - cos(oldTheta));
+	//cout<<" Rhos :: "<<newTheta<<"  "<<oldTheta<< " " << delTheta << endl ;
     // try harmonic mean?
 //    double rho = (rho1 + rho2) / 2;
     double rho = 2*rho1*rho2 / (rho1 + rho2);
     vl = w * (rho - d/2.0) / ticksToCmS;
     vr = w * (rho + d/2.0) / ticksToCmS;
-  //  cout << "                                  " << vl << " " << vr << endl;
-	
+	cout<<"Calculated velocity :: "<<vl<<"   "<<vr<<endl;
 	Vector2D<float> v(vl,vr);
     return v;
   }
@@ -253,46 +267,38 @@ namespace Strategy
       
 	  float lastVelocityx        = ballVelocity.x;
 	  float lastVelocityy        = ballVelocity.y;
-//	  ballPosQueue.pop_front();
-//	  ballPosQueue.push_back(ballPose);
+	  
 	  ballVelocity.x             = (ballPose.x - lastPoseX) / delTime;
 	  ballVelocity.y             = (ballPose.y - lastPoseY) / delTime;
-//	  myfile << newx << " " << ballPose.x << " " << ballVelocity.x << " " << delTime << endl;
-	  //New code for ball Velocity
-/*	  float sumX =0, sumY =0;
-	  float prevPosX = ballPosQueue[0].x;
-	  float prevPosY = ballPosQueue[0].y;
-	  for(int i = 1; i <10 ;i+=2){
-			sumX += (ballPosQueue[i].x - ballPosQueue[i-1].x)/delTime;
-			sumY += (ballPosQueue[i].y - ballPosQueue[i-1].y)/delTime;
-			prevPosX = ballPosQueue[i].x;
-			prevPosY = ballPosQueue[i].y;
+	  
+	  SgFilter sg;	  	 
+	  vector<float> ballT;	
+	  float ans = 0;	  
+	  // for x direction
+	  ballPosX.erase(ballPosX.begin());
+	  ballPosTimeX.erase(ballPosTimeX.begin());	  
+	  ballPosX.push_back(ballPose.x);
+	  ballPosTimeX.push_back(delTime);  
+	  ans = 0;	
+	  for(int i = 0 ; i < 2*SGFILTER_SIZE + 1 ; i++){
+		  ans += ballPosTimeX[i];
+		  ballT.push_back(ans);
+	  }	
+	  // getchar();
+	  myfileX << ballVelocity.x << "\t" <<  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV ) << endl;
+      ballT.clear();
+	  // for y direction
+	  ballPosY.erase(ballPosY.begin());
+	  ballPosTimeY.erase(ballPosTimeY.begin());	  
+	  ballPosY.push_back(ballPose.y);
+	  ballPosTimeY.push_back(delTime);	  
+	  ans = 0;
+	  for(int i = 0 ; i < 2*SGFILTER_SIZE + 1 ; i++){
+		  ans += ballPosTimeY[i];
+		  ballT.push_back(ans);
 	  }
-	  ballVelocity.x = sumX/5;
-	  ballVelocity.y = sumY/5;
-	  */
-	  //ballVelocity.x = (newx - bsQ.front().first.ballPos.x)/(timeMs * 0.001);
-	  //ballVelocity.y = (newy - bsQ.front().first.ballPos.y)/(timeMs * 0.001);
-	  ballAcceleration.x         = (ballVelocity.x - lastVelocityx) / delTime;
-      ballAcceleration.y         = (ballVelocity.y - lastVelocityy) / delTime;
-				
-		float Xsum2=0, Xsum1=0, TimeDiffSum = 10*delTime, TimeDiffSqSum = 30*delTime*delTime, n=4, lambda = 0.001, Ysum2=0,Ysum1=0;
-
-		for(int i=3;i>=0;i--)
-		{
-			Xsum1+=(delTime*(4-i)*ballPosQueue[i].x);
-			Xsum2+=(ballPosQueue[i].x);
-			Ysum1+=(delTime*(4-i)*ballPosQueue[i].y);
-			Ysum2+=(ballPosQueue[i].y);
-		}
-
-		//std::cout << n*Xsum1 << " dbsakejb" << TimeDiffSum*Xsum2 << std::endl;
-		int Xv_lambda = ((n*Xsum1 -TimeDiffSum*Xsum2)/(n*(lambda + TimeDiffSqSum) - TimeDiffSum*TimeDiffSum));
-		int Yv_lambda = ((n*Ysum1 -TimeDiffSum*Ysum2)/(n*(lambda + TimeDiffSqSum) - TimeDiffSum*TimeDiffSum));
-	
-	//	myfile  <<  newx << "\t" << newy << "\t" << ballPose.x << "\t" << ballPose.y << "\t" << ballVelocity.x << "\t" << ballVelocity.y << std::endl;
-     //	ballVelocity.x = -Xv_lambda;
-	//	ballVelocity.y = -Yv_lambda;
+	  myfileY << ballVelocity.y << "\t"  <<  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV ) << endl;
+	  ballT.clear();
 	  checkValidX(ballPose.x, ballVelocity.x, newx);
       checkValidY(ballPose.y, ballVelocity.y, newy);
       ballLastUpdateTime         = timeCapture;
@@ -330,7 +336,7 @@ namespace Strategy
 			timeMs = 0.001;
 		}
         static float lastnx = 0;
-		float  lastPoseX         = homePose[id].x;
+		float  lastPoseX        = homePose[id].x;
 		float  lastPoseY         = homePose[id].y;
 		float  lastAngle         = homeAngle[id];
 		float lastVelocityx      = homeVelocity[id].x;
@@ -347,8 +353,8 @@ namespace Strategy
         homeAngularAcc[id]       = (homeOmega[id] - lastAngularV) / delTime;
 		
         if(homeAngle[id] > PI)  
-			homeAngle[id] -= 2*PI;
-        else if(homeAngle[id] <=-PI) 
+			homeAngle[id] -=2*PI;
+        else if(homeAngle[id] <=-PI)
 			homeAngle[id] += 2*PI;
         homeLastUpdateTime[id]   = timeCapture;
         
@@ -364,7 +370,7 @@ namespace Strategy
       {
         
         SSL_DetectionRobot robot = detection.robots_yellow(i);
-				int newx = robot.x() - CENTER_X;
+		int newx = robot.x() - CENTER_X;
         int newy = robot.y() - CENTER_Y;
         float newangle = robot.orientation();
         #if GR_SIM_COMM || FIRASSL_COMM
@@ -470,8 +476,13 @@ namespace Strategy
         homeLastUpdateTime[id]   = timeCapture;
 		
 		//Adding vl,vr calculation from motion-simulation
+		if(i!=4)
+			continue;
+		cout << "id" << id << endl;
 		homeVlVr[id] = calcBotVelocity((newx - lastPoseX)/fieldXConvert, (newy - lastPoseY)/fieldXConvert, newangle, lastAngle, delTime);
-      }
+		//cout << (newx - lastPoseX)/fieldXConvert << " " << (newy - lastPoseY)/fieldXConvert << " " << newangle << " " << lastAngle << " " << delTime << endl;
+	    cout<<" homeVlVr[id] :: "<<homeVlVr[id].x<<"  "<<homeVlVr[id].y<<endl;
+	  }
 	  
       // Blue robot info
       uniqueBotIDs.clear();

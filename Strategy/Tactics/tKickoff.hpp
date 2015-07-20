@@ -83,7 +83,6 @@ namespace Strategy
 			printf("the bot id for kickoff issss  : %d \n",botID);
 			
 			float yDiff = abs(state->ballPos.y - state->homePos[botID].y);
-			printf("    the ydiffffffffffffffffffffffffffff  is :: %f \n",yDiff);
 			
 			if(yDiff > 4*BOT_RADIUS) //240
 				return;

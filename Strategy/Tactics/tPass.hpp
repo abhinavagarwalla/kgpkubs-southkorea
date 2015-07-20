@@ -59,6 +59,14 @@ namespace Strategy
 			int sgn = (FIELD_IS_INVERTED)?(-1):(1);
 			sParam.VelocityP.vl = sgn*40;
 			sParam.VelocityP.vr = sgn*40;
+			
+
+//			double theta = atan2(state->ballPos.y-state->homePos[botID].y, state->ballPos.x-state->homePos[botID].x);
+//			sID = SkillSet::GoToPoint ;
+//			sParam.GoToPointP.x = state->ballPos.x + 200*cos(theta);
+//			sParam.GoToPointP.y = state->ballPos.y + 200*cos(theta);
+//			sParam.GoToPointP.finalVelocity = 60;
+//			sParam.GoToPointP.finalslope = theta;
 			skillSet->executeSkill(sID, sParam);		
       //gotoPointExact(state->ballPos.x, state->ballPos.y, false, 0, MAX_BOT_SPEED);
     }

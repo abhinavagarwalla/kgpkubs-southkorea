@@ -36,8 +36,8 @@ namespace Strategy
 			start.setTheta(normalizeAngle(start.theta() - PI));
 			
 		algoController->genControls(start, end, vl, vr, finalvel);
-		assert(vl <= 150 && vl >= -150);
-		assert(vr <= 150 && vr >= -150);
+		assert(vl <= 180 && vl >= -180);
+		assert(vr <= 180 && vr >= -180);
 		if (direction){
 			comm->sendCommand(botid, vl/2, vr/2); //maybe add mutex
 		}else {
@@ -59,7 +59,7 @@ namespace Strategy
 			if(!flag){
 				if(traj)
 					delete traj;
-				traj = TrajectoryGenerators::cubic(start, end, vls, vrs, 0, 0);
+				traj = TrajectoryGenerators::cubic(start, end, vls, vrs, 80, 80);
 			}
 			else{
 			//	cout << "here" << endl;
@@ -67,14 +67,14 @@ namespace Strategy
 				Pose start = algoController->getNewStartPose();
 				if(traj) 
 					delete traj;
-				traj = TrajectoryGenerators::cubic(start, end, delayedVel.x , delayedVel.y , 0, 0);
+				traj = TrajectoryGenerators::cubic(start, end, delayedVel.x , delayedVel.y , 80, 80);
 			}
 		}
 		else {
 			if(!flag){
 				if(traj)
 					delete traj;
-				traj = TrajectoryGenerators::cubic(start2, end, vls, vrs, 0, 0);
+				traj = TrajectoryGenerators::cubic(start2, end, vls, vrs, 80, 80);
 			}
 			else{
 			//	cout << "here" << endl;
@@ -82,7 +82,7 @@ namespace Strategy
 				Pose start2 = algoController->getNewStartPose();
 				if(traj)
 					delete traj;
-				traj = TrajectoryGenerators::cubic(start2, end, delayedVel.x, delayedVel.y, 0, 0);
+				traj = TrajectoryGenerators::cubic(start2, end, delayedVel.x, delayedVel.y, 80, 80);
 			}
 		}
 		
@@ -107,6 +107,7 @@ namespace Strategy
 	Pose start(state->homePos[botID].x, state->homePos[botID].y, state->homeAngle[botID]);
 	Pose end(param.SplineGoToPointP.x, param.SplineGoToPointP.y, param.SplineGoToPointP.finalSlope);
 	
+	cout << state->homePos[botID].x << " " << state->homePos[botID].y << endl;
 	if(param.SplineGoToPointP.initTraj == 1){
 		_splineGoToPointInitTraj(botID, start, end, finalvel, state->homeVlVr[botID].x, state->homeVlVr[botID].y, 0);
 	}

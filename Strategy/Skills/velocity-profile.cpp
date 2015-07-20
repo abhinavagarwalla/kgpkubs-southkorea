@@ -43,6 +43,7 @@ Interval trans_acc_limits(double vwold, double vwmax, double vold, double atmax,
   if (fabs(vwold/vwmax) > 1) {
       vwold = vwmax;
   }
+//  cout << vwold << " herte" << vwmax << endl;
   assert(fabs(vwold/vwmax) <= 1.);
   double at = sqrt(1-(vwold/vwmax)*(vwold/vwmax))*atmax;
   // std::cout << "in trans acc, vwold and vwmax = " << vwold << vwmax << ", at = " << at;
@@ -152,7 +153,7 @@ vector<ProfileDatapoint> generateVelocityProfile(Spline &p, int numPoints, doubl
     double full = Integration::integrate(p, 0, 1);
     double vs = (vls+vrs)/2.;
     double ve = (vle+vre)/2.;
-    std::cout << vs << " " << ve << endl;
+    //std::cout << vs << " " << ve << endl;
     //assert(vs >= 0 && ve >= 0);
     vector<ProfileDatapoint> v(numPoints, ProfileDatapoint());
     double dels = full/(numPoints-1);
@@ -166,11 +167,10 @@ vector<ProfileDatapoint> generateVelocityProfile(Spline &p, int numPoints, doubl
         double u = Integration::getArcLengthParam(p, s, full);
         double k = p.k(u);
         //NOTE: hardcoding vsat here!!
-        v[i].v = min(vmax_isolated(k, 100), vsat);
+        v[i].v = min(vmax_isolated(k, 150), vsat);
         v[i].u = u;
         v[i].s = s;
     }
-
     // forward consistency
     v[0].v = vs;
     for (int i = 1; i < numPoints; i++) {

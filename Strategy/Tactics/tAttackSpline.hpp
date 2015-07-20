@@ -23,10 +23,12 @@ namespace Strategy
     Point2D<int> prevBotPos;
     float prevBotAngle;
 	int splin;
+	int sCount;
   public:
     TAttackSpline(const BeliefState* state, int botID) :
       Tactic(Tactic::AttackSpline, state, botID)
     {
+		sCount = 0 ;
 	  splin = 0;
       iState = APPROACHING;
       for(int i=0; i<10; i++)
@@ -229,7 +231,30 @@ namespace Strategy
 			   
 			if(isfirst&&(index==9))
 				isfirst = false ;
-			   
+		if(sCount++ < 15){
+			sID = SkillSet::Stop;
+			skillSet->executeSkill(sID, sParam);	
+			return ;
+		}
+		else{
+			 sID = SkillSet::SplineInterceptBall;
+		//  cout << "here" << endl;
+		  sParam.SplineInterceptBallP.vl = 0;
+		  sParam.SplineInterceptBallP.vr = 0;
+		  sParam.SplineInterceptBallP.velGiven = 1;
+		  sParam.SplineInterceptBallP.ballVelX = avgBallVel.x;
+		  sParam.SplineInterceptBallP.ballVelY = avgBallVel.y;
+		 // cout << "here" << endl;
+		  if(splin == 0){
+				sParam.SplineInterceptBallP.initTraj = 1;
+		  }		
+		  else{
+			  sParam.SplineInterceptBallP.initTraj = 0;
+		  }
+		  skillSet->executeSkill(sID, sParam);
+		  splin  = 1;
+		}
+	  return ;
       float dist = Vector2D<int>::dist(state->ballPos, state->homePos[botID]);
       movementError[movementErrorIndex++] = (Vector2D<int>::distSq(prevBotPos, state->homePos[botID])) + (prevBotAngle - state->homeAngle[botID])*(prevBotAngle - state->homeAngle[botID])*50000;
       prevBotPos = state->homePos[botID];

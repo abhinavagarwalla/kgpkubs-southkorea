@@ -119,7 +119,7 @@ namespace Strategy
 		}
 		botVel.x = state->homeVlVr[botID].x;
 		botVel.y = state->homeVlVr[botID].y;
-		
+		cout << botVel.x << " " << botVel.y << endl;
 		if(param.SplineInterceptBallP.initTraj == 1)
 			_splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr, 0);
 		if(interceptCounter > 30000)

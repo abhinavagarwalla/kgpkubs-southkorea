@@ -11,6 +11,7 @@
 #include <fstream>
 #include "opencv2/video/tracking.hpp"
 #include "opencv2/highgui/highgui.hpp"
+#include "sgfilter.h"
 
 using namespace std;
 using namespace cv;
@@ -93,25 +94,9 @@ namespace Strategy
 	std::queue<std::pair<BeliefState, double> > bsQ;
 	static const int MAX_BS_Q = 2;
 	
-	typedef struct BotP {
-		float x, y;
-		float theta;
-		BotP():x(0), y(0), theta(0) {}
-		BotP(float x, float y, float theta): x(x), y(y), theta(theta) {}
-	}BotPose;
-	ofstream myfile;
- 
-//	Mat_<float> measurement;
- // 	KalmanFilter KF;
-	void strategyToRealConversion(BotPose &p);
+	ofstream myfileX, myfileY; 
 	Vector2D<float> calcBotVelocity(double delX, double delY, double Theta1, double Theta2, float timeMs);
-//	Point ballPos;
-//	static inline cv::Point calcPoint(cv::double deltaT = 0.016, omega_w =8, omega_u = 3.1623;
-//    KalmanFilter KF(3, 2, 0);    
-//    Mat_<float> measurement(2,1); Point2f center, double R, double angle)
-//	{
-//		return center + cv::Point2f((float)cos(angle), (float)-sin(angle))*(float)R;
-//	}
+	vector<float> ballPosX, ballPosY, ballPosTimeX, ballPosTimeY;
    };
 }
 
