@@ -310,7 +310,6 @@ namespace HAL
   int Serial::Write(void *buf, int size)
   {
     DWORD bytesTransfered;
-
     if(!WriteFile(hCom, (char*)buf, size, &bytesTransfered, NULL ))
     {
       err(stderr, "Can't write to comm port.");

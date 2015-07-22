@@ -791,7 +791,7 @@ grSim_Commands::grSim_Commands(const grSim_Commands& from)
 
 void grSim_Commands::SharedCtor() {
   _cached_size_ = 0;
-  timestamp_ = 0;
+ // timestamp_ = 0;
   isteamyellow_ = false;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
@@ -827,7 +827,7 @@ grSim_Commands* grSim_Commands::New() const {
 
 void grSim_Commands::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    timestamp_ = 0;
+ //   timestamp_ = 0;
     isteamyellow_ = false;
   }
   robot_commands_.Clear();

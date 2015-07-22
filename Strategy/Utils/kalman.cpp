@@ -204,7 +204,6 @@ namespace Strategy
         vr = vl;
 		Vector2D<float> v(vl,vr);
 		cout<<"hete Returning from the loop "<<endl;
-		getchar();
         return v;
     }
     // we calculate 2 rho's, based on delX and delY, and take average
@@ -284,9 +283,11 @@ namespace Strategy
 		  ans += ballPosTimeX[i];
 		  ballT.push_back(ans);
 	  }	
-	  // getchar();
+	  
 	  myfileX << ballVelocity.x << "\t" <<  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV ) << endl;
-      ballT.clear();
+      ballVelocity.x = sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV );
+	  ballT.clear();
+	  
 	  // for y direction
 	  ballPosY.erase(ballPosY.begin());
 	  ballPosTimeY.erase(ballPosTimeY.begin());	  
@@ -297,8 +298,12 @@ namespace Strategy
 		  ans += ballPosTimeY[i];
 		  ballT.push_back(ans);
 	  }
-	  myfileY << ballVelocity.y << "\t"  <<  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV ) << endl;
+	  
+	  myfileY << ballVelocity.y << "\t"  <<  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV ) << endl;
+	  ballVelocity.y = sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV );
 	  ballT.clear();
+	 // cout << "b all Velocity" << ballVelocity.x << " " << ballVelocity.y << endl;
+	  
 	  checkValidX(ballPose.x, ballVelocity.x, newx);
       checkValidY(ballPose.y, ballVelocity.y, newy);
       ballLastUpdateTime         = timeCapture;
@@ -574,7 +579,7 @@ namespace Strategy
       double delTime = 0;
       state.homePos[botID]   = Vector2D<int>(homePose[botID].x, homePose[botID].y);/*Vector2D<int>(homePose[botID].x+homeVelocity[botID].x*delTime, 
       homePose[botID].y+homeVelocity[botID].y*delTime);*/
-      printf("Home Pose: %d %d %d\n",botID,state.homePos[botID].x,state.homePos[botID].y);
+      //printf("Home Pose: %d %d %d\n",botID,state.homePos[botID].x,state.homePos[botID].y);
 	  state.homeAngle[botID] = homeAngle[botID];// + homeOmega[botID]*delTime;
       state.homeVel[botID]   = homeVelocity[botID];
 	  state.homeVlVr[botID] = homeVlVr[botID];

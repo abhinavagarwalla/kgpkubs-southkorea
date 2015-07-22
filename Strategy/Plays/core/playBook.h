@@ -24,39 +24,38 @@ namespace Strategy
   public:
     enum PlayID
     {
-      TestPlay, //0
-      SetPosition,
-			PenaltyOur,
-			PenaltyOpp,
-      Stop,      
-      OurGoalKick,
-      OppGoalKick,//6
-      SuperOffense,
-      Offense1,
-      Offense2,//9
-      SuperDefense,
-      Defense1,
-      Defense2,//12
-			//Arpit plays:
-		PositionOurKickoff, //sorry, i didnt see PositionOurStrike already did the same thing... so i removed it.
-		PositionOppKickoff,
-		Kickoff,
-		PositionOurPenalty,
-	    TakeGoalKick,
-		PositionOurFreeKick,
-		PositionOppFreeKick,
-		PositionOurFreeBall,
-		PositionOppFreeBall,
-		PositionOppPenalty,
-		PositionOurGoalKick,
-		PositionOppGoalKick,
-	    PositionGather,
-		OppFreeBall,
-		OurFreeBall,
-		OppFreeKick,
-		OurFreeKick,
-      None,
-      MAX_PLAYS //16
+       Stop =0,
+    PositionGather,
+    Offense1,
+    Offense2  ,
+    Defense1  ,
+    Defense2  ,
+    PositionOurKickoff  ,
+    PositionOppKickoff  ,
+    PositionOurFreeKick  ,
+    PositionOppFreeKick  ,
+    PositionOurFreeBall  ,
+    PositionOppFreeBall  ,
+    PositionOurPenalty  ,
+    PositionOppPenalty  ,
+    PositionOurGoalKick  ,
+    PositionOppGoalKick  ,
+    Kickoff  ,
+    OurFreeKick  ,
+    OppFreeKick  ,
+    OurFreeBall  ,
+    OppFreeBall  ,
+    PenaltyOur  ,
+    PenaltyOpp  ,
+    OurGoalKick  ,
+    OppGoalKick  ,
+    TakeGoalKick  ,
+    TestPlay  ,
+    SetPosition  ,
+    SuperOffense  ,
+    SuperDefense  ,
+    None  ,
+      MAX_PLAYS //30 should be it. 31, it is.
     };
 
   protected:

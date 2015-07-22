@@ -1,37 +1,37 @@
 message StrategyPacket {  
   enum Play {
     /// List all plays here
-    TestPlay = 0;
-    SetPosition = 1;
-		PenaltyOur = 2;
-		PenaltyOpp = 3;
-    //Stop = 4;      
-    OurGoalKick = 5;
-    OppGoalKick = 6;
-    SuperOffense = 7;
-    Offense1 = 8;
-    Offense2 = 9;
-    SuperDefense = 10;
-    Defense1 = 11;
-    Defense2 = 12;
-		PositionOurKickoff = 13;
-		PositionOppKickoff = 14;
-		//Kickoff = 15;
-		PositionOurPenalty = 16;
-	  TakeGoalKick = 17;
-		PositionOurFreeKick = 18;
-		PositionOppFreeKick = 19;
-		PositionOurFreeBall = 20;
-		PositionOppFreeBall = 21;
-		PositionOppPenalty = 22;
-		PositionOurGoalKick = 23;
-		PositionOppGoalKick = 24;
-	  PositionGather = 25;
-		OppFreeBall = 26;
-		OurFreeBall = 27;
-		OppFreeKick = 28;
-		OurFreeKick = 29;
-    None = 30;
+     Stop=0;
+    PositionGather=1;
+    Offense1  =2;
+    Offense2  =3;
+    Defense1  =4;
+    Defense2  =5;
+    PositionOurKickoff  =6;
+    PositionOppKickoff  =7;
+    PositionOurFreeKick  =8;
+    PositionOppFreeKick  =9;
+    PositionOurFreeBall  =10;
+    PositionOppFreeBall  =11;
+    PositionOurPenalty  =12;
+    PositionOppPenalty  =13;
+    PositionOurGoalKick  =14;
+    PositionOppGoalKick  =15;
+    Kickoff  =16;
+    OurFreeKick  =17;
+    OppFreeKick  =18;
+    OurFreeBall  =19;
+    OppFreeBall  =20;
+    PenaltyOur  =21;
+    PenaltyOpp  =22;
+    OurGoalKick  =23;
+    OppGoalKick  =24;
+    TakeGoalKick  =25;
+    TestPlay  =26;
+    SetPosition  =27;
+    SuperOffense  =28;
+    SuperDefense  =29;
+    None  =30;
   }
   optional Play play = 1;
 
@@ -46,7 +46,7 @@ message StrategyPacket {
     GoalieOpp =7;            // Grant Goalie to opponent team. only for testing purpose.
     MarkBot =8;              // Mark an opponent preventing them from getting the ball; getting to the goal; blocking a shot
     Pass = 9;                 // Pass to a point
-    Kickoff = 10;
+    //Kickoff = 10;
     Position =11;             // Go to the given position
     PositionForPenalty =12;   // Set-play tactic
    // PositionForReceive;   // Pass Receive check
@@ -55,7 +55,7 @@ message StrategyPacket {
     Defend =15;              // Defend the ball from coming to our side
     Attack =16;               // Attck the ball towards the goal      
     Steal =17;                // Manipulate the ball to remove possession of it from another robot
-    Stop =18;                 // Stop the bot
+    //Stop =18;                 // Stop the bot
     Velocity =19;             // Move at a fixed velocity
   }
   message Tactic {

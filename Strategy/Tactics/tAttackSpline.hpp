@@ -11,6 +11,7 @@
 #include "intersection.hpp"
 #include <fstream>
 #define ANGLE_TO_DIST 0
+
 namespace Strategy
 {
   class TAttackSpline : public Tactic
@@ -49,7 +50,8 @@ namespace Strategy
       SPINNING_CW,
       ATTACKING,
       CLOSE_TO_BALL,
-      STUCK
+      STUCK,
+	  OLD_ATTACK,
     } iState;
 	
     int hasAchievedOffset;
@@ -203,7 +205,6 @@ namespace Strategy
  void execute(const Param& tParam)
     { 
 		
-		
       printf("Attack BotID: %d\n",botID);
       static Vector2D<float> lastVel[10];
 			static int index = 0;
@@ -231,30 +232,11 @@ namespace Strategy
 			   
 			if(isfirst&&(index==9))
 				isfirst = false ;
-		if(sCount++ < 15){
-			sID = SkillSet::Stop;
-			skillSet->executeSkill(sID, sParam);	
-			return ;
-		}
-		else{
-			 sID = SkillSet::SplineInterceptBall;
-		//  cout << "here" << endl;
-		  sParam.SplineInterceptBallP.vl = 0;
-		  sParam.SplineInterceptBallP.vr = 0;
-		  sParam.SplineInterceptBallP.velGiven = 1;
-		  sParam.SplineInterceptBallP.ballVelX = avgBallVel.x;
-		  sParam.SplineInterceptBallP.ballVelY = avgBallVel.y;
-		 // cout << "here" << endl;
-		  if(splin == 0){
-				sParam.SplineInterceptBallP.initTraj = 1;
-		  }		
-		  else{
-			  sParam.SplineInterceptBallP.initTraj = 0;
-		  }
-		  skillSet->executeSkill(sID, sParam);
-		  splin  = 1;
-		}
-	  return ;
+//		if(sCount++ < 15){
+//			sID = SkillSet::Stop;
+//			skillSet->executeSkill(sID, sParam);	
+//			return ;
+//		}
       float dist = Vector2D<int>::dist(state->ballPos, state->homePos[botID]);
       movementError[movementErrorIndex++] = (Vector2D<int>::distSq(prevBotPos, state->homePos[botID])) + (prevBotAngle - state->homeAngle[botID])*(prevBotAngle - state->homeAngle[botID])*50000;
       prevBotPos = state->homePos[botID];
@@ -279,21 +261,33 @@ namespace Strategy
 	 
 	cout<<"Ball Velocity "<<avgBallVel.x<<" "<<avgBallVel.y<<std::endl ;
   switch(iState)
-  {        
+  {
+	case OLD_ATTACK:
+	{
+		if(dist<1.1*BOT_BALL_THRESH && state->homePos[botID].x<state->ballPos.x )
+		{
+            iState = CLOSE_TO_BALL ;
+            break;
+		} 
+	}
 	case APPROACHING:
 	{ 
-      
-	  if(dist<2*BOT_BALL_THRESH && state->homePos[botID].x<state->ballPos.x )
+	  if(dist<1.1*BOT_BALL_THRESH && state->homePos[botID].x<state->ballPos.x )
 	  {
             iState = CLOSE_TO_BALL ;
 			splin = 0 ;
             break;
 	  
-	  } 
+	  }
+	  if (dist < 1000) {
+			iState = OLD_ATTACK;
+			splin = 0 ;
+            break;
+		}
 	  cout<<"APPROACHING"<<endl ; 
 	  if(isBallInDBox()==true)
 	  {
-		  sParam.GoToPointP.x =  -HALF_FIELD_MAXX+GOAL_DEPTH+DBOX_WIDTH+BOT_RADIUS ;
+		  sParam.GoToPointP.x =  -HALF_FIELD_MAXX + GOAL_DEPTH + DBOX_WIDTH+BOT_RADIUS ;
 		  sParam.GoToPointP.y =   SGN(state->ballPos.y)*(OUR_GOAL_MAXY+BOT_RADIUS);
 		  if(Vector2D<int>::dist(state->homePos[botID],state->homePos[0])>2*BOT_BALL_THRESH)
 		  { int id=chooseOppReceiver();
@@ -341,8 +335,6 @@ namespace Strategy
 			   
  			}    
 				break;
-
-  
     }
 
 	case SPINNING_CW:
@@ -350,8 +342,12 @@ namespace Strategy
 	   cout<<"SPINNING_CW"<<endl;
 	   if(dist>2*BOT_BALL_THRESH)
 	   {
-		 iState = APPROACHING;
-		 return;
+		 if (dist < 1000) {
+		   iState = OLD_ATTACK;
+			return;
+		}
+		iState = APPROACHING;
+		return;
 	   }
 		 // shoot();
 		 // break;
@@ -368,6 +364,10 @@ namespace Strategy
 	  cout<<"SPINNING_CCW"<<endl;
 	  if(dist>2*BOT_BALL_THRESH)
 	  {
+		if (dist < 1000) {
+		   iState = OLD_ATTACK;
+			return;
+	   }  
 		iState = APPROACHING;
 		return;
 	  }
@@ -398,6 +398,10 @@ namespace Strategy
 		   */
 		   if(dist > 2*BOT_BALL_THRESH)
 		   {
+			   if (dist < 1000) {
+					iState = OLD_ATTACK;
+					break;
+				}
               iState = APPROACHING ;
 			   break ;
             }

@@ -267,7 +267,8 @@ namespace Strategy
 		else
 			botDestination.y = state->ballPos.y + SGN(state->ballVel.y)*(2*BOT_RADIUS/500) - ((state->ballPos.x)-(-HALF_FIELD_MAXX + DBOX_WIDTH))*tan(ang1);
        */
-	   botDestination.y = state->ballPos.y - ((state->ballPos.x)-(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS))*tan(ang1);
+//	   botDestination.y = state->ballPos.y - ((state->ballPos.x)-(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS))*tan(ang1);
+	   botDestination.y = state->ballPos.y - ((state->ballPos.x)-(-HALF_FIELD_MAXX + GOAL_DEPTH + 2.2*BOT_RADIUS))*tan(ang1);
 	   /*
 	   if((state->ballPos.x < (-HALF_FIELD_MAXX + GOAL_DEPTH + 5.2*BOT_RADIUS))&&(abs(state->ballPos.y) < OUR_GOAL_MAXY)) 
 	   {

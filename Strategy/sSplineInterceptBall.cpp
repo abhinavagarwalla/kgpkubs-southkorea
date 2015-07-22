@@ -27,8 +27,8 @@ namespace Strategy
 		int vl,vr;
 		Pose dummy(0,0,0);
 		algoController->genControls(start, dummy, vl, vr, 0);
-		assert(vl <= 150 && vl >= -150);
-		assert(vr <= 150 && vr >= -150);
+		assert(vl <= 180 && vl >= -180);
+		assert(vr <= 180 && vr >= -180);
 		if (direction2)
 			comm->sendCommand(botid, vl/2, vr/2); //maybe add mutex
 		else {
@@ -83,7 +83,7 @@ namespace Strategy
 			   //delayed vel to be reversed
 				if(traj)
 					delete traj;
-				traj = BallInterception::getIntTraj(start, ballPos, ballVel, delayedVel);
+				traj = BallInterception::getIntTraj(start2, ballPos, ballVel, delayedVel);
 			}
 		}
 		
@@ -91,10 +91,10 @@ namespace Strategy
 			delete algoController;
 		
 		//cout << state->homeVlVr[botID].x << " " << state->homeVlVr[botID].y << endl;
-		if(direction2)
+	//	if(direction2)
 			algoController = new ControllerWrapper(traj, state->homeVlVr[botID].x, state->homeVlVr[botID].y, PREDICTION_PACKET_DELAY);
-		else
-			algoController = new ControllerWrapper(traj, (-1)*state->homeVlVr[botID].y, (-1)*state->homeVlVr[botID].x, PREDICTION_PACKET_DELAY);
+	//	else
+	//		algoController = new ControllerWrapper(traj, (-1)*state->homeVlVr[botID].y, (-1)*state->homeVlVr[botID].x, PREDICTION_PACKET_DELAY);
 		
 		_splineInterceptBallTrack(botID, start, ballPos, ballVel, botVel, final_vl, final_vr);
 	}
@@ -119,7 +119,7 @@ namespace Strategy
 		}
 		botVel.x = state->homeVlVr[botID].x;
 		botVel.y = state->homeVlVr[botID].y;
-		cout << botVel.x << " " << botVel.y << endl;
+		
 		if(param.SplineInterceptBallP.initTraj == 1)
 			_splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr, 0);
 		if(interceptCounter > 30000)
