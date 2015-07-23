@@ -59,22 +59,22 @@ namespace Strategy
 			if(!flag){
 				if(traj)
 					delete traj;
-				traj = TrajectoryGenerators::cubic(start, end, vls, vrs, 80, 80);
+				traj = TrajectoryGenerators::cubic(start, end, vls, vrs, 0, 0);
 			}
 			else{
 			//	cout << "here" << endl;
 				delayedVel = algoController->getDelayedVel();
-				Pose start = algoController->getNewStartPose();
+				start = algoController->getNewStartPose();
 				if(traj) 
 					delete traj;
-				traj = TrajectoryGenerators::cubic(start, end, delayedVel.x , delayedVel.y , 80, 80);
+				traj = TrajectoryGenerators::cubic(start, end, delayedVel.x , delayedVel.y , 0, 0);
 			}
 		}
 		else {
 			if(!flag){
 				if(traj)
 					delete traj;
-				traj = TrajectoryGenerators::cubic(start2, end, vls, vrs, 80, 80);
+				traj = TrajectoryGenerators::cubic(start2, end, vls, vrs, 0, 0);
 			}
 			else{
 			//	cout << "here" << endl;
@@ -82,7 +82,7 @@ namespace Strategy
 				Pose start2 = algoController->getNewStartPose();
 				if(traj)
 					delete traj;
-				traj = TrajectoryGenerators::cubic(start2, end, delayedVel.x, delayedVel.y, 80, 80);
+				traj = TrajectoryGenerators::cubic(start2, end, delayedVel.x, delayedVel.y, 0, 0);
 			}
 		}
 		
@@ -111,7 +111,7 @@ namespace Strategy
 	if(param.SplineGoToPointP.initTraj == 1){
 		_splineGoToPointInitTraj(botID, start, end, finalvel, state->homeVlVr[botID].x, state->homeVlVr[botID].y, 0);
 	}
-	else if(counter > 20000){
+	else if(counter > 30){
 		_splineGoToPointInitTraj(botID, start, end, finalvel, state->homeVlVr[botID].x, state->homeVlVr[botID].y, 1);
 	}
 	else 

@@ -349,7 +349,7 @@ public:
 		//	sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
 		//	params4.SplineInterceptBallP.initTraj = 0;
 			//tKickoff.execute(pAttack) ;
-			loopcount = loopcount%1000 + 11;
+			loopcount = loopcount%1000 + 15;
 		}
 		else{
 		//	getchar();

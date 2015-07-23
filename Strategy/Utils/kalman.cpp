@@ -299,10 +299,10 @@ namespace Strategy
 		  ans += ballPosTimeY[i];
 		  ballT.push_back(ans);
 	  }
-	//  myfileY << ballVelocity.y << "\t"  <<  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV ) << endl;
+	 myfileY << ballPose.y << "\t"  <<  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV - 1 ) << endl;
 	  ballVelocity.y =  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV );
 	  ballT.clear();
-	  myfileY <<	ballVelocity.y << " " << prevBallVelocity.y << " " << abs(ballVelocity.y - prevBallVelocity.y) << endl;
+//	  myfileY <<	ballVelocity.y << " " << prevBallVelocity.y << " " << abs(ballVelocity.y - prevBallVelocity.y) << endl;
 
 	checkValidX(ballPose.x, ballVelocity.x, newx);
       checkValidY(ballPose.y, ballVelocity.y, newy);

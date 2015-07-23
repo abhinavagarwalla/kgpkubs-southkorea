@@ -106,5 +106,7 @@ Pose ControllerWrapper::getNewStartPose(){
     struct timeval nowTime;
     gettimeofday(&nowTime, NULL);
     elapsedS = (nowTime.tv_sec-startTime.tv_sec)+(nowTime.tv_usec-startTime.tv_usec)/1000000.0;
+//	if(elapsedS < 0.075)
+//		return s;
     return tracker.getNewStartPose(elapsedS);
 }

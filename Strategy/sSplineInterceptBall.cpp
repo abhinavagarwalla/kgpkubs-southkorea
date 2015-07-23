@@ -9,6 +9,7 @@
 #define PREDICTION_PACKET_DELAY 4
 using namespace Util;
 static bool direction2 = true;
+static bool lastDirection2 = true;
 
 namespace Strategy
 {
@@ -53,48 +54,59 @@ namespace Strategy
 		interceptCounter = 0;	
 		
 		Vector2D<float> delayedVel(botVel.x, botVel.y);
-		
+//		double dt = 10;
+//		if(traj){
+//			SplineTrajectory *st = dynamic_cast<SplineTrajectory*>(traj);
+//			dt = st->totalTime() - algoController->getCurrentTimeS();
+//		}
+//		if(dt < 0.75){
+//			comm->sendCommand(botID, 0, 0);
+//			return;
+//		}
 		if(direction2){
 			if(!flag){
 				if(traj)
 					delete traj;
 				traj = BallInterception::getIntTraj(start, ballPos, ballVel, botVel);
+				algoController = new ControllerWrapper(traj, botVel.x, botVel.y,  PREDICTION_PACKET_DELAY);
 			}
 			else{
 				delayedVel = algoController->getDelayedVel();
-				Pose start = algoController->getNewStartPose();
+				start = algoController->getNewStartPose();
 				
 				if(traj) 
 					delete traj;
 				traj = BallInterception::getIntTraj(start, ballPos, ballVel, delayedVel);
+				algoController = new ControllerWrapper(traj, delayedVel.x, delayedVel.y, PREDICTION_PACKET_DELAY);
 			}
 		}
 		else {
-			//Vector2D<float> botVel2((-1)*botVel.y , (-1)*botVel.x);
 			if(!flag){
 				if(traj)
 					delete traj;
 				Vector2D<float> botVel2((-1)*botVel.y , (-1)*botVel.x);	
 				traj = BallInterception::getIntTraj(start2, ballPos, ballVel, botVel2);
+				algoController = new ControllerWrapper(traj, botVel2.x, botVel2.y, PREDICTION_PACKET_DELAY);
 			}
 			else{
 			//	cout << "here" << endl;
 				delayedVel = algoController->getDelayedVel();
-				Pose start2 = algoController->getNewStartPose();
+				start2 = algoController->getNewStartPose();
 			   //delayed vel to be reversed
-			   Vector2D<float> delayedVel2((-1)*delayedVel.y, (-1)*delayedVel.x);
+			   //Vector2D<float> delayedVel2((-1)*delayedVel.y, (-1)*delayedVel.x);
 				if(traj)
 					delete traj;
-				traj = BallInterception::getIntTraj(start2, ballPos, ballVel, delayedVel2);
+				traj = BallInterception::getIntTraj(start2, ballPos, ballVel, delayedVel);
+				algoController = new ControllerWrapper(traj, delayedVel.x, delayedVel.y, PREDICTION_PACKET_DELAY);
 			}
 		}
 		
-		if(algoController)
-			delete algoController;
-		
+//		if(algoController)
+//			delete algoController;
+//		
 		//cout << state->homeVlVr[botID].x << " " << state->homeVlVr[botID].y << endl;
 	//	if(direction2)
-			algoController = new ControllerWrapper(traj, state->homeVlVr[botID].x, state->homeVlVr[botID].y, PREDICTION_PACKET_DELAY);
+			//algoController = new ControllerWrapper(traj, state->homeVlVr[botID].x, state->homeVlVr[botID].y, PREDICTION_PACKET_DELAY);
 	//	else
 	//		algoController = new ControllerWrapper(traj, (-1)*state->homeVlVr[botID].y, (-1)*state->homeVlVr[botID].x, PREDICTION_PACKET_DELAY);
 		
@@ -122,10 +134,10 @@ namespace Strategy
 		botVel.x = state->homeVlVr[botID].x;
 		botVel.y = state->homeVlVr[botID].y;
 		cout << botVel.x << " " << botVel.y << endl;
-		getchar();
+		//getchar();
 		if(param.SplineInterceptBallP.initTraj == 1)
 			_splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr, 0);
-		if(interceptCounter > 30000)
+		if(interceptCounter > 60)
 			_splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr, 1);
 		else 
 			_splineInterceptBallTrack(botID, start, ballPos, ballVel, botVel, final_vl, final_vr);	

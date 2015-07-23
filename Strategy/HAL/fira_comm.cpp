@@ -22,7 +22,7 @@ namespace HAL
   FIRAComm::FIRAComm()
   {
     debug_cs = new CS();
-    if (!sPort.Open("/dev/ttyUSB0", 38400))
+    if (!sPort.Open("/dev/ttyUSB1", 38400))
     { 
       Logger::abort("Could not open COMM port");
     }
