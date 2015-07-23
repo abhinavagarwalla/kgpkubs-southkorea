@@ -131,8 +131,8 @@ public:
 		TVelocity tVelocity2(&state,2);
     
 	Tactic::Param pVelocity;
-	pVelocity.VelocityP.vl = 60;
-	pVelocity.VelocityP.vr = 60;
+	pVelocity.VelocityP.vl = 0;
+	pVelocity.VelocityP.vr = 0;
 	
 	Tactic::Param pVelocity_1;
 	pVelocity_1.VelocityP.vl = 30;
@@ -165,7 +165,7 @@ public:
     TAttack tAttack3(&state, 3);
     TAttack tAttack4(&state, 4);
 	 
-	TAttackSpline tAttackSpline0(&state , 4);
+	TAttackSpline tAttackSpline0(&state , 0);
 	
 	TAttack2015 tAttack20150(&state , 0) ;
 	TAttack2015 tAttack20151(&state , 1) ;
@@ -196,7 +196,7 @@ public:
 	params4.SplineInterceptBallP.vl = 70;
 	params4.SplineInterceptBallP.vr = 70;
 	params4.SplineInterceptBallP.initTraj = 1;
-	SkillSet sball(&state, 4); 
+	SkillSet sball(&state, 0); 
 	
 	// params2 for dwgo to point
 	Strategy::SParam params2;
@@ -340,12 +340,12 @@ public:
     //   tAttackSpline0.execute(pAttack) ;
 
 	//	tPass.execute(pAttack);
-		if(loopcount++ > 5){		
+		if(loopcount++ > 15){		
 		//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 		//	params1.SplineGoToPointP.initTraj = 0;
-			//sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
-			//params4.SplineInterceptBallP.initTraj = 0;
-			tAttackSpline0.execute(pAttack) ;
+			sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
+			params4.SplineInterceptBallP.initTraj = 0;
+			//tAttackSpline0.execute(pAttack) ;
 		//	sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
 		//	params4.SplineInterceptBallP.initTraj = 0;
 			//tKickoff.execute(pAttack) ;
@@ -353,7 +353,7 @@ public:
 		}
 		else{
 		//	getchar();
-			//tVelocity2.execute(pVelocity);		
+			tVelocity0.execute(pVelocity);		
 		}		
         
 	    //tPass.execute(pAttack);

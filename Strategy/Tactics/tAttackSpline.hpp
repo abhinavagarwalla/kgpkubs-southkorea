@@ -236,30 +236,7 @@ namespace Strategy
 			if(isfirst&&(index==9))
 				isfirst = false ;
 		*/
-		if(sCount++ < 15){
-			sID = SkillSet::Stop;
-			skillSet->executeSkill(sID, sParam);	
-			return ;
-		}
-		else{
-			 sID = SkillSet::SplineInterceptBall;
-		//  cout << "here" << endl;
-		  sParam.SplineInterceptBallP.vl = 0;
-		  sParam.SplineInterceptBallP.vr = 0;
-		  sParam.SplineInterceptBallP.velGiven = 1;
-		  sParam.SplineInterceptBallP.ballVelX = state->ballVel.x;
-		  sParam.SplineInterceptBallP.ballVelY = state->ballVel.y;
-		 // cout << "here" << endl;
-		  if(splin == 0){
-				sParam.SplineInterceptBallP.initTraj = 1;
-		  }		
-		  else{
-			  sParam.SplineInterceptBallP.initTraj = 0;
-		  }
-		  skillSet->executeSkill(sID, sParam);
-		  splin  = 1;
-		}
-	  return ;
+		
       float dist = Vector2D<int>::dist(state->ballPos, state->homePos[botID]);
       movementError[movementErrorIndex++] = (Vector2D<int>::distSq(prevBotPos, state->homePos[botID])) + (prevBotAngle - state->homeAngle[botID])*(prevBotAngle - state->homeAngle[botID])*50000;
       prevBotPos = state->homePos[botID];
@@ -333,13 +310,8 @@ namespace Strategy
 		  }
 		//  cout << "here " << endl;
 		  skillSet->executeSkill(sID, sParam);
-		  splin  = 1;
-		  if(Vector2D<int>::dist(lastSplinePoint , state->ballPos) > 4*BOT_RADIUS)
-			{  splin  = 0 ;
-		       cout<<"Creating new spline at point :: "<<lastSplinePoint.x<<" "<<lastSplinePoint.y<<std::endl;
-			   
- 			}    
-				break;
+		  splin  = 1; 
+		  break;
 
   
     }
@@ -385,7 +357,7 @@ namespace Strategy
 	case CLOSE_TO_BALL:
 	{
 		cout<<"CLOSE_TO_BALL"<<endl;
-           /*
+           
 		   if(fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x))) < PI / 2 + PI / 9 && fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x)))  > PI / 2 - PI / 9)
            {
               if(state->ballPos.y > 0)
@@ -394,7 +366,7 @@ namespace Strategy
 				iState = FIELD_IS_INVERTED? SPINNING_CW : SPINNING_CCW;
               break ;
 		   } 
-		   */
+		   
 		   if(dist > 2*BOT_BALL_THRESH)
 		   {
               iState = APPROACHING ;
@@ -441,7 +413,7 @@ namespace Strategy
           break ;
 	}
 				
-      }       
+      }        
     }  
       
   }; // class TAttack
