@@ -51,6 +51,7 @@ namespace Strategy
     Vector2D<float> homeVel[HomeTeam::SIZE];
 	Vector2D<float> homeVlVr[HomeTeam::SIZE];
     Vector2D<float> homeAcc[HomeTeam::SIZE];
+	
     float           homeAngle[HomeTeam::SIZE];
     float           homeOmega[HomeTeam::SIZE];
     float           homeAngAcc[HomeTeam::SIZE];
@@ -65,6 +66,7 @@ namespace Strategy
     Point2D<int>    ballPos;
     Vector2D<float> ballVel;
     Vector2D<float> ballAcc;
+	Vector2D<float> prevBallVel;
 
     // Rarely changing elements from refree box
 	 /*new adds*/
@@ -87,6 +89,7 @@ namespace Strategy
     bool pr_oppPenaltyKick;
     bool pr_ourKickOff;
     bool pr_oppKickOff;
+	bool pr_ballHasCollided;
     /* Arpit: extras */
 		bool pr_ourKickOffStart;
 		bool pr_ourPenaltyKickStart;
@@ -183,6 +186,7 @@ namespace Strategy
     void computeBallInStrips();
     void updateStateFromRefree(HAL::RefBoxCmd &refBoxCmdSh);
 	    
+	void ballHasCollided();	
     // Functional Predicates
     int ourBotNearestToPoint(const int x, const int y);
     int oppBotNearestToPoint(const int x, const int y);

@@ -79,6 +79,7 @@ namespace Strategy
     Vector2D<float> ballPose;
     Vector2D<float> ballVelocity;
     Vector2D<float> ballAcceleration;
+	Vector2D<float> prevBallVelocity;
     Vector2D<float> ballPosK;
     Vector2D<float> ballPosSigmaSqK;
 

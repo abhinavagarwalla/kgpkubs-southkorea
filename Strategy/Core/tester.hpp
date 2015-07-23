@@ -18,6 +18,7 @@ public:
   running(running_),state(state_) {}
   void run()
   {
+	
     Util::CS loggerCS;
     Util::Logger logger("timelog.log", Util::Logger::Write, loggerCS);
     Kalman      kFilter ;
@@ -26,16 +27,20 @@ public:
 //	kFilter.Kalman();
     #ifdef STR_GUI
     Util::CS strCS;
+	
     StrategyPacket strPktSh;
     StrategyGUIThread strGUIThread = StrategyGUIThread::getInstance(&strPktSh, &strCS);
     strGUIThread.start();
 	TExec tExec(&state);
+	
+	
 	int prev_tactic_id = -1;
 	int prev_bot_id = -1;
 	int prev_play_id = -1;
-	PExec       pExec(&state);
+	  std::cout << "here4" << std::endl;
+	//PExec       pExec(&state);
     #endif
-	
+	  std::cout << "here4" << std::endl;
 	Tactic::Param paramList[Tactic::MAX_TACTICS];
 	
     //tGoalKeeping
@@ -217,13 +222,13 @@ public:
 	params3_old.DWGoToPointP.finalSlope = 0;
 
 	SkillSet simplegoto(&state, 4);
-	SkillSet simplegoto_old(&state, 2);
+	SkillSet simplegoto_old(&state, 0);
     Tactic::Param ptestpoint;
 	   
-    TestbotRace ttest2(&state,2);
-    Tactic::Param ptestrace;
-    ptestrace.TestbotRaceP.vl = 100;
-    ptestrace.TestbotRaceP.vr = 100;
+ //   TestbotRace ttest2(&state,2);
+  //  Tactic::Param ptestrace;
+ //   ptestrace.TestbotRaceP.vl = 100;
+  //  ptestrace.TestbotRaceP.vr = 100;
    // FILE *f = fopen("/home/robo/ballPos.txt", "w");  
 #ifdef BOTLOG
     FILE *f = fopen("/home/robo/botplot/compare_dataset/botlog.txt", "w");    
@@ -239,7 +244,7 @@ public:
 			
 //	ofstream myfile;
 //	myfile.open ("ballPosLog.txt");
-	
+	std::cout << "here" << std::endl;
     while(running)
     {
     //      timer.start();
@@ -294,9 +299,9 @@ public:
 					printf("GOT COMMAND FROM STRATEGY GUI!!!!\n");
 					prev_play_id = strPktSh.play();
 					Util::Logger::toStdOut("Command From Refee.. Reselecting play..\n");
-					pExec.selectfromGUI(prev_play_id);
+			//		pExec.selectfromGUI(prev_play_id);
 				}
-				pExec.executePlay();
+			//	pExec.executePlay();
 				strCS.leave();
 			}
 		}
@@ -320,10 +325,8 @@ public:
 	 //tVelocity0.execute(pVelocity_1);
 	/*	tVelocity2.execute(pVelocity_2);
    	tVelocity3.execute(pVelocity_3);  */
-	  tVelocity4.execute(pVelocity_4);
-	
-	
-	          // tVelocity0.execute(pVelocity_1);
+	  //tVelocity4.execute(pVelocity_4);
+	        //   tVelocity0.execute(pVelocity_1);
 				//tVelocity3.execute(pVelocity);
 				//tAttackDuo12.execute(pAttack);
                  // tVelocity0.execute(pVelocity);
@@ -331,23 +334,26 @@ public:
 	      //tGoalie2.execute(paramGoal);
           // tGoalOur2.execute(paramGoal);
         //tDefendLine1.execute(pDefendL1);
-				//tGoalOur4.execute(paramGoal);
+				//tGoalOur2.execute(paramGoal);
 	//	tGoalOur3.execute(paramGoal);
-    //   tAttackSpline0.execute(pAttack) ; 
-		//tPass.execute(pAttack);
-//		if(loopcount++ > 15){		
-//		//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
-//		//	params1.SplineGoToPointP.initTraj = 0;
-//		//	sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
-//		//	params4.SplineInterceptBallP.initTraj = 0;
-//	//	tAttackSpline0.execute(pAttack) ;
-//			//tKickoff.execute(pAttack) ;
-//			loopcount = loopcount%1000 + 15;
-//		}
-//		else{
-//		//	getchar();
-//			//tVelocity2.execute(pVelocity);		
-//		}
+    //   tAttackSpline0.execute(pAttack) ;
+
+	//	tPass.execute(pAttack);
+		if(loopcount++ > 5){		
+		//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
+		//	params1.SplineGoToPointP.initTraj = 0;
+			//sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
+			//params4.SplineInterceptBallP.initTraj = 0;
+			//tAttackSpline0.execute(pAttack) ;
+		//	sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
+		//	params4.SplineInterceptBallP.initTraj = 0;
+			//tKickoff.execute(pAttack) ;
+			loopcount = loopcount%1000 + 11;
+		}
+		else{
+		//	getchar();
+			//tVelocity2.execute(pVelocity);		
+		}
         
 	    //tPass.execute(pAttack);
         //tKickoff.execute(pAttack) ;
@@ -360,7 +366,7 @@ public:
 		 // tcover20152.execute(paramcover2015);
 	//	  tGoalOur4.execute(paramGoal);
 	   //  	tcoverleft2.execute(paramcoverleft);
-	    //    tcoverright0.execute(paramcoverright);
+	  //      tcoverright0.execute(paramcoverright);
 	 // dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
 	//		dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
 //			dwpoint_old.executeSkill(SkillSet::DWGoToPoint,params3_old) ;
