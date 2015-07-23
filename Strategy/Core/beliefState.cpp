@@ -59,6 +59,7 @@ namespace Strategy
     pr_oppKickOff = false;
     pr_ourKickOffStart = false;
 		pr_ourPenaltyKickStart = false;
+		
     //Predicates
     pr_ball_in_our_dbox = false;
     pr_ball_in_opp_dbox = false;
@@ -74,6 +75,7 @@ namespace Strategy
     pr_ballInOppCorner = false;
     pr_ballInSideStrip = false;
     pr_ballInFrontStrip = false;
+	pr_ballHasCollided = false;
   }
 
   BeliefState::~BeliefState()
@@ -91,6 +93,7 @@ namespace Strategy
     computeBallOppSide();
     computeBallInStrips();
     computeBallMidfield();
+	ballHasCollided();
     return true;
   } // update
   /* Function definitions for all the predicates...
@@ -195,6 +198,9 @@ namespace Strategy
     }
   }
 
+/**
+ * @brief 
+ */
   void BeliefState::computeBallOurSide()
   {
     if(ForwardX(ballPos.x) < -MID_FIELD_THRESH)
@@ -404,6 +410,18 @@ namespace Strategy
     return botId;
   }
   
+  void BeliefState::ballHasCollided(){
+	 if(abs(ballVel.y - prevBallVel.y) > 100){
+			if(SGN(ballVel.y)*SGN(prevBallVel.y) == -1)
+				pr_ballHasCollided = true;
+	}	 
+    if(abs(ballVel.x - prevBallVel.x) > 100){
+			if(SGN(ballVel.x)*SGN(prevBallVel.x) == -1){
+				pr_ballHasCollided = true;
+			}
+	}	
+  }
+  
   void BeliefState::resetPr()
   {
     //R_Box
@@ -436,6 +454,7 @@ namespace Strategy
     pr_ballInOppCorner = false;
     pr_ballInSideStrip = false;
     pr_ballInFrontStrip = false;
+	pr_ballHasCollided = false;
   }
   
 } // namespace Strategy

@@ -43,7 +43,6 @@ namespace Strategy
 		tacticList[Tactic::Stop][botID]                = new TStop(state, botID);
 		tacticList[Tactic::Velocity][botID]            = new TVelocity(state, botID);
 		tacticList[Tactic::Backup][botID]              = new TBackup(state, botID);
-		//tacticList[Tactic::PositionForReceive]  = new TPositionForReceive(state, botID);
 		tacticList[Tactic::ReceiveBall][botID]         = new TReceiveBall(state, botID);
 		tacticList[Tactic::TestgotoPoint][botID] 			= new Testgotopoint(state,botID);
 		tacticList[Tactic::TestbotRace][botID] 				= new TestbotRace(state,botID);
@@ -56,7 +55,9 @@ namespace Strategy
 		tacticList[Tactic::CoverGoalPairLeft][botID]           = new TCoverGoalPairLeft(state,botID);
 		tacticList[Tactic::CoverGoalPairRight][botID]           = new TCoverGoalPairRight(state,botID);
 		tacticList[Tactic::ReceiveBall2015][botID]         = new TReceiveBall2015(state, botID);
-		
+		tacticList[Tactic::AttackSpline][botID]			   = new TAttackSpline(state, botID);
+		tacticList[Tactic::Attack2015][botID]			   = new TAttack2015(state, botID);
+//		tacticList[Tactic::AttackDuo][botID]			   = new TAttackDuo(state, botID);
 		//tacticList[Tactic::Clear]								= new TClear(state,botID);
 		//tacticList[Tactic::AttackDuo] = new TAttackDuo() -- how the fuck am i supposed to add two bot ids ??? :-(
 	}

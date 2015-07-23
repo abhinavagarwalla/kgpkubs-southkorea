@@ -47,7 +47,7 @@ namespace Strategy
     tacticList[Tactic::Defend]              = new TDefend(state,botID);
     tacticList[Tactic::Attack]              = new TAttack(state,botID);
 	tacticList[Tactic::SupportAttack2015]	= new TSupportAttack2015(state,botID);
-    //tacticList[Tactic::Shoot]               = new TShoot(state, botID);
+    tacticList[Tactic::Shoot]               = new TShoot(state, botID);
     tacticList[Tactic::Stop]                = new TStop(state, botID);
     tacticList[Tactic::Velocity]            = new TVelocity(state, botID);
     tacticList[Tactic::Backup]              = new TBackup(state, botID);
@@ -56,7 +56,6 @@ namespace Strategy
 	tacticList[Tactic::TestgotoPoint] 			= new Testgotopoint(state,botID);
 	tacticList[Tactic::TestbotRace] 				= new TestbotRace(state,botID);
 	tacticList[Tactic::GoalKick]						= new TGoalKick(state,botID);
-	tacticList[Tactic::Shoot]                  = new TShoot(state,botID);
 		tacticList[Tactic::DWDefender]		   = new TDWDefender(state, botID);
 		tacticList[Tactic::DWDefender2015]         = new TDWDefender2015(state,botID);
 		tacticList[Tactic::CoverGoal2015]           = new TCoverGoal2015(state,botID);
@@ -64,6 +63,7 @@ namespace Strategy
 		tacticList[Tactic::CoverGoalPairRight]           = new TCoverGoalPairRight(state,botID);
 		tacticList[Tactic::ReceiveBall2015]         = new TReceiveBall2015(state, botID);
         tacticList[Tactic::AttackSpline]        = new TAttackSpline(state,botID);
+		tacticList[Tactic::Attack2015]			   = new TAttack2015(state, botID);
          //tacticList[Tactic::Clear]								= new TClear(state,botID);
 		//tacticList[Tactic::AttackDuo] = new TAttackDuo() -- how the fuck am i supposed to add two bot ids ??? :-(
     // Initialization check

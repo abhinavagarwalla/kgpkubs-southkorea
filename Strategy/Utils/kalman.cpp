@@ -267,7 +267,8 @@ namespace Strategy
       
 	  float lastVelocityx        = ballVelocity.x;
 	  float lastVelocityy        = ballVelocity.y;
-	  
+	  prevBallVelocity.x        = ballVelocity.x;
+	  prevBallVelocity.y        = ballVelocity.y;
 	  ballVelocity.x             = (ballPose.x - lastPoseX) / delTime;
 	  ballVelocity.y             = (ballPose.y - lastPoseY) / delTime;
 	  
@@ -286,7 +287,8 @@ namespace Strategy
 	  }	
 	  // getchar();
 	  myfileX << ballVelocity.x << "\t" <<  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV ) << endl;
-      ballT.clear();
+      ballVelocity.x =  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV );
+	  ballT.clear();
 	  // for y direction
 	  ballPosY.erase(ballPosY.begin());
 	  ballPosTimeY.erase(ballPosTimeY.begin());	  
@@ -297,9 +299,12 @@ namespace Strategy
 		  ans += ballPosTimeY[i];
 		  ballT.push_back(ans);
 	  }
-	  myfileY << ballVelocity.y << "\t"  <<  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV ) << endl;
+	//  myfileY << ballVelocity.y << "\t"  <<  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV ) << endl;
+	  ballVelocity.y =  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV );
 	  ballT.clear();
-	  checkValidX(ballPose.x, ballVelocity.x, newx);
+	  myfileY <<	ballVelocity.y << " " << prevBallVelocity.y << " " << abs(ballVelocity.y - prevBallVelocity.y) << endl;
+
+	checkValidX(ballPose.x, ballVelocity.x, newx);
       checkValidY(ballPose.y, ballVelocity.y, newy);
       ballLastUpdateTime         = timeCapture;
     }
@@ -598,6 +603,7 @@ namespace Strategy
       state.ballPos = Vector2D<int>(ballPose.x + delTime*ballVelocity.x, ballPose.y + delTime*ballVelocity.y);
       state.ballVel = ballVelocity;
       state.ballAcc = ballAcceleration;
+	  state.prevBallVel = prevBallVelocity;
     //printf("Omega-> %lf\n",state.homeOmega[2]);
 
         /*for (int botID = 0; botID < HomeTeam::SIZE; ++botID)

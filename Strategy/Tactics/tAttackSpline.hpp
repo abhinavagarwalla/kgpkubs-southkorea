@@ -203,9 +203,13 @@ namespace Strategy
  void execute(const Param& tParam)
     { 
 		
-		
+//		if(state->pr_ballHasCollided){
+//			cout << "in this" << endl;
+//			getchar();
+//		}
       printf("Attack BotID: %d\n",botID);
-      static Vector2D<float> lastVel[10];
+           /* 
+			static Vector2D<float> lastVel[10];
 			static int index = 0;
 			static bool isfirst = true ;
 			if(index < 10) {
@@ -228,9 +232,10 @@ namespace Strategy
 			   avgBallVel.x = 0.0 ;
 			if(state->ballVel.y == 0)
 			   avgBallVel.y = 0.0 ;
-			   
+			
 			if(isfirst&&(index==9))
 				isfirst = false ;
+		*/
 		if(sCount++ < 15){
 			sID = SkillSet::Stop;
 			skillSet->executeSkill(sID, sParam);	
@@ -242,8 +247,8 @@ namespace Strategy
 		  sParam.SplineInterceptBallP.vl = 0;
 		  sParam.SplineInterceptBallP.vr = 0;
 		  sParam.SplineInterceptBallP.velGiven = 1;
-		  sParam.SplineInterceptBallP.ballVelX = avgBallVel.x;
-		  sParam.SplineInterceptBallP.ballVelY = avgBallVel.y;
+		  sParam.SplineInterceptBallP.ballVelX = state->ballVel.x;
+		  sParam.SplineInterceptBallP.ballVelY = state->ballVel.y;
 		 // cout << "here" << endl;
 		  if(splin == 0){
 				sParam.SplineInterceptBallP.initTraj = 1;
@@ -271,13 +276,7 @@ namespace Strategy
         skillSet->executeSkill(sID, sParam);
         return;
       }
-	  
-      ofstream outfile;
-      outfile.open("/home/robocup/vel_log.txt", ios::app );
-	  outfile<<avgBallVel.x<<" "<<avgBallVel.y<<"    ::   "<<state->ballVel.x<<" "<<state->ballVel.y<<endl;
-	  outfile.close() ;
-	 
-	cout<<"Ball Velocity "<<avgBallVel.x<<" "<<avgBallVel.y<<std::endl ;
+
   switch(iState)
   {        
 	case APPROACHING:
@@ -322,8 +321,8 @@ namespace Strategy
 		  sParam.SplineInterceptBallP.vl = 0;
 		  sParam.SplineInterceptBallP.vr = 0;
 		  sParam.SplineInterceptBallP.velGiven = 1;
-		  sParam.SplineInterceptBallP.ballVelX = avgBallVel.x;
-		  sParam.SplineInterceptBallP.ballVelY = avgBallVel.y;
+		  sParam.SplineInterceptBallP.ballVelX = state->ballVel.x;
+		  sParam.SplineInterceptBallP.ballVelY = state->ballVel.y;
 		 // cout << "here" << endl;
 		  if(splin == 0){
 				sParam.SplineInterceptBallP.initTraj = 1;

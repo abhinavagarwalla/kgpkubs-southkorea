@@ -64,7 +64,7 @@ namespace HAL
         cs_internal[i].enter();
       }
       command.preamble = Strategy::HomeTeam::COLOR == Simulator::BLUE_TEAM ? (int8_t)126 : (int8_t)127;
-	  command.timestamp = 0;
+	//  command.timestamp = 0;
       sPort.Write(&command, sizeof(CombinedFIRAPacket));
       
 #ifdef BOTLOG

@@ -18,6 +18,7 @@ public:
   running(running_),state(state_) {}
   void run()
   {
+	
     Util::CS loggerCS;
     Util::Logger logger("timelog.log", Util::Logger::Write, loggerCS);
     Kalman      kFilter ;
@@ -26,16 +27,20 @@ public:
 //	kFilter.Kalman();
     #ifdef STR_GUI
     Util::CS strCS;
+	
     StrategyPacket strPktSh;
     StrategyGUIThread strGUIThread = StrategyGUIThread::getInstance(&strPktSh, &strCS);
     strGUIThread.start();
 	TExec tExec(&state);
+	
+	
 	int prev_tactic_id = -1;
 	int prev_bot_id = -1;
 	int prev_play_id = -1;
-	PExec       pExec(&state);
+	  std::cout << "here4" << std::endl;
+	//PExec       pExec(&state);
     #endif
-	
+	  std::cout << "here4" << std::endl;
 	Tactic::Param paramList[Tactic::MAX_TACTICS];
 	
     //tGoalKeeping
@@ -218,13 +223,13 @@ public:
 	params3_old.DWGoToPointP.finalSlope = 0;
 
 	SkillSet simplegoto(&state, 4);
-	SkillSet simplegoto_old(&state, 2);
+	SkillSet simplegoto_old(&state, 0);
     Tactic::Param ptestpoint;
 	   
-    TestbotRace ttest2(&state,2);
-    Tactic::Param ptestrace;
-    ptestrace.TestbotRaceP.vl = 100;
-    ptestrace.TestbotRaceP.vr = 100;
+ //   TestbotRace ttest2(&state,2);
+  //  Tactic::Param ptestrace;
+ //   ptestrace.TestbotRaceP.vl = 100;
+  //  ptestrace.TestbotRaceP.vr = 100;
    // FILE *f = fopen("/home/robo/ballPos.txt", "w");  
 #ifdef BOTLOG
     FILE *f = fopen("/home/robo/botplot/compare_dataset/botlog.txt", "w");    
@@ -240,7 +245,7 @@ public:
 			
 //	ofstream myfile;
 //	myfile.open ("ballPosLog.txt");
-	
+	std::cout << "here" << std::endl;
     while(running)
     {
     //      timer.start();
@@ -267,7 +272,7 @@ public:
 				//if(strPktSh.which()==1)printf("1\n\n");
 				if(strPktSh.tactic().tid() != prev_tactic_id){
 					prev_tactic_id = strPktSh.tactic().tid();
-					printf("\n\n\n\n\n\n\n");com
+					printf("\n\n\n\n\n\n\n");
 					printf("****************  HELLO  ******************");
 					printf("\n\n\n\n\n\n\n");
 				}
@@ -294,9 +299,9 @@ public:
 					printf("GOT COMMAND FROM STRATEGY GUI!!!!\n");
 					prev_play_id = strPktSh.play();
 					Util::Logger::toStdOut("Command From Refee.. Reselecting play..\n");
-					pExec.selectfromGUI(prev_play_id);
+			//		pExec.selectfromGUI(prev_play_id);
 				}
-				pExec.executePlay();
+			//	pExec.executePlay();
 				strCS.leave();
 			}
 		}
@@ -322,7 +327,7 @@ public:
    	tVelocity3.execute(pVelocity_3);  
 	  tVelocity4.execute(pVelocity_4);
 	*/	
-	          // tVelocity0.execute(pVelocity_1);
+	        //   tVelocity0.execute(pVelocity_1);
 				//tVelocity3.execute(pVelocity);
 				//tAttackDuo12.execute(pAttack);
                  // tVelocity0.execute(pVelocity);
@@ -330,10 +335,11 @@ public:
 	      //tGoalie2.execute(paramGoal);
           // tGoalOur2.execute(paramGoal);
         //tDefendLine1.execute(pDefendL1);
-			//	tGoalOur2.execute(paramGoal);
+				//tGoalOur2.execute(paramGoal);
 	//	tGoalOur3.execute(paramGoal);
-    //   tAttackSpline0.execute(pAttack) ; 
-		tPass.execute(pAttack);
+    //   tAttackSpline0.execute(pAttack) ;
+
+	//	tPass.execute(pAttack);
 		if(loopcount++ > 5){		
 		//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 		//	params1.SplineGoToPointP.initTraj = 0;
@@ -359,9 +365,9 @@ public:
 		//dwDefend2.execute(paramDWDefend);
 	    //dwDefend20152.execute(paramDWDefend2015);
 		 // tcover20152.execute(paramcover2015);
-		 // tGoalOur0.execute(paramGoal);
+		//  tGoalOur0.execute(paramGoal);
 	   //  	tcoverleft2.execute(paramcoverleft);
-	    //    tcoverright0.execute(paramcoverright);
+	  //      tcoverright0.execute(paramcoverright);
 	 // dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
 	//		dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
 //			dwpoint_old.executeSkill(SkillSet::DWGoToPoint,params3_old) ;
