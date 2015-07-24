@@ -91,6 +91,10 @@ public:
 	TCoverGoalPairRight tcoverright0(&state,0);
 	Tactic::Param paramcoverright;
 	
+	//SupportAttack
+	TSupportAttack2015 tsupportattack20150(&state,0);
+	Tactic::Param paramsupportattack2015;
+	
     //tStop Bot
     TStop tS0(&state, 0);
     TStop tS1(&state, 1);
@@ -196,6 +200,7 @@ public:
 	params4.SplineInterceptBallP.vl = 70;
 	params4.SplineInterceptBallP.vr = 70;
 	params4.SplineInterceptBallP.initTraj = 1;
+	params4.SplineInterceptBallP.changeSpline = true;
 	SkillSet sball(&state, 0); 
 	
 	// params2 for dwgo to point
@@ -254,7 +259,7 @@ public:
 	  
 	  /*unsigned long long int x;
 	   unsigned a, d;
-	   __asm__ volatile("rdtsc" : "=a" (a), "=d" (d));
+	   __asm__ volatile("rdtsc" : "=a" (a), tAttackSpline0"=d" (d));
 	   t2 =  ((unsigned long lsadcaong)a) | (((unsigned long long)d) << 32);
 	   
 	  printf("\n\tTime taken for while loop\t %f\n",(t2-t1)/3200000.);
@@ -312,6 +317,7 @@ public:
 			//	printf(" \n\n %d %d \n\n",state.ourGoalCount,state.oppGoalCount);
 		
       //  printf("our side %d\n",state.pr_ballOurSide);
+	  
         //printf("opp side %d\n",state.pr_ballOppSide);
         //printf("mid %d\n",state.pr_ballMidField);
         //printf("dbox %d\n",state.pr_ball_in_opp_dbox);    
@@ -322,11 +328,11 @@ public:
         //tAttack4.execute(pAttack); 
 
 	// tVelocity1.execute(pVelocity); 
-	 //tVelocity0.execute(pVelocity_1);
-	/*	tVelocity2.execute(pVelocity_2);
-   	tVelocity3.execute(pVelocity_3);  
-	  tVelocity4.execute(pVelocity_4);
-	*/	
+	      //tVelocity0.execute(pVelocity_1);
+	//tVelocity2.execute(pVelocity_2);
+   	//tVelocity3.execute(pVelocity_3);  
+	  //tVelocity4.execute(pVelocity_4);
+	
 	        //   tVelocity0.execute(pVelocity_1);
 				//tVelocity3.execute(pVelocity);
 				//tAttackDuo12.execute(pAttack);
@@ -337,7 +343,8 @@ public:
         //tDefendLine1.execute(pDefendL1);
 				//tGoalOur2.execute(paramGoal);
 	//	tGoalOur3.execute(paramGoal);
-    //   tAttackSpline0.execute(pAttack) ;
+      // tAttackSpline0.execute(pAttack) ;
+	//tsupportattack20150.execute(paramsupportattack2015);
 
 	//	tPass.execute(pAttack);
 		if(loopcount++ > 15){		
@@ -345,16 +352,16 @@ public:
 		//	params1.SplineGoToPointP.initTraj = 0;
 			sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
 			params4.SplineInterceptBallP.initTraj = 0;
+			
 			//tAttackSpline0.execute(pAttack) ;
-		//	sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
-		//	params4.SplineInterceptBallP.initTraj = 0;
+			//sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
+			//params4.SplineInterceptBallP.initTraj = 0;
 			//tKickoff.execute(pAttack) ;
 			loopcount = loopcount%1000 + 15;
 		}
 		else{
-		//	getchar();
 			tVelocity0.execute(pVelocity);		
-		}		
+		}
         
 	    //tPass.execute(pAttack);
         //tKickoff.execute(pAttack) ;
@@ -388,7 +395,7 @@ public:
       //  tcover0.execute(paramcover);
         //tcover3.execute(paramcover);
      //tCharge1.execute(pCharge);
-	    //tAttack20150.execute(pAttack) ;
+	   //tAttack20150.execute(pAttack) ;
 		  //tShoot4.execute(paramShoot) ;
 		  //  tAttack0.execute(pAttack);
 		//	tAttack2.execute(pAttack);

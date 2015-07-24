@@ -90,7 +90,7 @@ inline SplineTrajectory* getIntTraj(Pose botPosStart, Vector2D<float> ballPos, V
 	     st = TrajectoryGenerators::cubic(botPosStart, endPose, botVel.x, botVel.y, 0, 0, midPoints);
 
         double t = st->totalTime();
-		std::cout << "time" << t << std::endl;
+		//std::cout << "time" << t << std::endl;
 		//getchar();
      //   qDebug() << "mid = " << mid << ", bot-ka-time = " << t;
         if (fabs(t-mid) < error)

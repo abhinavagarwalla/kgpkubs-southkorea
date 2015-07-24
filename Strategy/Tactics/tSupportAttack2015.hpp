@@ -103,7 +103,7 @@ namespace Strategy
 
 			float dist = Vector2D<int>::dist(state->homePos[botID], state->homePos[botID]);
 			int ourBot = state->ourBotNearestToBall;
-			int oppBot = state->oppBotNearestToBall;
+			//int oppBot = state->oppBotNearestToBall;
 
 			if(abs(state->homePos[botID].y) < OUR_GOAL_MAXY - BOT_RADIUS && state->homePos[botID].x < -HALF_FIELD_MAXX + GOAL_DEPTH + DBOX_HEIGHT)
 			{
@@ -132,12 +132,12 @@ namespace Strategy
 			{
 				case ATTACK_LINGO :
 				{
-					if(state->ballPos.x < 0 && state->ballVel.x < 0 && state->ballPos.x > state->homePos[botID].x && 
+					/*if(state->ballPos.x < 0 && state->ballVel.x < 0 && state->ballPos.x > state->homePos[botID].x && 
 							state->ballPos.x > ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH)*0.8)
 					{
 						iState = DEFEND;
 						break;
-					}
+					}*/
 					
 					float factorX = 0.00005;
 					float factorY = 0.00005;

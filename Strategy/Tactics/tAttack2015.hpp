@@ -236,21 +236,21 @@ namespace Strategy
 	case APPROACHING:
 	{ 
 
-	  if(dist<1.5*BOT_BALL_THRESH && state->homePos[botID].x<state->ballPos.x )
+	  if(dist<1.2*BOT_BALL_THRESH && state->homePos[botID].x<state->ballPos.x )
 	  {
             iState = CLOSE_TO_BALL ;
             break;
 	  
 	  } 
 	  
-      if(state->homePos[botID].x > state->ballPos.x )
-	  {
-	// **************  YAHAN PE SPLINE / BALL INTERCEPTION ******************************************************* 	  
-	    sID = SkillSet::GoBehindBall ;
-	    skillSet->executeSkill(sID, sParam);
-		cout<<"BehindBall"<<endl;
-	    break ;
-      }
+//      if(state->homePos[botID].x > state->ballPos.x )
+//	  {
+//	// **************  YAHAN PE SPLINE / BALL INTERCEPTION ******************************************************* 	  
+//	    sID = SkillSet::GoBehindBall ;
+//	    skillSet->executeSkill(sID, sParam);
+//		cout<<"BehindBall"<<endl;
+//	    break ;
+//      }
 	  
 		cout<<"APPROACHING"<<endl ;  
            // shoot();
@@ -258,41 +258,17 @@ namespace Strategy
           sID = SkillSet::GoToPoint;
           sParam.GoToPointP.align = true;
           float ballgoaldist = Vector2D<int>::dist(state->ballPos, Vector2D<int>(OPP_GOAL_X, 0));
-          float offset = 600;
+          float offset = 500;
          
 		  //******************** changed**********************
-		  float factorx = 0.00005;
-		  if(avgBallVel.x<200 )
-			  factorx=0.00005;
-		  else if(avgBallVel.x<1000 )
-			  factorx=0.00005;
-		  else if(avgBallVel.x<1400)
-			  factorx=0.00006;
-		  else if(avgBallVel.x<2000)
-			  factorx=0.00007;
-		  else if(avgBallVel.x<3000)
-			  factorx=0.00008;
-		  else factorx=0.00010;
-
-		   float factory = 0.00005;
-		  if( avgBallVel.y<200 )
-			  factory=0.00002;
-		  else if(avgBallVel.y<1000 )
-			  factory=0.00004;
-		  else if(avgBallVel.y<1400)
-			  factory=0.00006;
-		  else if(avgBallVel.y<2000)
-			  factory=0.00007;
-		  else if(avgBallVel.y<3000)
-			  factory=0.00008;
-		  else factory=0.0001;
+		  float factorx = 0.00004,factory=0.0004;
 		  //****************************************************
 		 /*float factorx,factory;
 		  factorx=factory=0.00002;*/
 
           int ballBotDist = (int)Vector2D<int>::dist(state->homePos[botID],state->ballPos);
-          int targetX = state->ballPos.x ;// + (int)ballBotDist * factorx * avgBallVel.x;
-          int targetY = state->ballPos.y ;//+ (int)ballBotDist * factory * avgBallVel.y;
+          int targetX = state->ballPos.x;// + (int)ballBotDist * factorx * avgBallVel.x;
+          int targetY = state->ballPos.y;// + (int)ballBotDist * factory * avgBallVel.y;
           int x3 = (targetX * (ballgoaldist + offset) - offset * OPP_GOAL_X) / ballgoaldist;
           int y3 = (targetY * (ballgoaldist + offset)) / ballgoaldist;
 
@@ -319,7 +295,7 @@ namespace Strategy
           
 	      //***************************************
 		  /// log search to place offset at a point not co-inciding with a bot.		         
-         /*
+         
 		  while(1)		        
           {		
             bool flag = false;		
@@ -341,25 +317,25 @@ namespace Strategy
                 offset /= 1.1;		
               }		
             }		
-            //x3 = (ballPosX * (ballgoaldist + offset) - offset * OPP_GOAL_X) / ballgoaldist;		
-            //y3 = (ballPosY * (ballgoaldist + offset)) / ballgoaldist;		
+            x3 = (state->ballPos.x * (ballgoaldist + offset) - offset * OPP_GOAL_X) / ballgoaldist;		
+            y3 = (state->ballPos.y * (ballgoaldist + offset)) / ballgoaldist;		
             if(!flag)		
               break;		
             if(offset <= 2.0)		
             {		
               offset = 0;		
-              //x3 = (ballPosX * (ballgoaldist + offset) - offset * OPP_GOAL_X) / ballgoaldist;		
-              //y3 = (ballPosY * (ballgoaldist + offset)) / ballgoaldist;		
+              x3 = (state->ballPos.x * (ballgoaldist + offset) - offset * OPP_GOAL_X) / ballgoaldist;		
+              y3 = (state->ballPos.y * (ballgoaldist + offset)) / ballgoaldist;		
               break;		
             }		
           }
-		  */
+		  
 		  //***************************************
 		  
 		  
           Vector2D<int> offsetpt(x3, y3);
           int dist2 = Vector2D<int>::dist(offsetpt, state->homePos[botID]);
-          if(dist2 < 300)
+          if(dist2 < 1.5*BOT_RADIUS)
             hasAchievedOffset = 1;
                   /* Bot is already between ball and offset point */
                   //else if(Vector2D<int>::dist(offsetpt,state->ballPos) < 500 + Vector2D<int>::dist(state->homePos[botID],state->ballPos) + dist2) hasAchievedOffset = 1; 
@@ -374,6 +350,7 @@ namespace Strategy
           sParam.GoToPointP.x = x3;
           sParam.GoToPointP.y = y3;
 		  sParam.GoToPointP.finalslope = Vector2D<int>::angle( Vector2D<int>(OPP_GOAL_X, 0),state->ballPos);
+		   //sParam.GoToPointP.finalslope = Vector2D<int>::angle( state->ballPos,state->homePos[botID]);
           sParam.GoToPointP.increaseSpeed = 0;
           if(hasAchievedOffset)
           {
@@ -410,6 +387,12 @@ namespace Strategy
 		  }
 
 	  }
+	  
+	  if(!LocalAvoidance::isPointInField(Vector2D<int> (sParam.GoToPointP.x,sParam.GoToPointP.y)))
+            {
+				sParam.GoToPointP.x=state->ballPos.x;
+				sParam.GoToPointP.y=state->ballPos.y;
+			}
     
 	// write the condition here so that it doesn't hamper the goalie
 
@@ -467,7 +450,7 @@ namespace Strategy
 				iState = FIELD_IS_INVERTED? SPINNING_CW : SPINNING_CCW;
               break ;
 		   } 
-		   if(dist > 1.5*BOT_BALL_THRESH)
+		   if(dist > 1.2*BOT_BALL_THRESH)
 		   {
               iState = APPROACHING ;
 			   break ;
@@ -508,6 +491,11 @@ namespace Strategy
 				sParam.GoToPointP.finalslope = Vector2D<int>::angle( Vector2D<int>(OPP_GOAL_X, 0),state->ballPos);
 			}
             sParam.GoToPointP.increaseSpeed = 1;
+			 if(!LocalAvoidance::isPointInField(Vector2D<int> (sParam.GoToPointP.x,sParam.GoToPointP.y)))
+            {
+				sParam.GoToPointP.x=state->ballPos.x;
+				sParam.GoToPointP.y=state->ballPos.y;
+			}
             skillSet->executeSkill(sID, sParam);
            
           break ;

@@ -14,6 +14,7 @@
 #include "pose.h"
 #include "controller-wrapper.hpp"
 #include "trajectory.hpp"
+#include <deque>
 
 // Forward Declarations
 namespace Strategy
@@ -106,6 +107,7 @@ namespace Strategy
 		float ballVelY;
 		bool velGiven;
 		bool initTraj;
+		bool changeSpline;
       }SplineInterceptBallP;
 
     };
@@ -115,7 +117,6 @@ namespace Strategy
 		ControllerWrapper *algoController;
 		Trajectory* traj;
 		int counter, interceptCounter;
-		std::queue<Pose> predictedPoseQ;
 	public:
 		enum SkillID
 		{
@@ -194,7 +195,8 @@ namespace Strategy
      * Soumyadeep & Ankit
      */
     static void errorLog(int botid,float vl,float vr, const BeliefState *state);
-    
+	// old predictions side-by-side with the actual position of the bot.
+    std::deque<Pose> predictedPoseQ;
     
     SkillSet(const BeliefState* state, int botID);
     ~SkillSet();
