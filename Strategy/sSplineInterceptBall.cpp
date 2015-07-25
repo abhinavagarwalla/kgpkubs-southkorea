@@ -45,7 +45,7 @@ namespace Strategy
 
     float dist = Vector2D<int>::dist(state->homePos[botID], state->ballPos);  
     interceptCounter = 0; 
-    if(dist < 50){
+    if(dist < 150){
       comm->sendCommand(botID, 0, 0);
       return;
     }
@@ -69,7 +69,7 @@ namespace Strategy
 	}
 	else{
 		if(lastDirection2 == direction2){
-			genVel = algoController->getDelayedVel();          
+			genVel = algoController->getDelayedVel();
 			startP = predictedPoseQ.back();
 		}
 		else{
@@ -111,10 +111,10 @@ namespace Strategy
     botVel.x = state->homeVlVr[botID].x;
     botVel.y = state->homeVlVr[botID].y;
     double dt = 10;
-    if(traj){
-      SplineTrajectory *st = dynamic_cast<SplineTrajectory*>(traj);
-      dt = st->totalTime() - algoController->getCurrentTimeS();
-    }
+//    if(traj){
+//      SplineTrajectory *st = dynamic_cast<SplineTrajectory*>(traj);
+//      dt = st->totalTime() - algoController->getCurrentTimeS();
+//    }
     if(param.SplineInterceptBallP.initTraj == 1 || dt < 0.075)
        _splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr, 0);
     else if (param.SplineInterceptBallP.changeSpline == 1 && interceptCounter > 80) 

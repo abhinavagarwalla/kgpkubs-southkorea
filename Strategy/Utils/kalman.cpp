@@ -195,7 +195,7 @@ namespace Strategy
  //   if (delTheta < 1e-2 && delTheta > -1e-2) {  // be realistic
 	if(fabs(delTheta) < err){	
 	
-	//cout << "here" << endl;
+	//cout << "here" << endl;final_vl
         // bot should be headed straight, but again confusion
         // so taking projection of (delX, delY) along (cos(theta), sin(theta)) as displacement.
         double dispLength = delX*cos(oldTheta) + delY*sin(oldTheta);
@@ -203,15 +203,13 @@ namespace Strategy
         vl = vl / ticksToCmS;
         vr = vl;
 		Vector2D<float> v(vl,vr);
-		cout<<"hete Returning from the loop "<<endl;
-		getchar();
         return v;
     }
     // we calculate 2 rho's, based on delX and delY, and take average
   // whatif newTheta == oldTheta 
     
 	double rho1 = delX / (sin(newTheta) - sin(oldTheta));
-    double rho2 = -delY / (cos(newTheta) - cos(oldTheta));
+    double rho2 = -delY / (cos(newTheta)- cos(oldTheta));
 	//cout<<" Rhos :: "<<newTheta<<"  "<<oldTheta<< " " << delTheta << endl ;
     // try harmonic mean?
 //    double rho = (rho1 + rho2) / 2;
@@ -286,8 +284,8 @@ namespace Strategy
 		  ballT.push_back(ans);
 	  }	
 	  // getchar();
-	  myfileX << ballVelocity.x << "\t" <<  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV ) << endl;
-   //  ballVelocity.x =  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV );
+	//  myfileX << ballVelocity.x << "\t" <<  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV ) << endl;
+      ballVelocity.x =  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV );
 	  ballT.clear();
 	  // for y direction
 	  ballPosY.erase(ballPosY.begin());
@@ -299,8 +297,8 @@ namespace Strategy
 		  ans += ballPosTimeY[i];
 		  ballT.push_back(ans);
 	  }
-	 myfileY << ballVelocity.y << "\t"  <<  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV) << endl;
-//	  ballVelocity.y =  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV );
+	// myfileY << ballVelocity.y << "\t"  <<  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV) << endl;
+	  ballVelocity.y =  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV );
 	  ballT.clear();
 //	  myfileY <<	ballVelocity.y << " " << prevBallVelocity.y << " " << abs(ballVelocity.y - prevBallVelocity.y) << endl;
 

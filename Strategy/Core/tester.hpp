@@ -135,8 +135,8 @@ public:
 		TVelocity tVelocity2(&state,2);
     
 	Tactic::Param pVelocity;
-	pVelocity.VelocityP.vl = 30;
-	pVelocity.VelocityP.vr = 30;
+	pVelocity.VelocityP.vl = 0;
+	pVelocity.VelocityP.vr = 0;
 	
 	Tactic::Param pVelocity_1;
 	pVelocity_1.VelocityP.vl = 30;
@@ -197,8 +197,8 @@ public:
 	
 	//params4 for spline interception with ball
 	Strategy::SParam params4;
-	params4.SplineInterceptBallP.vl = 70;
-	params4.SplineInterceptBallP.vr = 70;
+	params4.SplineInterceptBallP.vl = 20;
+	params4.SplineInterceptBallP.vr = 20;
 	params4.SplineInterceptBallP.initTraj = 1;
 	params4.SplineInterceptBallP.changeSpline = true;
 	SkillSet sball(&state, 0); 
