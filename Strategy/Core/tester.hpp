@@ -135,8 +135,8 @@ public:
 		TVelocity tVelocity2(&state,2);
     
 	Tactic::Param pVelocity;
-	pVelocity.VelocityP.vl = 0;
-	pVelocity.VelocityP.vr = 0;
+	pVelocity.VelocityP.vl = 30;
+	pVelocity.VelocityP.vr = 30;
 	
 	Tactic::Param pVelocity_1;
 	pVelocity_1.VelocityP.vl = 30;
@@ -350,8 +350,8 @@ public:
 		if(loopcount++ > 15){		
 			//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 			//	params1.SplineGoToPointP.initTraj = 0;
-				//sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
-				//params4.SplineInterceptBallP.initTraj = 0;
+				sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
+				params4.SplineInterceptBallP.initTraj = 0;
 			//tAttackSpline0.execute(pAttack) ;
 			//tKickoff.execute(pAttack) ;
 			loopcount = loopcount%1000 + 15;
@@ -359,6 +359,7 @@ public:
 		else{
 			tVelocity0.execute(pVelocity);		
 		}
+	//	tVelocity0.execute(pVelocity);		
         
 	    //tPass.execute(pAttack);
         //tKickoff.execute(pAttack) ;
@@ -388,11 +389,11 @@ public:
 				//tReceive1.execute(pReceive);
 	//	tAttack3.execute(pAttack);
 	 //tAttack1.execute(pAttack);
-        //tAttack4.execute(pAttack);
+     //   tAttack0.execute(pAttack);
       //  tcover0.execute(paramcover);
         //tcover3.execute(paramcover);
      //tCharge1.execute(pCharge);
-	//   tAttack20150.execute(pAttack) ;
+	   //tAttack20150.execute(pAttack) ;
 		  //tShoot4.execute(paramShoot) ;
 		  //  tAttack0.execute(pAttack);
 		//	tAttack2.execute(pAttack);

@@ -15,7 +15,6 @@ namespace Strategy
 {
   void SkillSet::_splineInterceptBallTrack(int botid, Pose start, Vector2D<float> ballPos, Vector2D<float> ballVel, Vector2D<float> botVel, float final_vl, float final_vr){
     
-  //  cout << "in this" << endl;
     interceptCounter++;
     
     if(!algoController){
@@ -30,15 +29,12 @@ namespace Strategy
     Pose dummy(0,0,0);
     algoController->genControls(start, dummy, vl, vr, 0);
     predictedPoseQ.push_back(algoController->getPredictedPose(start));
-    if(predictedPoseQ.size() > PREDICTION_PACKET_DELAY){
-        predictedPoseQ.pop_front();
-    }
+    predictedPoseQ.pop_front();
     assert(vl <= 150 && vl >= -150);
     assert(vr <= 150 && vr >= -150);
     if (direction2)
       comm->sendCommand(botid, vl/2, vr/2); //maybe add mutex
     else {
-      //cout << "ulta chaloooo" << endl;
       int vl1 = (-1)*vr;
       int vr1 = (-1)*vl;
       comm->sendCommand(botid, vl1/2, vr1/2);
@@ -86,6 +82,11 @@ namespace Strategy
 	traj = BallInterception::getIntTraj(startP, ballPos, ballVel, genVel);
 	algoController = new ControllerWrapper(traj, genVel.x, genVel.y, PREDICTION_PACKET_DELAY);
 	lastDirection2 = direction2 ; 
+	
+	for (int i = 0; i < PREDICTION_PACKET_DELAY; i++) {
+        predictedPoseQ.push_back(Pose(state->homePos[botID].x, state->homePos[botID].y, state->homeAngle[botID]));
+    }
+	
     _splineInterceptBallTrack(botID, start, ballPos, ballVel, botVel, final_vl, final_vr);
   }
   

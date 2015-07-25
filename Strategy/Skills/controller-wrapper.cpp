@@ -98,7 +98,7 @@ MiscData ControllerWrapper::genControlsTrajSim(Pose s, int &vl, int &vr, double 
 
 Vector2D<float> ControllerWrapper::getDelayedVel()
 {
-    return Vector2D<float>(uq.front().first, uq.front().second);
+    return Vector2D<float>(uq.back().first, uq.back().second);
 }
 
 Pose ControllerWrapper::getNewStartPose(){
