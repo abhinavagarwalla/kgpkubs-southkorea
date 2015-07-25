@@ -108,6 +108,9 @@ namespace Strategy
 			  sID = SkillSet::DWGoToPoint;
 			  sParam.DWGoToPointP.x = ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*1.2) /*/4*/;
 			  int temp = getBotDestPointY();
+			  if( state->ballPos.x <  ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS))
+				  sParam.DWGoToPointP.y = SGN(state->ballPos.y)*state->ballPos.y ;
+			  else
 			  sParam.DWGoToPointP.y = temp;
 //			  sParam.DWGoToPointP.align = false;
 			 // sParam.GoToPointP.finalVelocity = 0;

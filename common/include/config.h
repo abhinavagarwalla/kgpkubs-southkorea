@@ -112,6 +112,8 @@ extern const double yUncertainty ;
 extern const double thetaUncertainty ;
 extern const int numPacketDelay ;
 
+extern const double vwSlope; //making vw as function of r
+extern const double vwIntercept;
 extern const double vwmax    ; // cm/s^2
 extern const double vsat     ; // cm/s
 extern const double atmax    ; // cm/s^2, need to measure this, need to take inertia into account

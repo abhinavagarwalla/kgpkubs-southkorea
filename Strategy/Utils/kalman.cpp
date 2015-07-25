@@ -12,7 +12,7 @@
 #include <iostream>
 #include <fstream>
 
-#define SGFILTER_SIZE 4
+#define SGFILTER_SIZE 5
 #define SGFILTER_DERIV 1
 #define SGFILTER_ORDER 2
 
@@ -287,7 +287,7 @@ namespace Strategy
 	  }	
 	  // getchar();
 	  myfileX << ballVelocity.x << "\t" <<  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV ) << endl;
-      ballVelocity.x =  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV );
+   //  ballVelocity.x =  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV );
 	  ballT.clear();
 	  // for y direction
 	  ballPosY.erase(ballPosY.begin());
@@ -299,8 +299,8 @@ namespace Strategy
 		  ans += ballPosTimeY[i];
 		  ballT.push_back(ans);
 	  }
-	 myfileY << ballPose.y << "\t"  <<  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV) << endl;
-	  ballVelocity.y =  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV );
+	 myfileY << ballVelocity.y << "\t"  <<  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV) << endl;
+//	  ballVelocity.y =  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV );
 	  ballT.clear();
 //	  myfileY <<	ballVelocity.y << " " << prevBallVelocity.y << " " << abs(ballVelocity.y - prevBallVelocity.y) << endl;
 

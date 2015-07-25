@@ -181,8 +181,8 @@ public:
 	TPass tPass(&state , 0);
 	
 	Tactic::Param pAttack;
-    paramList[Tactic::Attack].AttackP.rotateOnError = true;
-    paramList[Tactic::Attack2015].AttackP.rotateOnError = true;
+    paramList[Tactic::Attack].AttackP.rotateOnError = false;
+    paramList[Tactic::Attack2015].AttackP.rotateOnError = false;
     // TestgotoPoint
     Strategy::Testgotopoint ttest1(&state,1);
 	
@@ -337,25 +337,22 @@ public:
 				//tVelocity3.execute(pVelocity);
 				//tAttackDuo12.execute(pAttack);
                  // tVelocity0.execute(pVelocity);
-	      //tVelocity2.execute(pVelocity_1);
+	      //tVelocity0.execute(pVelocity_1);
 	      //tGoalie2.execute(paramGoal);
           // tGoalOur2.execute(paramGoal);
         //tDefendLine1.execute(pDefendL1);
 				//tGoalOur2.execute(paramGoal);
-	//	tGoalOur3.execute(paramGoal);
+		//tGoalOur0.execute(paramGoal);
       // tAttackSpline0.execute(pAttack) ;
 	//tsupportattack20150.execute(paramsupportattack2015);
 
 	//	tPass.execute(pAttack);
 		if(loopcount++ > 15){		
-		//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
-		//	params1.SplineGoToPointP.initTraj = 0;
-			sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
-			params4.SplineInterceptBallP.initTraj = 0;
-			
+			//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
+			//	params1.SplineGoToPointP.initTraj = 0;
+				//sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
+				//params4.SplineInterceptBallP.initTraj = 0;
 			//tAttackSpline0.execute(pAttack) ;
-			//sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
-			//params4.SplineInterceptBallP.initTraj = 0;
 			//tKickoff.execute(pAttack) ;
 			loopcount = loopcount%1000 + 15;
 		}
@@ -367,7 +364,7 @@ public:
         //tKickoff.execute(pAttack) ;
 		//tPosition
 				//tcover3.execute(paramcover);
-       // tAttack3.execute(paramcover);
+     //   tAttack0.execute(paramcover);
       //  tcover1.execute(paramcover);
 		//dwDefend2.execute(paramDWDefend);
 	    //dwDefend20152.execute(paramDWDefend2015);
@@ -395,7 +392,7 @@ public:
       //  tcover0.execute(paramcover);
         //tcover3.execute(paramcover);
      //tCharge1.execute(pCharge);
-	   //tAttack20150.execute(pAttack) ;
+	//   tAttack20150.execute(pAttack) ;
 		  //tShoot4.execute(paramShoot) ;
 		  //  tAttack0.execute(pAttack);
 		//	tAttack2.execute(pAttack);

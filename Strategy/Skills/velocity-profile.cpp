@@ -154,44 +154,70 @@ vector<ProfileDatapoint> generateVelocityProfile(Spline &p, int numPoints, doubl
     double vs = (vls+vrs)/2.;
     double ve = (vle+vre)/2.;
     //std::cout << vs << " " << ve << endl;
-    //assert(vs >= 0 && ve >= 0);
+    assert(ve >= 0);
     vector<ProfileDatapoint> v(numPoints, ProfileDatapoint());
     double dels = full/(numPoints-1);
 
     Integration::refreshMatrix();
-    Integration::computeInverseBezierMatrices(p);
+    Integration::computeInverseBezierMatrices(p); //comment this when final
     Integration::computeSplineApprox(p);
     //Integration::computeBezierMatrices(p);
-    for (int i = 0; i < numPoints; i++) {
+    for (int i = 0; i < v.size(); i++) {
         double s = full/(numPoints-1)*(double)i;
         double u = Integration::getArcLengthParam(p, s, full);
         double k = p.k(u);
         //NOTE: hardcoding vsat here!!
-        v[i].v = min(vmax_isolated(k, 100), vsat);
+        v[i].v = min(vmax_isolated(k, vsat), vsat);
         v[i].u = u;
         v[i].s = s;
     }
+	
+	// in case of negative starting velocity, adding 2 CP:
+    // 1. at the point where bot goes from negative -> zero velocty, should be
+    // at distance of -v^2/(2*a) whre a = max decelaration
+    // 2. at the point where it reaches original starting point, but with positive velocity
+    if (vs < 0) {
+        double s = -vs*vs/atmax/2./10.;
+        ProfileDatapoint dp;
+        dp.v = 0;
+        dp.s = s;
+        dp.u = Integration::getArcLengthParam(p, dp.s, full);
+        v.insert(v.begin()+1, dp);
+        dp.v = -vs;
+        dp.s = 0;
+        dp.u = 0;
+        v.insert(v.begin()+2, dp);
+    }
+	
     // forward consistency
     v[0].v = vs;
-    for (int i = 1; i < numPoints; i++) {
+    for (int i = 1; i < v.size(); i++) {
         double vwold = v[i-1].v*v[i-1].v*p.k(v[i-1].u);
+		assert(p.k(v[i-1].u) != 0);
+        double vw = vwIntercept + vwSlope/p.k(v[i-1].u);
+        if( vw < vwmax)
+            vw = vwmax;
         v[i].v = min(v[i].v, trans_acc_limits(vwold, vwmax, v[i-1].v, atmax, dels).second);
     }
     // backward consistency
-    v[numPoints-1].v = ve;
-    for (int i = numPoints-2; i >= 0; i--) {
+    v[v.size()-1].v = ve;
+    for (int i = v.size()-2; i >= 0; i--) {
         double vwold = v[i+1].v*v[i+1].v*p.k(v[i+1].u);
+		assert(p.k(v[i+1].u) != 0);
+        double vw = vwIntercept + vwSlope/p.k(v[i+1].u);
+        if( vw < vwmax)
+            vw = vwmax;
         v[i].v = min(v[i].v, trans_acc_limits(vwold, vwmax, v[i+1].v, atmax, dels).second);
     }
     // set time to reach for each datapoint
     v[0].t = 0;
-    for (int i = 1; i < numPoints; i++) {
+    for (int i = 1; i < v.size(); i++) {
         v[i].t = v[i-1].t + 2*dels/(v[i].v+v[i-1].v);
     }
     // std::cout << "profile:" ;
-    for (int i = 0; i< numPoints; i++) {
-        // std::cout << v[i].u << v[i].t << v[i].s << v[i].v;
-    }
+//    for (int i = 0; i< v.size(); i++) {
+//        // std::cout << v[i].u << v[i].t << v[i].s << v[i].v;
+//    }
     return v;
 }
 

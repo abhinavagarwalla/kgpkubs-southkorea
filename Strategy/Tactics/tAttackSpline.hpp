@@ -249,19 +249,22 @@ namespace Strategy
 //        skillSet->executeSkill(sID, sParam);
 //        return;
 //      }
-
+      float botBallAngle = normalizeAngle(Vector2D<int>::angle(state->homePos[botID] , state->ballPos));
+	  float ballGoalAngle = normalizeAngle(Vector2D<int>::angle(state->ballPos, Vector2D<int>(OPP_GOAL_MAXY - GOAL_DEPTH, 0)));
+	  float diff = normalizeAngle(fabs(botBallAngle - ballGoalAngle));
+	  cout << "angle " << botBallAngle << " " << ballGoalAngle << " " << diff << endl;
   switch(iState)
   {        
   case APPROACHING:
   { 
-      
-    if(dist<1.2*BOT_BALL_THRESH && state->homePos[botID].x<state->ballPos.x )
-    {
+
+	  if(dist<1.2*BOT_BALL_THRESH && state->homePos[botID].x<state->ballPos.x && diff < PI/4)
+      {
             iState = CLOSE_TO_BALL ;
 			splin = 0;
             break;
-    } 
-    cout<<"APPROACHING"<<endl ; 
+      } 
+      cout<<"APPROACHING"<<endl ; 
 //    if(isBallInDBox()==true)
 //    {
 //      sParam.GoToPointP.x =  -HALF_FIELD_MAXX+GOAL_DEPTH+DBOX_WIDTH+BOT_RADIUS ;
@@ -285,7 +288,7 @@ namespace Strategy
 //    skillSet->executeSkill(sID, sParam);
 //    break;
 //    }
-    
+
     // write the code for local avoidance also :: using CP in spline 
         static Vector2D<int> lastSplinePoint(state->ballPos.x , state->ballPos.y) ;
           cout << "spline here :: " << splin << std::endl;
@@ -305,7 +308,7 @@ namespace Strategy
         sParam.SplineInterceptBallP.initTraj = 0;
       }
    //   if (dist < 500)
-      sParam.SplineInterceptBallP.changeSpline = false;
+      sParam.SplineInterceptBallP.changeSpline = true;
  //     else
   //      sParam.SplineInterceptBallP.changeSpline = true;
     //  cout << "here " << endl;
@@ -371,11 +374,11 @@ namespace Strategy
        if(dist > 4*BOT_BALL_THRESH)
        {
               iState = APPROACHING ;
-         break ;
-            }
+			break ;
+		}
           /* Ball is with bot. So go to goal */
-          sID = SkillSet::GoToPoint;
-          int desty = 0;
+	  sID = SkillSet::GoToPoint;
+	  int desty = 0;
       Vector2D<int> GoalMidPoint  (OPP_GOAL_X,0);
       Vector2D<int> GoalLeftPoint (OPP_GOAL_X,OPP_GOAL_MINY);
       Vector2D<int> GoalRightPoint(OPP_GOAL_X,OPP_GOAL_MAXY);

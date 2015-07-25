@@ -22,8 +22,7 @@ namespace Strategy
 		double v1 = testx / tan(botPos.theta()) + testy - botPos.x() / tan(botPos.theta()) - botPos.y();
 		double v2 = endPos.x() / tan(botPos.theta()) + endPos.y() - botPos.x() / tan(botPos.theta()) - botPos.y();
 		return ((v1 * v2) >= 0) ? true : false;
-	}
-		
+	}	
 	void SkillSet::_splineGoToPointTrack(int botid, Pose start, Pose end, float finalvel, float vls, float vrs){
 		
 		counter++;	

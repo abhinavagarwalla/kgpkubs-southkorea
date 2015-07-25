@@ -531,8 +531,8 @@ double getArcLengthParam(Spline& p, double s, double full, int *itr, int method)
   
   //std::cout << s  << " " << full << std::endl;
 
-	if (s < 0) s = 0; //hard code
-  assert(s >= 0);
+	//if (s < 0) s = 0; //hard code
+  //assert(s >= 0);
   double u = s/full;  // initial guess;
   if(method==0)u = get_ufroms_sp(s);
   else if(method==1)u = get_ufroms(s/full);
