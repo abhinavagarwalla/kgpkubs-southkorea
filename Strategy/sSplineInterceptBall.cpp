@@ -54,10 +54,11 @@ namespace Strategy
     direction2 = _isFrontDirected(start, Pose(state->ballPos.x, state->ballPos.y , Vector2D<int>::angle(state->ballPos, GoalPoint)), state->homeVlVr[botID].x, state->homeVlVr[botID].y);
     interceptCounter = 0; 
     Vector2D<float> genVel, delayedVel; Pose startP;
-
+	Vector2D<int> prevV;
 	if(traj)delete traj;
 	
 	if(!flag){
+		prevV.x=0;prevV.y=0;
 		if(direction2){
 			genVel.x = botVel.x; genVel.y = botVel.y;
 			startP = start;
@@ -68,6 +69,7 @@ namespace Strategy
 		}
 	}
 	else{
+		prevV = algoController->getPrevDelVel();
 		if(lastDirection2 == direction2){
 			genVel = algoController->getDelayedVel();
 			startP = predictedPoseQ.back();
@@ -79,8 +81,8 @@ namespace Strategy
           startP.setTheta(normalizeAngle(start.theta() - PI));
 		}
 	}
-	traj = BallInterception::getIntTraj(startP, ballPos, ballVel, genVel);
-	algoController = new ControllerWrapper(traj, genVel.x, genVel.y, PREDICTION_PACKET_DELAY);
+	traj = BallInterception::getIntTraj(startP, ballPos, ballVel, genVel);	
+	algoController = new ControllerWrapper(traj, genVel.x, genVel.y, PREDICTION_PACKET_DELAY, prevV.x, prevV.y);
 	lastDirection2 = direction2 ; 
 	
 	for (int i = 0; i < PREDICTION_PACKET_DELAY; i++) {

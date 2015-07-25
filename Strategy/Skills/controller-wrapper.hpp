@@ -20,6 +20,7 @@ public:
 
     ControllerWrapper(FType fun, int start_vl, int start_vr, int k);
     ControllerWrapper(Trajectory *traj, int start_vl, int start_vr,  int k);
+	ControllerWrapper(Trajectory *traj, int start_vl, int start_vr,  int k, int prevVL, int prevVR);
     void reset();
     void setTraj(Trajectory *traj);
     Pose getPredictedPose(Pose s);
@@ -28,5 +29,6 @@ public:
     MiscData genControlsTrajSim(Pose s, int &vl, int &vr, double t);
     Pose getNewStartPose();
     Vector2D<float> getDelayedVel();
+	Vector2D<int> getPrevDelVel();
 };
 #endif // CONTROLLERWRAPPER_HPP

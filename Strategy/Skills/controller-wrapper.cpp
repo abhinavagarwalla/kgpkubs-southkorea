@@ -58,6 +58,13 @@ ControllerWrapper::ControllerWrapper(Trajectory *traj, int start_vl, int start_v
         uq.push_back(make_pair<int,int>((int)start_vl,(int)start_vr));
     prevVl = prevVr = 0;
 }
+
+ControllerWrapper::ControllerWrapper(Trajectory *traj, int start_vl, int start_vr,  int k, int prevVL, int prevVR):k(k),
+	ctrlType(TRACKCTRL), tracker(traj), startTime(), isFirstCall(true), prevVl(prevVL), prevVr(prevVR){
+    for(int i = 0; i < k; i++)
+        uq.push_back(make_pair<int,int>((int)start_vl,(int)start_vr));
+}
+
 void ControllerWrapper::reset() {
     isFirstCall = true;
 }
@@ -99,6 +106,11 @@ MiscData ControllerWrapper::genControlsTrajSim(Pose s, int &vl, int &vr, double 
 Vector2D<float> ControllerWrapper::getDelayedVel()
 {
     return Vector2D<float>(uq.back().first, uq.back().second);
+}
+
+Vector2D<int> ControllerWrapper::getPrevDelVel()
+{
+    return Vector2D<int>(uq[uq.size()-2].first, uq[uq.size()-2].second);
 }
 
 Pose ControllerWrapper::getNewStartPose(){
