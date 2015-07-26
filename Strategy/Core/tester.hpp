@@ -82,9 +82,12 @@ public:
     paramList[Tactic::CoverGoal].CoverGoalP.distFromGoal = -2*DBOX_WIDTH;
 	
 	//CoverGoal2015
+	TCoverGoal2015 tcover20150(&state,0);
+	TCoverGoal2015 tcover20151(&state,1);
 	TCoverGoal2015 tcover20152(&state,2);
+	TCoverGoal2015 tcover20153(&state,3);
+	TCoverGoal2015 tcover20154(&state,4);
 	Tactic::Param paramcover2015;
-	
 	//CoverGoalPair
 	TCoverGoalPairLeft tcoverleft2(&state,2);
 	Tactic::Param paramcoverleft;
@@ -337,16 +340,18 @@ public:
 				//tVelocity3.execute(pVelocity);
 				//tAttackDuo12.execute(pAttack);
                  // tVelocity0.execute(pVelocity);
-	      //tVelocity0.execute(pVelocity_1);
+	     // tVelocity0.execute(pVelocity_1);
 	      //tGoalie2.execute(paramGoal);
-          // tGoalOur2.execute(paramGoal);
+          tGoalOur0.execute(paramGoal);
         //tDefendLine1.execute(pDefendL1);
 				//tGoalOur2.execute(paramGoal);
-		//tGoalOur0.execute(paramGoal);
+		  //tGoalOur4.execute(paramGoal);
+		// tcover20150.execute(paramcover2015);
       // tAttackSpline0.execute(pAttack) ;
 	//tsupportattack20150.execute(paramsupportattack2015);
 
 	//	tPass.execute(pAttack);
+		/*
 		if(loopcount++ > 15){		
 			//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 			//	params1.SplineGoToPointP.initTraj = 0;
@@ -359,6 +364,7 @@ public:
 		else{
 			tVelocity0.execute(pVelocity);		
 		}
+		*/
 	//	tVelocity0.execute(pVelocity);		
         
 	    //tPass.execute(pAttack);
@@ -383,8 +389,9 @@ public:
 			//dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
 	  	    //  simplegoto.executeSkill(SkillSet::GoToPoint, params3);
 		  
-			//simplegoto_old.executeSkill(SkillSet::GoToPoint, params2_old);
-        //tAttack2.execute(pAttack);
+	//	simplegoto_old.executeSkill(SkillSet::GoToPoint, params2_old);
+        
+		//tAttack2.execute(pAttack);
 			//	tReceive3.execute(pReceive);
 				//tReceive1.execute(pReceive);
 	//	tAttack3.execute(pAttack);

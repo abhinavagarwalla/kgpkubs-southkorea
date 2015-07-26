@@ -268,9 +268,44 @@ namespace Strategy
 		   splin = 0 ; 
 		   break ;
 		 }
-	  }
-      cout<<"APPROACHING"<<endl ; 
+	  } 
 	  
+	  if(dist < BOT_BALL_THRESH)
+	  {
+	   if(fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x))) < PI / 2 + PI / 9 && fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x)))  > PI / 2 - PI / 9)
+       {
+        if(state->ballPos.y < 0)
+          iState = FIELD_IS_INVERTED? SPINNING_CCW : SPINNING_CW;
+		else
+		   iState = FIELD_IS_INVERTED? SPINNING_CW : SPINNING_CCW;
+		 break ;
+       }  
+	  }
+
+	  
+	  if(state->ballPos.x < ForwardX(-HALF_FIELD_MAXX / 2  ))
+	  { 
+		sID=SkillSet::GoToPoint;
+		cout<<"In DBox"<<endl;
+	    sParam.GoToPointP.x = ForwardX(-HALF_FIELD_MAXX / 2  - BOT_RADIUS ) ;
+		sParam.GoToPointP.y = -1*SGN(state->ballPos.y)*( HALF_FIELD_MAXY /2 );
+		splin = 0 ;    
+        skillSet->executeSkill(sID, sParam);
+        break;
+	  } 
+	  
+	  if(abs(abs(state->ballPos.y) - HALF_FIELD_MAXY) < 2*BOT_RADIUS || abs(abs(state->ballPos.x) - (HALF_FIELD_MAXX - GOAL_DEPTH - BOT_RADIUS*1.2)) < 2*BOT_RADIUS)
+	  {
+		cout<<"Local Avoidance"<<endl ;
+		sID = SkillSet::GoToPoint ;
+		if(state->ballPos.x > state->homePos[botID].x)
+		{
+		   sParam.GoToPointP.x = state->ballPos.x ;
+		   sParam.GoToPointP.y = state->ballPos.y ;
+		   skillSet->executeSkill(sID , sParam );
+		   break ;
+	    }
+	  }
 //    if(isBallInDBox()==true)
 //    {
 //      sParam.GoToPointP.x =  -HALF_FIELD_MAXX+GOAL_DEPTH+DBOX_WIDTH+BOT_RADIUS ;
@@ -296,8 +331,8 @@ namespace Strategy
 //    }
 
     // write the code for local avoidance also :: using CP in spline 
-        static Vector2D<int> lastSplinePoint(state->ballPos.x , state->ballPos.y) ;
-          cout << "spline here :: " << splin << std::endl <<std::endl;
+             cout<<"APPROACHING"<<endl ; 
+   //       cout << "spline here :: " << splin << std::endl <<std::endl;
       sID = SkillSet::SplineInterceptBall;
     //  cout << "here" << endl;
       sParam.SplineInterceptBallP.vl = 0;
@@ -308,7 +343,6 @@ namespace Strategy
      if(splin == 0){
 		 splin = 1;
         sParam.SplineInterceptBallP.initTraj = 1;
-        lastSplinePoint.x = state->ballPos.x ; lastSplinePoint.y = state->ballPos.y ;
       } else{
 		  splin = 1;
         sParam.SplineInterceptBallP.initTraj = 0;
@@ -366,16 +400,20 @@ namespace Strategy
   case CLOSE_TO_BALL:
   {
 	splin = 0;
-//       if(fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x))) < PI / 2 + PI / 9 && fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x)))  > PI / 2 - PI / 9)
-//           {
-//              if(state->ballPos.y > 0)
-//                iState = FIELD_IS_INVERTED? SPINNING_CCW : SPINNING_CW;
-//        else
-//        iState = FIELD_IS_INVERTED? SPINNING_CW : SPINNING_CCW;
-//              break ;
-//       } 
-       
-	   if(state->homePos[botID].x > state->ballPos.x - 0.5*BOT_BALL_THRESH)
+	
+	 if(dist < BOT_BALL_THRESH)
+     {
+	   if(fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x))) < PI / 2 + PI / 9 && fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x)))  > PI / 2 - PI / 9)
+       {
+        if(state->ballPos.y < 0)
+          iState = FIELD_IS_INVERTED? SPINNING_CCW : SPINNING_CW;
+		else
+		   iState = FIELD_IS_INVERTED? SPINNING_CW : SPINNING_CCW;
+		 break ;
+       } 
+     }
+	 
+	if(state->homePos[botID].x > state->ballPos.x - 0.5*BOT_BALL_THRESH)
 	   {
 		 iState = APPROACHING ; 
 		 break ;
@@ -405,7 +443,7 @@ namespace Strategy
             */
       
       // **************  YAHAN PE SPLINE ******************************************************* 
-      
+      cout<<":::::::::::::::    "<<dist<<" "<<1.5*BOT_BALL_THRESH<<endl;
 	  if (dist > 1.5*BOT_BALL_THRESH) {
 		    cout<<"CLOSE_TO_BALL :: Something else"<<endl;
 		    sParam.GoToPointP.align = false;
@@ -417,7 +455,7 @@ namespace Strategy
 		  cout<<"CLOSE_TO_BALL :: DRAG_TO_GOAL"<<endl;
 		  sParam.GoToPointP.align = false;
 				sParam.GoToPointP.x = OPP_GOAL_X;
-				sParam.GoToPointP.y = destY;
+				sParam.GoToPointP.y = 0 ; //destY;
 		  if(abs(state->ballPos.y)>HALF_FIELD_MAXY-2*BOT_RADIUS && abs(state->homePos[botID].y)>HALF_FIELD_MAXY-1.7 && botID==state->ourBotNearestToBall)
 		  {
 			sParam.GoToPointP.finalslope = Vector2D<int>::angle(state->ballPos,state->homePos[botID]);

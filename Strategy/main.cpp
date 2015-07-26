@@ -138,5 +138,5 @@ int main(int argc, char* argv[])
   {
     a = new QApplication(argc, argv);
   }
-  return startgame(false, Simulator::YELLOW_TEAM);
+  return startgame(false, Simulator::BLUE_TEAM);
 } // main
