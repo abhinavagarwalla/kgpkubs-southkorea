@@ -135,12 +135,12 @@ namespace Strategy
 	for(int i = 1 ; i<5;i++)
 		ballPosQueue.push_back(Vector2D<float>(0,0));
 	
-	for(int i = 0; i < 2*SGFILTER_SIZE + 1 ;i++){
+/*	for(int i = 0; i < 2*SGFILTER_SIZE + 1 ;i++){
 		ballPosX.push_back(0);
 		ballPosTimeX.push_back(0.016);
 		ballPosY.push_back(0);
 		ballPosTimeY.push_back(0.016);
-	}
+	}*/
   }
 
   Kalman::~Kalman()
@@ -161,7 +161,7 @@ namespace Strategy
 				closest = botID;
 				closestCost = cost;
 			}				
-    }
+		}
 		return closest; //returns -1 if no suitable bot present.
 	}
   static float nearestAngle(float angle, float reference)
@@ -193,7 +193,7 @@ namespace Strategy
 
 	double err = 0.134;
  //   if (delTheta < 1e-2 && delTheta > -1e-2) {  // be realistic
-	if(fabs(delTheta) <  1e-2){	
+	if(fabs(delTheta) <  err){	
 	
 	//cout << "here" << endl;final_vl
         // bot should be headed straight, but again confusion
@@ -216,7 +216,7 @@ namespace Strategy
     double rho = 2*rho1*rho2 / (rho1 + rho2);
     vl = w * (rho - d/2.0) / ticksToCmS;
     vr = w * (rho + d/2.0) / ticksToCmS;
-	cout<<"Calculated velocity :: "<<vl<<"   "<<vr<<endl;
+	cout<<"Calculated velocity :: " << vl << "   " << vr << endl;
 	Vector2D<float> v(vl,vr);
     return v;
   }
@@ -274,35 +274,40 @@ namespace Strategy
 	  vector<float> ballT;	
 	  float ans = 0;	  
 	  // for x direction
-	  ballPosX.erase(ballPosX.begin());
-	  ballPosTimeX.erase(ballPosTimeX.begin());	  
 	  ballPosX.push_back(ballPose.x);
 	  ballPosTimeX.push_back(delTime);  
-	  ans = 0;	
-	  for(int i = 0 ; i < 2*SGFILTER_SIZE + 1 ; i++){
-		  ans += ballPosTimeX[i];
-		  ballT.push_back(ans);
-	  }	
-	  // getchar();
-	  myfileX << ballPose.x << "\t" <<  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, 0) << endl;
-      ballVelocity.x =  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV );
+	  
+	  if( ballPosX.size() >= 2*SGFILTER_SIZE + 1){ 
+		  ans = 0;			  
+		  for(int i = 0 ; i < 2*SGFILTER_SIZE + 1 ; i++){
+			  ans += ballPosTimeX[i];
+			  ballT.push_back(ans);
+		  }	
+		  // getchar();
+		  myfileX << ballPose.x << "\t" <<  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV) << endl;
+		  ballVelocity.x =  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV );	
+		//  ballAcceleration.x =  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV + 1);
+		  ballPosX.erase(ballPosX.begin());
+		  ballPosTimeX.erase(ballPosTimeX.begin());	 
+	  }
 	  ballT.clear();
 	  // for y direction
-	  ballPosY.erase(ballPosY.begin());
-	  ballPosTimeY.erase(ballPosTimeY.begin());	  
 	  ballPosY.push_back(ballPose.y);
-	  ballPosTimeY.push_back(delTime);	  
-	  ans = 0;
-	  for(int i = 0 ; i < 2*SGFILTER_SIZE + 1 ; i++){
-		  ans += ballPosTimeY[i];
-		  ballT.push_back(ans);
+	  ballPosTimeY.push_back(delTime);	
+	  if( ballPosY.size() >= 2*SGFILTER_SIZE + 1){  	  
+		  ans = 0;
+		  for(int i = 0 ; i < 2*SGFILTER_SIZE + 1 ; i++){
+			  ans += ballPosTimeY[i];
+			  ballT.push_back(ans);
+		  }
+		  myfileY << ballVelocity.y << "\t"  <<  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV) << endl;
+		  ballVelocity.y =  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV );
+		//  ballAcceleration.y =  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV + 1);
+		  ballPosY.erase(ballPosY.begin());
+		  ballPosTimeY.erase(ballPosTimeY.begin());	
 	  }
-	// myfileY << ballVelocity.y << "\t"  <<  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV) << endl;
-	  ballVelocity.y =  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV );
 	  ballT.clear();
-//	  myfileY <<	ballVelocity.y << " " << prevBallVelocity.y << " " << abs(ballVelocity.y - prevBallVelocity.y) << endl;
-
-	checkValidX(ballPose.x, ballVelocity.x, newx);
+	  checkValidX(ballPose.x, ballVelocity.x, newx);
       checkValidY(ballPose.y, ballVelocity.y, newy);
       ballLastUpdateTime         = timeCapture;
     }
@@ -599,6 +604,7 @@ namespace Strategy
       state.ballVel = ballVelocity;
       state.ballAcc = ballAcceleration;
 	  state.prevBallVel = prevBallVelocity;
+	  cout << ballAcceleration.x << " " << ballAcceleration.y << endl;
     //printf("Omega-> %lf\n",state.homeOmega[2]);
 
         /*for (int botID = 0; botID < HomeTeam::SIZE; ++botID)

@@ -81,7 +81,7 @@ namespace Strategy
           startP.setTheta(normalizeAngle(start.theta() - PI));
 		}
 	}
-	traj = BallInterception::getIntTraj(startP, ballPos, ballVel, genVel);	
+	traj = BallInterception::getIntTraj(startP, ballPos, ballVel, genVel, state->ballAcc);	
 	algoController = new ControllerWrapper(traj, genVel.x, genVel.y, PREDICTION_PACKET_DELAY, prevV.x, prevV.y);
 	lastDirection2 = direction2 ; 
 	
@@ -113,15 +113,23 @@ namespace Strategy
     botVel.x = state->homeVlVr[botID].x;
     botVel.y = state->homeVlVr[botID].y;
     double dt = 10;
-//    if(traj){
-//      SplineTrajectory *st = dynamic_cast<SplineTrajectory*>(traj);
-//      dt = st->totalTime() - algoController->getCurrentTimeS();
-//    }
-    if(param.SplineInterceptBallP.initTraj == 1)
+    if(traj){
+		SplineTrajectory *st = dynamic_cast<SplineTrajectory*>(traj);
+		dt = st->totalTime() - algoController->getCurrentTimeS();
+    }
+    if( dt < 0.075 && sCount < 2){
+	//	cout << "cljkvsbiuvedv" << endl;
+		sCount++;
+		comm->sendCommand(botID, 0, 0);
+	}
+	else if(param.SplineInterceptBallP.initTraj == 1 || dt < 0.075){
+		sCount = 0;
        _splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr, 0);
-    else if ((param.SplineInterceptBallP.changeSpline == 1 && interceptCounter > 80) || dt < 0.075)
-        _splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr, 1);
+	}
+   // else if ((param.SplineInterceptBallP.changeSpline == 1 && interceptCounter > 80) || dt < 0.075)
+     //   _splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr, 1);
     else {
+		sCount = 0;
         _splineInterceptBallTrack(botID, start, ballPos, ballVel, botVel, final_vl, final_vr);
     }
   }

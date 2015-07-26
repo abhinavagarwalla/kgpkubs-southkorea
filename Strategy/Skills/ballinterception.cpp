@@ -10,10 +10,11 @@
 namespace BallInterception {
 
 
-inline Vector2D<float> predictBallPose(Vector2D<float> ballPos, Vector2D<float> ballVel, double timeOfPrediction){
+inline Vector2D<float> predictBallPose(Vector2D<float> ballPos, Vector2D<float> ballVel, double timeOfPrediction, Vector2D<float> ballAcc){
     Vector2D<float> bPos;
-    bPos.x = ballPos.x + timeOfPrediction*ballVel.x;
-    bPos.y = ballPos.y + timeOfPrediction*ballVel.y;
+	float factor = 0.7;
+    bPos.x = ballPos.x + factor*timeOfPrediction*ballVel.x;// + (ballAcc.x*timeOfPrediction*timeOfPrediction)/2.0;
+    bPos.y = ballPos.y + factor*timeOfPrediction*ballVel.y;// + (ballAcc.x*timeOfPrediction*timeOfPrediction)/2.0;
 
     while (bPos.x > HALF_FIELD_MAXX || bPos.x < -HALF_FIELD_MAXX || bPos.y > HALF_FIELD_MAXY || bPos.y < -HALF_FIELD_MAXY) {
         if (bPos.y > HALF_FIELD_MAXY) {
@@ -37,7 +38,7 @@ inline double getBotBallDist(Pose botPos, Vector2D<float> ballPos) {
     return sqrt((botPos.x() - ballPos.x)*(botPos.x() - ballPos.x) + (botPos.y() - ballPos.y)*(botPos.y() - ballPos.y));
 }
 
-inline SplineTrajectory* getIntTraj(Pose botPosStart, Vector2D<float> ballPos, Vector2D<float> ballVel, Vector2D<float> botVel) {
+inline SplineTrajectory* getIntTraj(Pose botPosStart, Vector2D<float> ballPos, Vector2D<float> ballVel, Vector2D<float> botVel, Vector2D<float> ballAcc) {
 
     Vector2D<float> predictedBallPos;
     double error = 0.02;
@@ -50,7 +51,7 @@ inline SplineTrajectory* getIntTraj(Pose botPosStart, Vector2D<float> ballPos, V
     while (1) {
         if (st)
             delete st;
-        predictedBallPos = predictBallPose(ballPos, ballVel, T);
+        predictedBallPos = predictBallPose(ballPos, ballVel, T, ballAcc);
         double endTheta = atan2(goalCentre.y - predictedBallPos.y, goalCentre.x - predictedBallPos.x);
         Pose endPose(predictedBallPos.x, predictedBallPos.y, endTheta);
         // add a cp behind the ball pos, distance of 500
@@ -76,7 +77,7 @@ inline SplineTrajectory* getIntTraj(Pose botPosStart, Vector2D<float> ballPos, V
     while (1) {
         // predictedBallPos: strategy coordinates
         double mid = (T1+T2)/2;
-        predictedBallPos = predictBallPose(ballPos, ballVel, mid);
+        predictedBallPos = predictBallPose(ballPos, ballVel, mid, ballAcc);
         iter++;
         double endTheta = atan2(goalCentre.y - predictedBallPos.y, goalCentre.x - predictedBallPos.x);
         endPose = Pose(predictedBallPos.x, predictedBallPos.y, endTheta);

@@ -319,15 +319,15 @@ namespace Strategy
           float offset = 600;
          
 		  //******************** changed**********************
-		  float factorx = 0.00005;
+		  float factorx = 0.0001;
 		 
-		  float factory=0.00005;
+		  float factory=0.0001;
 		  //****************************************************
 		 
 
           int ballBotDist = (int)Vector2D<int>::dist(state->homePos[botID],state->ballPos);
-          int targetX = state->ballPos.x ;// + (int)ballBotDist * factorx * avgBallVel.x;
-          int targetY = state->ballPos.y ;//+ (int)ballBotDist * factory * avgBallVel.y;
+          int targetX = state->ballPos.x  + (int)ballBotDist * factorx * avgBallVel.x;
+          int targetY = state->ballPos.y + (int)ballBotDist * factory * avgBallVel.y;
           int x3 = (targetX * (ballgoaldist + offset) - offset * OPP_GOAL_X) / ballgoaldist;
           int y3 = (targetY * (ballgoaldist + offset)) / ballgoaldist;
 
