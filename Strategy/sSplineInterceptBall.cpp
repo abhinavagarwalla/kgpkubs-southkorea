@@ -117,7 +117,7 @@ namespace Strategy
 		SplineTrajectory *st = dynamic_cast<SplineTrajectory*>(traj);
 		dt = st->totalTime() - algoController->getCurrentTimeS();
     }
-    if( dt < 0.075 && sCount < 2){
+    if(dt < 0.075 && sCount < 2){
 	//	cout << "cljkvsbiuvedv" << endl;
 		sCount++;
 		comm->sendCommand(botID, 0, 0);

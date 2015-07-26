@@ -108,7 +108,8 @@ inline SplineTrajectory* getIntTraj(Pose botPosStart, Vector2D<float> ballPos, V
     }
 //	vector<Pose> midPoints;
 //	Pose ballPose(ballPos.x, ballPos.y, Vector2D<float>::angle(ballPos, goalCentre));
-//    return TrajectoryGenerators::cubic(botPosStart, ballPose, botVel.x, botVel.y, 0, 0, midPoints);;
+//    return TrajectoryGenerators::cubic(botPosStart, ballPose, botVel.x, botVel.y, 0, 0, midPoints);
+
 	return st;
 	}
 }
