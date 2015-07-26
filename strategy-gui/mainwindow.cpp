@@ -4,12 +4,11 @@
 #include "QDebug"
 #include <string>
 static char playOptions[][100] = {
-    "DefensiveSteal",
     "TestPlay",
     "SetPosition",
     "PenaltyOur",
     "PenaltyOpp",
-        //"Stop",
+        "Stop",
      "OurGoalKick",
      "OppGoalKick",
      "SuperOffense",
@@ -20,7 +19,7 @@ static char playOptions[][100] = {
      "Defense2",
      "PositionOurKickoff",
      "PositionOppKickoff",
-      //"Kickoff",
+      "Kickoff",
     "PositionOurPenalty",
      "TakeGoalKick",
      "PositionOurFreeKick",

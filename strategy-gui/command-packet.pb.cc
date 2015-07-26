@@ -109,28 +109,28 @@ void protobuf_AddDesc_command_2dpacket_2eproto() {
     "\006tactic\030\002 \001(\0132\026.StrategyPacket.Tactic\022$\n"
     "\005which\030\003 \002(\0162\025.StrategyPacket.Which\032>\n\006T"
     "actic\022%\n\003tID\030\001 \002(\0162\030.StrategyPacket.Tact"
-    "icID\022\r\n\005botID\030\002 \002(\005\"\255\004\n\004Play\022\014\n\010TestPlay"
+    "icID\022\r\n\005botID\030\002 \002(\005\"\304\004\n\004Play\022\014\n\010TestPlay"
     "\020\000\022\017\n\013SetPosition\020\001\022\016\n\nPenaltyOur\020\002\022\016\n\nP"
-    "enaltyOpp\020\003\022\017\n\013OurGoalKick\020\005\022\017\n\013OppGoalK"
-    "ick\020\006\022\020\n\014SuperOffense\020\007\022\014\n\010Offense1\020\010\022\014\n"
-    "\010Offense2\020\t\022\020\n\014SuperDefense\020\n\022\014\n\010Defense"
-    "1\020\013\022\014\n\010Defense2\020\014\022\026\n\022PositionOurKickoff\020"
-    "\r\022\026\n\022PositionOppKickoff\020\016\022\026\n\022PositionOur"
-    "Penalty\020\020\022\020\n\014TakeGoalKick\020\021\022\027\n\023PositionO"
-    "urFreeKick\020\022\022\027\n\023PositionOppFreeKick\020\023\022\027\n"
-    "\023PositionOurFreeBall\020\024\022\027\n\023PositionOppFre"
-    "eBall\020\025\022\026\n\022PositionOppPenalty\020\026\022\027\n\023Posit"
-    "ionOurGoalKick\020\027\022\027\n\023PositionOppGoalKick\020"
-    "\030\022\022\n\016PositionGather\020\031\022\017\n\013OppFreeBall\020\032\022\017"
-    "\n\013OurFreeBall\020\033\022\017\n\013OppFreeKick\020\034\022\017\n\013OurF"
-    "reeKick\020\035\022\010\n\004None\020\036\"\257\002\n\010TacticID\022\t\n\005Bloc"
-    "k\020\000\022\016\n\nChargeBall\020\001\022\r\n\tCoverGoal\020\002\022\016\n\nDr"
-    "agToGoal\020\003\022\016\n\nDefendLine\020\004\022\017\n\013DefendPoin"
-    "t\020\005\022\r\n\tGoalieOur\020\006\022\r\n\tGoalieOpp\020\007\022\013\n\007Mar"
-    "kBot\020\010\022\010\n\004Pass\020\t\022\013\n\007Kickoff\020\n\022\014\n\010Positio"
-    "n\020\013\022\026\n\022PositionForPenalty\020\014\022\024\n\020PositionF"
-    "orStart\020\r\022\017\n\013ReceiveBall\020\016\022\n\n\006Defend\020\017\022\n"
-    "\n\006Attack\020\020\022\t\n\005Steal\020\021\022\010\n\004Stop\020\022\022\014\n\010Veloc"
+    "enaltyOpp\020\003\022\010\n\004Stop\020\004\022\017\n\013OurGoalKick\020\005\022\017"
+    "\n\013OppGoalKick\020\006\022\020\n\014SuperOffense\020\007\022\014\n\010Off"
+    "ense1\020\010\022\014\n\010Offense2\020\t\022\020\n\014SuperDefense\020\n\022"
+    "\014\n\010Defense1\020\013\022\014\n\010Defense2\020\014\022\026\n\022PositionO"
+    "urKickoff\020\r\022\026\n\022PositionOppKickoff\020\016\022\013\n\007K"
+    "ickoff\020\017\022\026\n\022PositionOurPenalty\020\020\022\020\n\014Take"
+    "GoalKick\020\021\022\027\n\023PositionOurFreeKick\020\022\022\027\n\023P"
+    "ositionOppFreeKick\020\023\022\027\n\023PositionOurFreeB"
+    "all\020\024\022\027\n\023PositionOppFreeBall\020\025\022\026\n\022Positi"
+    "onOppPenalty\020\026\022\027\n\023PositionOurGoalKick\020\027\022"
+    "\027\n\023PositionOppGoalKick\020\030\022\022\n\016PositionGath"
+    "er\020\031\022\017\n\013OppFreeBall\020\032\022\017\n\013OurFreeBall\020\033\022\017"
+    "\n\013OppFreeKick\020\034\022\017\n\013OurFreeKick\020\035\022\010\n\004None"
+    "\020\036\"\230\002\n\010TacticID\022\t\n\005Block\020\000\022\016\n\nChargeBall"
+    "\020\001\022\r\n\tCoverGoal\020\002\022\016\n\nDragToGoal\020\003\022\016\n\nDef"
+    "endLine\020\004\022\017\n\013DefendPoint\020\005\022\r\n\tGoalieOur\020"
+    "\006\022\r\n\tGoalieOpp\020\007\022\013\n\007MarkBot\020\010\022\010\n\004Pass\020\t\022"
+    "\014\n\010Position\020\013\022\026\n\022PositionForPenalty\020\014\022\024\n"
+    "\020PositionForStart\020\r\022\017\n\013ReceiveBall\020\016\022\n\n\006"
+    "Defend\020\017\022\n\n\006Attack\020\020\022\t\n\005Steal\020\021\022\014\n\010Veloc"
     "ity\020\023\"\035\n\005Which\022\010\n\004PLAY\020\001\022\n\n\006TACTIC\020\002", 1116);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "command-packet.proto", &protobuf_RegisterTypes);
@@ -161,6 +161,7 @@ bool StrategyPacket_Play_IsValid(int value) {
     case 1:
     case 2:
     case 3:
+    case 4:
     case 5:
     case 6:
     case 7:
@@ -171,6 +172,7 @@ bool StrategyPacket_Play_IsValid(int value) {
     case 12:
     case 13:
     case 14:
+    case 15:
     case 16:
     case 17:
     case 18:
@@ -197,6 +199,7 @@ const StrategyPacket_Play StrategyPacket::TestPlay;
 const StrategyPacket_Play StrategyPacket::SetPosition;
 const StrategyPacket_Play StrategyPacket::PenaltyOur;
 const StrategyPacket_Play StrategyPacket::PenaltyOpp;
+const StrategyPacket_Play StrategyPacket::Stop;
 const StrategyPacket_Play StrategyPacket::OurGoalKick;
 const StrategyPacket_Play StrategyPacket::OppGoalKick;
 const StrategyPacket_Play StrategyPacket::SuperOffense;
@@ -207,6 +210,7 @@ const StrategyPacket_Play StrategyPacket::Defense1;
 const StrategyPacket_Play StrategyPacket::Defense2;
 const StrategyPacket_Play StrategyPacket::PositionOurKickoff;
 const StrategyPacket_Play StrategyPacket::PositionOppKickoff;
+const StrategyPacket_Play StrategyPacket::Kickoff;
 const StrategyPacket_Play StrategyPacket::PositionOurPenalty;
 const StrategyPacket_Play StrategyPacket::TakeGoalKick;
 const StrategyPacket_Play StrategyPacket::PositionOurFreeKick;
@@ -242,7 +246,6 @@ bool StrategyPacket_TacticID_IsValid(int value) {
     case 7:
     case 8:
     case 9:
-    case 10:
     case 11:
     case 12:
     case 13:
@@ -250,7 +253,6 @@ bool StrategyPacket_TacticID_IsValid(int value) {
     case 15:
     case 16:
     case 17:
-    case 18:
     case 19:
       return true;
     default:
@@ -269,7 +271,6 @@ const StrategyPacket_TacticID StrategyPacket::GoalieOur;
 const StrategyPacket_TacticID StrategyPacket::GoalieOpp;
 const StrategyPacket_TacticID StrategyPacket::MarkBot;
 const StrategyPacket_TacticID StrategyPacket::Pass;
-const StrategyPacket_TacticID StrategyPacket::Kickoff;
 const StrategyPacket_TacticID StrategyPacket::Position;
 const StrategyPacket_TacticID StrategyPacket::PositionForPenalty;
 const StrategyPacket_TacticID StrategyPacket::PositionForStart;
@@ -277,7 +278,6 @@ const StrategyPacket_TacticID StrategyPacket::ReceiveBall;
 const StrategyPacket_TacticID StrategyPacket::Defend;
 const StrategyPacket_TacticID StrategyPacket::Attack;
 const StrategyPacket_TacticID StrategyPacket::Steal;
-const StrategyPacket_TacticID StrategyPacket::Stop;
 const StrategyPacket_TacticID StrategyPacket::Velocity;
 const StrategyPacket_TacticID StrategyPacket::TacticID_MIN;
 const StrategyPacket_TacticID StrategyPacket::TacticID_MAX;

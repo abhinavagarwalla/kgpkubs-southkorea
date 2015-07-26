@@ -104,27 +104,34 @@ void protobuf_AddDesc_command_2dpacket_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\024command-packet.proto\"\217\006\n\016StrategyPacke"
+    "\n\024command-packet.proto\"\303\010\n\016StrategyPacke"
     "t\022\"\n\004play\030\001 \001(\0162\024.StrategyPacket.Play\022&\n"
     "\006tactic\030\002 \001(\0132\026.StrategyPacket.Tactic\022$\n"
     "\005which\030\003 \002(\0162\025.StrategyPacket.Which\032>\n\006T"
     "actic\022%\n\003tID\030\001 \002(\0162\030.StrategyPacket.Tact"
-    "icID\022\r\n\005botID\030\002 \002(\005\"\241\002\n\004Play\022\022\n\016Defensiv"
-    "eSteal\020\001\022\027\n\023DefenceSetPosition1\020\002\022\025\n\021Def"
-    "ensiveGoToGoal\020\003\022\010\n\004None\020\004\022\017\n\013OffensePla"
-    "y\020\005\022\014\n\010TestPlay\020\006\022\017\n\013SetPosition\020\007\022\025\n\021Po"
-    "sitionOurStrike\020\010\022\025\n\021PositionOppStrike\020\t"
-    "\022\027\n\023OffenceSetPosition1\020\n\022\017\n\013OurGoalKick"
-    "\020\013\022\017\n\013OppGoalKick\020\014\022\030\n\024TieBreakerOurPena"
-    "lty\020\r\022\030\n\024TieBreakerOppPenalty\020\016\"\207\002\n\010Tact"
-    "icID\022\t\n\005Block\020\001\022\016\n\nChargeBall\020\002\022\r\n\tCover"
-    "Goal\020\003\022\016\n\nDragToGoal\020\004\022\016\n\nDefendLine\020\005\022\017"
-    "\n\013DefendPoint\020\006\022\r\n\tGoalieOur\020\007\022\r\n\tGoalie"
-    "Opp\020\010\022\013\n\007MarkBot\020\t\022\014\n\010Position\020\n\022\026\n\022Posi"
-    "tionForPenalty\020\013\022\024\n\020PositionForStart\020\014\022\n"
-    "\n\006Defend\020\r\022\n\n\006Attack\020\016\022\t\n\005Steal\020\017\022\010\n\004Sto"
-    "p\020\020\022\014\n\010Velocity\020\021\"\035\n\005Which\022\010\n\004PLAY\020\001\022\n\n\006"
-    "TACTIC\020\002", 808);
+    "icID\022\r\n\005botID\030\002 \002(\005\"\304\004\n\004Play\022\014\n\010TestPlay"
+    "\020\000\022\017\n\013SetPosition\020\001\022\016\n\nPenaltyOur\020\002\022\016\n\nP"
+    "enaltyOpp\020\003\022\010\n\004Stop\020\004\022\017\n\013OurGoalKick\020\005\022\017"
+    "\n\013OppGoalKick\020\006\022\020\n\014SuperOffense\020\007\022\014\n\010Off"
+    "ense1\020\010\022\014\n\010Offense2\020\t\022\020\n\014SuperDefense\020\n\022"
+    "\014\n\010Defense1\020\013\022\014\n\010Defense2\020\014\022\026\n\022PositionO"
+    "urKickoff\020\r\022\026\n\022PositionOppKickoff\020\016\022\013\n\007K"
+    "ickoff\020\017\022\026\n\022PositionOurPenalty\020\020\022\020\n\014Take"
+    "GoalKick\020\021\022\027\n\023PositionOurFreeKick\020\022\022\027\n\023P"
+    "ositionOppFreeKick\020\023\022\027\n\023PositionOurFreeB"
+    "all\020\024\022\027\n\023PositionOppFreeBall\020\025\022\026\n\022Positi"
+    "onOppPenalty\020\026\022\027\n\023PositionOurGoalKick\020\027\022"
+    "\027\n\023PositionOppGoalKick\020\030\022\022\n\016PositionGath"
+    "er\020\031\022\017\n\013OppFreeBall\020\032\022\017\n\013OurFreeBall\020\033\022\017"
+    "\n\013OppFreeKick\020\034\022\017\n\013OurFreeKick\020\035\022\010\n\004None"
+    "\020\036\"\230\002\n\010TacticID\022\t\n\005Block\020\000\022\016\n\nChargeBall"
+    "\020\001\022\r\n\tCoverGoal\020\002\022\016\n\nDragToGoal\020\003\022\016\n\nDef"
+    "endLine\020\004\022\017\n\013DefendPoint\020\005\022\r\n\tGoalieOur\020"
+    "\006\022\r\n\tGoalieOpp\020\007\022\013\n\007MarkBot\020\010\022\010\n\004Pass\020\t\022"
+    "\014\n\010Position\020\013\022\026\n\022PositionForPenalty\020\014\022\024\n"
+    "\020PositionForStart\020\r\022\017\n\013ReceiveBall\020\016\022\n\n\006"
+    "Defend\020\017\022\n\n\006Attack\020\020\022\t\n\005Steal\020\021\022\014\n\010Veloc"
+    "ity\020\023\"\035\n\005Which\022\010\n\004PLAY\020\001\022\n\n\006TACTIC\020\002", 1116);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "command-packet.proto", &protobuf_RegisterTypes);
   StrategyPacket::default_instance_ = new StrategyPacket();
@@ -150,51 +157,7 @@ const ::google::protobuf::EnumDescriptor* StrategyPacket_Play_descriptor() {
 }
 bool StrategyPacket_Play_IsValid(int value) {
   switch(value) {
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-    case 10:
-    case 11:
-    case 12:
-    case 13:
-    case 14:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#ifndef _MSC_VER
-const StrategyPacket_Play StrategyPacket::DefensiveSteal;
-const StrategyPacket_Play StrategyPacket::DefenceSetPosition1;
-const StrategyPacket_Play StrategyPacket::DefensiveGoToGoal;
-const StrategyPacket_Play StrategyPacket::None;
-const StrategyPacket_Play StrategyPacket::OffensePlay;
-const StrategyPacket_Play StrategyPacket::TestPlay;
-const StrategyPacket_Play StrategyPacket::SetPosition;
-const StrategyPacket_Play StrategyPacket::PositionOurStrike;
-const StrategyPacket_Play StrategyPacket::PositionOppStrike;
-const StrategyPacket_Play StrategyPacket::OffenceSetPosition1;
-const StrategyPacket_Play StrategyPacket::OurGoalKick;
-const StrategyPacket_Play StrategyPacket::OppGoalKick;
-const StrategyPacket_Play StrategyPacket::TieBreakerOurPenalty;
-const StrategyPacket_Play StrategyPacket::TieBreakerOppPenalty;
-const StrategyPacket_Play StrategyPacket::Play_MIN;
-const StrategyPacket_Play StrategyPacket::Play_MAX;
-const int StrategyPacket::Play_ARRAYSIZE;
-#endif  // _MSC_VER
-const ::google::protobuf::EnumDescriptor* StrategyPacket_TacticID_descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return StrategyPacket_TacticID_descriptor_;
-}
-bool StrategyPacket_TacticID_IsValid(int value) {
-  switch(value) {
+    case 0:
     case 1:
     case 2:
     case 3:
@@ -212,7 +175,85 @@ bool StrategyPacket_TacticID_IsValid(int value) {
     case 15:
     case 16:
     case 17:
-	case 18:
+    case 18:
+    case 19:
+    case 20:
+    case 21:
+    case 22:
+    case 23:
+    case 24:
+    case 25:
+    case 26:
+    case 27:
+    case 28:
+    case 29:
+    case 30:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#ifndef _MSC_VER
+const StrategyPacket_Play StrategyPacket::TestPlay;
+const StrategyPacket_Play StrategyPacket::SetPosition;
+const StrategyPacket_Play StrategyPacket::PenaltyOur;
+const StrategyPacket_Play StrategyPacket::PenaltyOpp;
+const StrategyPacket_Play StrategyPacket::Stop;
+const StrategyPacket_Play StrategyPacket::OurGoalKick;
+const StrategyPacket_Play StrategyPacket::OppGoalKick;
+const StrategyPacket_Play StrategyPacket::SuperOffense;
+const StrategyPacket_Play StrategyPacket::Offense1;
+const StrategyPacket_Play StrategyPacket::Offense2;
+const StrategyPacket_Play StrategyPacket::SuperDefense;
+const StrategyPacket_Play StrategyPacket::Defense1;
+const StrategyPacket_Play StrategyPacket::Defense2;
+const StrategyPacket_Play StrategyPacket::PositionOurKickoff;
+const StrategyPacket_Play StrategyPacket::PositionOppKickoff;
+const StrategyPacket_Play StrategyPacket::Kickoff;
+const StrategyPacket_Play StrategyPacket::PositionOurPenalty;
+const StrategyPacket_Play StrategyPacket::TakeGoalKick;
+const StrategyPacket_Play StrategyPacket::PositionOurFreeKick;
+const StrategyPacket_Play StrategyPacket::PositionOppFreeKick;
+const StrategyPacket_Play StrategyPacket::PositionOurFreeBall;
+const StrategyPacket_Play StrategyPacket::PositionOppFreeBall;
+const StrategyPacket_Play StrategyPacket::PositionOppPenalty;
+const StrategyPacket_Play StrategyPacket::PositionOurGoalKick;
+const StrategyPacket_Play StrategyPacket::PositionOppGoalKick;
+const StrategyPacket_Play StrategyPacket::PositionGather;
+const StrategyPacket_Play StrategyPacket::OppFreeBall;
+const StrategyPacket_Play StrategyPacket::OurFreeBall;
+const StrategyPacket_Play StrategyPacket::OppFreeKick;
+const StrategyPacket_Play StrategyPacket::OurFreeKick;
+const StrategyPacket_Play StrategyPacket::None;
+const StrategyPacket_Play StrategyPacket::Play_MIN;
+const StrategyPacket_Play StrategyPacket::Play_MAX;
+const int StrategyPacket::Play_ARRAYSIZE;
+#endif  // _MSC_VER
+const ::google::protobuf::EnumDescriptor* StrategyPacket_TacticID_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return StrategyPacket_TacticID_descriptor_;
+}
+bool StrategyPacket_TacticID_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+    case 16:
+    case 17:
+    case 19:
       return true;
     default:
       return false;
@@ -229,15 +270,15 @@ const StrategyPacket_TacticID StrategyPacket::DefendPoint;
 const StrategyPacket_TacticID StrategyPacket::GoalieOur;
 const StrategyPacket_TacticID StrategyPacket::GoalieOpp;
 const StrategyPacket_TacticID StrategyPacket::MarkBot;
+const StrategyPacket_TacticID StrategyPacket::Pass;
 const StrategyPacket_TacticID StrategyPacket::Position;
 const StrategyPacket_TacticID StrategyPacket::PositionForPenalty;
 const StrategyPacket_TacticID StrategyPacket::PositionForStart;
+const StrategyPacket_TacticID StrategyPacket::ReceiveBall;
 const StrategyPacket_TacticID StrategyPacket::Defend;
 const StrategyPacket_TacticID StrategyPacket::Attack;
 const StrategyPacket_TacticID StrategyPacket::Steal;
-const StrategyPacket_TacticID StrategyPacket::Stop;
 const StrategyPacket_TacticID StrategyPacket::Velocity;
-const StrategyPacket_TacticID StrategyPacket::DWDefender;
 const StrategyPacket_TacticID StrategyPacket::TacticID_MIN;
 const StrategyPacket_TacticID StrategyPacket::TacticID_MAX;
 const int StrategyPacket::TacticID_ARRAYSIZE;
@@ -284,7 +325,7 @@ StrategyPacket_Tactic::StrategyPacket_Tactic(const StrategyPacket_Tactic& from)
 
 void StrategyPacket_Tactic::SharedCtor() {
   _cached_size_ = 0;
-  tid_ = 1;
+  tid_ = 0;
   botid_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
@@ -320,7 +361,7 @@ StrategyPacket_Tactic* StrategyPacket_Tactic::New() const {
 
 void StrategyPacket_Tactic::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    tid_ = 1;
+    tid_ = 0;
     botid_ = 0;
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -540,7 +581,7 @@ StrategyPacket::StrategyPacket(const StrategyPacket& from)
 
 void StrategyPacket::SharedCtor() {
   _cached_size_ = 0;
-  play_ = 1;
+  play_ = 0;
   tactic_ = NULL;
   which_ = 1;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -578,7 +619,7 @@ StrategyPacket* StrategyPacket::New() const {
 
 void StrategyPacket::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    play_ = 1;
+    play_ = 0;
     if (has_tactic()) {
       if (tactic_ != NULL) tactic_->::StrategyPacket_Tactic::Clear();
     }

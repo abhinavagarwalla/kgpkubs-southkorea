@@ -117,9 +117,9 @@ namespace Strategy
 //      SplineTrajectory *st = dynamic_cast<SplineTrajectory*>(traj);
 //      dt = st->totalTime() - algoController->getCurrentTimeS();
 //    }
-    if(param.SplineInterceptBallP.initTraj == 1 || dt < 0.075)
+    if(param.SplineInterceptBallP.initTraj == 1)
        _splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr, 0);
-    else if (param.SplineInterceptBallP.changeSpline == 1 && interceptCounter > 80) 
+    else if ((param.SplineInterceptBallP.changeSpline == 1 && interceptCounter > 80) || dt < 0.075)
         _splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr, 1);
     else {
         _splineInterceptBallTrack(botID, start, ballPos, ballVel, botVel, final_vl, final_vr);

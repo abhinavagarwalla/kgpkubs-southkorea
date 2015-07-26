@@ -42,12 +42,12 @@ namespace Strategy
     void execute(const Param& tParam)
     {
 		//for logging ball position
-		FILE *out = fopen("/home/robocup/ballPosLog2.txt", "a");
+		FILE *out = fopen("/home/robocup/botVelocity.txt", "a");
 		struct timeval nowTime;
 		gettimeofday(&nowTime, NULL);
 		 double elapsedMs = (nowTime.tv_sec*1000.0+nowTime.tv_usec/1000.0);
-		fprintf(out, "%d %d %.18lf\n", state->ballPos.x, state->ballPos.y, elapsedMs);
-//		out << state->ballPos.x << " " << state->ballPos.y  << " " << elapsedMs<< endl;
+		fprintf(out, "%f %f \n", state->homeVlVr[botID].x, state->homeVlVr[botID].y);
+	//	out << state->homeVlVr[botID].x << " " << state->homeVlVr[botID].y  << " " << elapsedMs<< endl;
 //		out.close();
 		fclose(out);
       printf("Velocity BotID: %d\n",botID);

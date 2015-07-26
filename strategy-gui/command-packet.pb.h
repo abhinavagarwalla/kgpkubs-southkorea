@@ -38,6 +38,7 @@ enum StrategyPacket_Play {
   StrategyPacket_Play_SetPosition = 1,
   StrategyPacket_Play_PenaltyOur = 2,
   StrategyPacket_Play_PenaltyOpp = 3,
+  StrategyPacket_Play_Stop = 4,
   StrategyPacket_Play_OurGoalKick = 5,
   StrategyPacket_Play_OppGoalKick = 6,
   StrategyPacket_Play_SuperOffense = 7,
@@ -48,6 +49,7 @@ enum StrategyPacket_Play {
   StrategyPacket_Play_Defense2 = 12,
   StrategyPacket_Play_PositionOurKickoff = 13,
   StrategyPacket_Play_PositionOppKickoff = 14,
+  StrategyPacket_Play_Kickoff = 15,
   StrategyPacket_Play_PositionOurPenalty = 16,
   StrategyPacket_Play_TakeGoalKick = 17,
   StrategyPacket_Play_PositionOurFreeKick = 18,
@@ -90,7 +92,6 @@ enum StrategyPacket_TacticID {
   StrategyPacket_TacticID_GoalieOpp = 7,
   StrategyPacket_TacticID_MarkBot = 8,
   StrategyPacket_TacticID_Pass = 9,
-  StrategyPacket_TacticID_Kickoff = 10,
   StrategyPacket_TacticID_Position = 11,
   StrategyPacket_TacticID_PositionForPenalty = 12,
   StrategyPacket_TacticID_PositionForStart = 13,
@@ -98,7 +99,6 @@ enum StrategyPacket_TacticID {
   StrategyPacket_TacticID_Defend = 15,
   StrategyPacket_TacticID_Attack = 16,
   StrategyPacket_TacticID_Steal = 17,
-  StrategyPacket_TacticID_Stop = 18,
   StrategyPacket_TacticID_Velocity = 19
 };
 bool StrategyPacket_TacticID_IsValid(int value);
@@ -288,6 +288,7 @@ class StrategyPacket : public ::google::protobuf::Message {
   static const Play SetPosition = StrategyPacket_Play_SetPosition;
   static const Play PenaltyOur = StrategyPacket_Play_PenaltyOur;
   static const Play PenaltyOpp = StrategyPacket_Play_PenaltyOpp;
+  static const Play Stop = StrategyPacket_Play_Stop;
   static const Play OurGoalKick = StrategyPacket_Play_OurGoalKick;
   static const Play OppGoalKick = StrategyPacket_Play_OppGoalKick;
   static const Play SuperOffense = StrategyPacket_Play_SuperOffense;
@@ -298,6 +299,7 @@ class StrategyPacket : public ::google::protobuf::Message {
   static const Play Defense2 = StrategyPacket_Play_Defense2;
   static const Play PositionOurKickoff = StrategyPacket_Play_PositionOurKickoff;
   static const Play PositionOppKickoff = StrategyPacket_Play_PositionOppKickoff;
+  static const Play Kickoff = StrategyPacket_Play_Kickoff;
   static const Play PositionOurPenalty = StrategyPacket_Play_PositionOurPenalty;
   static const Play TakeGoalKick = StrategyPacket_Play_TakeGoalKick;
   static const Play PositionOurFreeKick = StrategyPacket_Play_PositionOurFreeKick;
@@ -345,7 +347,6 @@ class StrategyPacket : public ::google::protobuf::Message {
   static const TacticID GoalieOpp = StrategyPacket_TacticID_GoalieOpp;
   static const TacticID MarkBot = StrategyPacket_TacticID_MarkBot;
   static const TacticID Pass = StrategyPacket_TacticID_Pass;
-  static const TacticID Kickoff = StrategyPacket_TacticID_Kickoff;
   static const TacticID Position = StrategyPacket_TacticID_Position;
   static const TacticID PositionForPenalty = StrategyPacket_TacticID_PositionForPenalty;
   static const TacticID PositionForStart = StrategyPacket_TacticID_PositionForStart;
@@ -353,7 +354,6 @@ class StrategyPacket : public ::google::protobuf::Message {
   static const TacticID Defend = StrategyPacket_TacticID_Defend;
   static const TacticID Attack = StrategyPacket_TacticID_Attack;
   static const TacticID Steal = StrategyPacket_TacticID_Steal;
-  static const TacticID Stop = StrategyPacket_TacticID_Stop;
   static const TacticID Velocity = StrategyPacket_TacticID_Velocity;
   static inline bool TacticID_IsValid(int value) {
     return StrategyPacket_TacticID_IsValid(value);

@@ -38,7 +38,7 @@ public:
 	int prev_bot_id = -1;
 	int prev_play_id = -1;
 	  std::cout << "here4" << std::endl;
-	//PExec       pExec(&state);
+	PExec       pExec(&state);
     #endif
 	  std::cout << "here4" << std::endl;
 	Tactic::Param paramList[Tactic::MAX_TACTICS];
@@ -143,7 +143,7 @@ public:
 	
 	Tactic::Param pVelocity_1;
 	pVelocity_1.VelocityP.vl = 30;
-	pVelocity_1.VelocityP.vr = 30;
+	pVelocity_1.VelocityP.vr = 20;
 	
 	Tactic::Param pVelocity_2;
 	pVelocity_2.VelocityP.vl = 60;
@@ -307,9 +307,9 @@ public:
 					printf("GOT COMMAND FROM STRATEGY GUI!!!!\n");
 					prev_play_id = strPktSh.play();
 					Util::Logger::toStdOut("Command From Refee.. Reselecting play..\n");
-			//		pExec.selectfromGUI(prev_play_id);
+					pExec.selectfromGUI(prev_play_id);
 				}
-			//	pExec.executePlay();
+				pExec.executePlay();
 				strCS.leave();
 			}
 		}
@@ -342,7 +342,7 @@ public:
                  // tVelocity0.execute(pVelocity);
 	     // tVelocity0.execute(pVelocity_1);
 	      //tGoalie2.execute(paramGoal);
-          tGoalOur0.execute(paramGoal);
+          //tGoalOur0.execute(paramGoal);
         //tDefendLine1.execute(pDefendL1);
 				//tGoalOur2.execute(paramGoal);
 		  //tGoalOur4.execute(paramGoal);
@@ -351,32 +351,30 @@ public:
 	//tsupportattack20150.execute(paramsupportattack2015);
 
 	//	tPass.execute(pAttack);
-		/*
 		if(loopcount++ > 15){		
 			//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 			//	params1.SplineGoToPointP.initTraj = 0;
 			//	sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
 			//	params4.SplineInterceptBallP.initTraj = 0;
-			tAttackSpline0.execute(pAttack) ;
+			//tAttackSpline0.execute(pAttack) ;
 			//tKickoff.execute(pAttack) ;
 			loopcount = loopcount%1000 + 15;
 		}
 		else{
-			tVelocity0.execute(pVelocity);		
+		//	tVelocity0.execute(pVelocity);		
 		}
-		*/
-	//	tVelocity0.execute(pVelocity);		
+		//tVelocity0.execute(pVelocity_1);		
         
 	    //tPass.execute(pAttack);
         //tKickoff.execute(pAttack) ;
-		//tPosition
+		//tPositionř
 				//tcover3.execute(paramcover);
-     //   tAttack0.execute(paramcover);
+      //tAttack1.execute(pAttack);
       //  tcover1.execute(paramcover);
 		//dwDefend2.execute(paramDWDefend);
 	    //dwDefend20152.execute(paramDWDefend2015);
-		 // tcover20152.execute(paramcover2015);
-		//  tGoalOur0.execute(paramGoal);
+		  //tcover20150.execute(paramcover2015);
+		   // tGoalOur4.execute(paramGoal);
 	   //  	tcoverleft2.execute(paramcoverleft);
 	  //      tcoverright0.execute(paramcoverright);
 	 // dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
@@ -389,18 +387,18 @@ public:
 			//dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
 	  	    //  simplegoto.executeSkill(SkillSet::GoToPoint, params3);
 		  
-	//	simplegoto_old.executeSkill(SkillSet::GoToPoint, params2_old);
+		//simplegoto_old.executeSkill(SkillSet::GoToPoint, params2_old);
         
 		//tAttack2.execute(pAttack);
 			//	tReceive3.execute(pReceive);
 				//tReceive1.execute(pReceive);
 	//	tAttack3.execute(pAttack);
 	 //tAttack1.execute(pAttack);
-     //   tAttack0.execute(pAttack);
+       //tAttack0.execute(pAttack);
       //  tcover0.execute(paramcover);
         //tcover3.execute(paramcover);
      //tCharge1.execute(pCharge);
-	   //tAttack20150.execute(pAttack) ;
+	  tAttack20150.execute(pAttack) ;
 		  //tShoot4.execute(paramShoot) ;
 		  //  tAttack0.execute(pAttack);
 		//	tAttack2.execute(pAttack);

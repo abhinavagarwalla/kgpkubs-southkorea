@@ -40,7 +40,7 @@ inline double getBotBallDist(Pose botPos, Vector2D<float> ballPos) {
 inline SplineTrajectory* getIntTraj(Pose botPosStart, Vector2D<float> ballPos, Vector2D<float> ballVel, Vector2D<float> botVel) {
 
     Vector2D<float> predictedBallPos;
-    double error = 0.005;
+    double error = 0.02;
     double T2 = 6.0;
     double T1 = 0.0;
     double S = 1.0;

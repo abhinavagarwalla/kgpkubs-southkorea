@@ -12,7 +12,7 @@
 #include <iostream>
 #include <fstream>
 
-#define SGFILTER_SIZE 5
+#define SGFILTER_SIZE 4
 #define SGFILTER_DERIV 1
 #define SGFILTER_ORDER 2
 
@@ -193,7 +193,7 @@ namespace Strategy
 
 	double err = 0.134;
  //   if (delTheta < 1e-2 && delTheta > -1e-2) {  // be realistic
-	if(fabs(delTheta) < err){	
+	if(fabs(delTheta) <  1e-2){	
 	
 	//cout << "here" << endl;final_vl
         // bot should be headed straight, but again confusion
@@ -284,7 +284,7 @@ namespace Strategy
 		  ballT.push_back(ans);
 	  }	
 	  // getchar();
-	//  myfileX << ballVelocity.x << "\t" <<  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV ) << endl;
+	  myfileX << ballPose.x << "\t" <<  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, 0) << endl;
       ballVelocity.x =  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV );
 	  ballT.clear();
 	  // for y direction
@@ -479,12 +479,9 @@ namespace Strategy
         homeLastUpdateTime[id]   = timeCapture;
 		
 		//Adding vl,vr calculation from motion-simulation
-		if(i!=4)
-			continue;
-		cout << "id" << id << endl;
 		homeVlVr[id] = calcBotVelocity((newx - lastPoseX)/fieldXConvert, (newy - lastPoseY)/fieldXConvert, newangle, lastAngle, delTime);
 		//cout << (newx - lastPoseX)/fieldXConvert << " " << (newy - lastPoseY)/fieldXConvert << " " << newangle << " " << lastAngle << " " << delTime << endl;
-	    cout<<" homeVlVr[id] :: "<<homeVlVr[id].x<<"  "<<homeVlVr[id].y<<endl;
+	 //   myfileX <<" homeVlVr[id] :: "<<homeVlVr[id].x<<"  "<<homeVlVr[id].y<<endl;
 	  }
 	  
       // Blue robot info
