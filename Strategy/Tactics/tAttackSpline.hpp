@@ -234,6 +234,7 @@ namespace Strategy
     */
     
       float dist = Vector2D<int>::dist(state->ballPos, state->homePos[botID]);
+	/*
 //      movementError[movementErrorIndex++] = (Vector2D<int>::distSq(prevBotPos, state->homePos[botID])) + (prevBotAngle - state->homeAngle[botID])*(prevBotAngle - state->homeAngle[botID])*50000;
 //      prevBotPos = state->homePos[botID];
 //      prevBotAngle = state->homeAngle[botID];
@@ -249,22 +250,27 @@ namespace Strategy
 //        skillSet->executeSkill(sID, sParam);
 //        return;
 //      }
-      float botBallAngle = normalizeAngle(Vector2D<int>::angle(state->homePos[botID] , state->ballPos));
+      
+	   */
+	  float botBallAngle = normalizeAngle(Vector2D<int>::angle(state->homePos[botID] , state->ballPos));
 	  float ballGoalAngle = normalizeAngle(Vector2D<int>::angle(state->ballPos, Vector2D<int>(OPP_GOAL_MAXY - GOAL_DEPTH, 0)));
-	  float diff = normalizeAngle(fabs(botBallAngle - ballGoalAngle));
-	  cout << "angle " << botBallAngle << " " << ballGoalAngle << " " << diff << endl;
+
   switch(iState)
   {        
   case APPROACHING:
   { 
-
-	  if(dist<1.2*BOT_BALL_THRESH && state->homePos[botID].x<state->ballPos.x && diff < PI/4)
-      {
-            iState = CLOSE_TO_BALL ;
-			splin = 0;
-            break;
-      } 
+      
+	  if(state->homePos[botID].x < state->ballPos.x && abs(state->homePos[botID].x - state->ballPos.x) > 0.5*BOT_BALL_THRESH)
+	  {
+		 if(dist < 2*BOT_BALL_THRESH)
+		 {
+		   iState = CLOSE_TO_BALL ;
+		   splin = 0 ; 
+		   break ;
+		 }
+	  }
       cout<<"APPROACHING"<<endl ; 
+	  
 //    if(isBallInDBox()==true)
 //    {
 //      sParam.GoToPointP.x =  -HALF_FIELD_MAXX+GOAL_DEPTH+DBOX_WIDTH+BOT_RADIUS ;
@@ -291,7 +297,7 @@ namespace Strategy
 
     // write the code for local avoidance also :: using CP in spline 
         static Vector2D<int> lastSplinePoint(state->ballPos.x , state->ballPos.y) ;
-          cout << "spline here :: " << splin << std::endl;
+          cout << "spline here :: " << splin << std::endl <<std::endl;
       sID = SkillSet::SplineInterceptBall;
     //  cout << "here" << endl;
       sParam.SplineInterceptBallP.vl = 0;
@@ -321,7 +327,7 @@ namespace Strategy
   {
 	  splin = 0;
      cout<<"SPINNING_CW"<<endl;
-     if(dist>1.2*BOT_BALL_THRESH)
+     if(dist>2*BOT_BALL_THRESH)
      {
      iState = APPROACHING;
      return;
@@ -340,7 +346,7 @@ namespace Strategy
   {
 	splin = 0;
     cout<<"SPINNING_CCW"<<endl;
-    if(dist>1.2*BOT_BALL_THRESH)
+    if(dist>2*BOT_BALL_THRESH)
     {
     iState = APPROACHING;
     return;
@@ -360,8 +366,6 @@ namespace Strategy
   case CLOSE_TO_BALL:
   {
 	splin = 0;
-    cout<<"CLOSE_TO_BALL"<<endl;
-           
 //       if(fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x))) < PI / 2 + PI / 9 && fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x)))  > PI / 2 - PI / 9)
 //           {
 //              if(state->ballPos.y > 0)
@@ -371,6 +375,12 @@ namespace Strategy
 //              break ;
 //       } 
        
+	   if(state->homePos[botID].x > state->ballPos.x - 0.5*BOT_BALL_THRESH)
+	   {
+		 iState = APPROACHING ; 
+		 break ;
+	   }
+	   
        if(dist > 4*BOT_BALL_THRESH)
        {
               iState = APPROACHING ;
@@ -396,13 +406,15 @@ namespace Strategy
       
       // **************  YAHAN PE SPLINE ******************************************************* 
       
-	  if (dist > 2*BOT_BALL_THRESH) {
-		  sParam.GoToPointP.align = false;
-		sParam.GoToPointP.x = state->ballPos.x + 0.016*state->ballVel.x;
+	  if (dist > 1.5*BOT_BALL_THRESH) {
+		    cout<<"CLOSE_TO_BALL :: Something else"<<endl;
+		    sParam.GoToPointP.align = false;
+		    sParam.GoToPointP.x = state->ballPos.x + 0.016*state->ballVel.x;
 			sParam.GoToPointP.y = state->ballPos.y + 0.016*state->ballVel.y;
 			sParam.GoToPointP.finalslope = Vector2D<int>::angle( Vector2D<int>(OPP_GOAL_X, 0),state->ballPos);
 	  }
 	  else {
+		  cout<<"CLOSE_TO_BALL :: DRAG_TO_GOAL"<<endl;
 		  sParam.GoToPointP.align = false;
 				sParam.GoToPointP.x = OPP_GOAL_X;
 				sParam.GoToPointP.y = destY;
@@ -427,7 +439,6 @@ namespace Strategy
   }
         
       }
-    cout << "here" << endl;
     }  
       
   }; // class TAttack

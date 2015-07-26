@@ -350,9 +350,9 @@ public:
 		if(loopcount++ > 15){		
 			//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 			//	params1.SplineGoToPointP.initTraj = 0;
-				sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
-				params4.SplineInterceptBallP.initTraj = 0;
-			//tAttackSpline0.execute(pAttack) ;
+			//	sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
+			//	params4.SplineInterceptBallP.initTraj = 0;
+			tAttackSpline0.execute(pAttack) ;
 			//tKickoff.execute(pAttack) ;
 			loopcount = loopcount%1000 + 15;
 		}
