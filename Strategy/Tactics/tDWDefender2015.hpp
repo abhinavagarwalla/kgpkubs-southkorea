@@ -21,17 +21,18 @@ namespace Strategy
 			TDWDefender2015(const BeliefState* state, int botID) :
 			  Tactic(Tactic::DWDefender, state, botID)
 			{
-			  iState = DEFENDING;
+			  iState = POSITIONING;
 			} // TDWDefender	
 			~TDWDefender2015()
 			{ } // ~TDWDefender
 
 		enum InternalState
-		{
+		{ 
+		  POSITIONING,
+		  INTERCEPTING,
 		  DEFENDING,
-		  SPINNING_CCW = -1,
-		  SPINNING_CW = 1,
-		  ATTACKING,
+		  SPINNING_CCW ,
+		  SPINNING_CW ,
 		} iState;
 		inline bool isActiveTactic(void) const
 		{
@@ -102,7 +103,7 @@ namespace Strategy
 
 void execute(const Param& tParam)
 {
-	bool isFirstRun=true;
+	static bool isFirstRun=true;
 			//cout<<"\n \n" <<"istate"<< iState;
 			static Vector2D<float> lastVel[10];
 			static int index = 0;
@@ -124,102 +125,153 @@ void execute(const Param& tParam)
 	float ang1 = atan(state->ballVel.y/state->ballVel.x);
 	float distBotBall = Vector2D<int>::dist(state->ballPos,state->homePos[botID]);
 	float distOppBall = Vector2D<int>::dist(state->ballPos,state->awayPos[state->oppBotNearestToBall]);
-    cout<<"iState :: "<<iState<<std::endl;
+	int oppthreshX = ForwardX(HALF_FIELD_MAXX/2 - 2*BOT_RADIUS) ;
+	int ourthreshX = ForwardX(-HALF_FIELD_MAXX/4 - 2*BOT_RADIUS) ;
 	switch(iState)
 	{
-	case DEFENDING :
-	//	cout<< 1;
-		
-		if( distBotBall < 1.5*BOT_BALL_THRESH )//&& abs(abs(state->homeAngle[botID]) - PI/2 ) < PI/12)
-		{
-			if( fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x))) < PI /4  && state->ballPos.x >= state->homePos[botID].x)
-			{                                      
-				sParam.DWGoToPointP.x = state->ballPos.x;
-				sParam.DWGoToPointP.y = state->ballPos.y;
-				sParam.DWGoToPointP.finalSlope = PI/2;
-				skillSet->executeSkill(SkillSet::DWGoToPoint, sParam);
-			}
-			
-			else //if(fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x))) < PI / 2 + PI / 10 && fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x)))  > PI / 2 - PI / 10)
-				{
-					//sID = SkillSet::Spin;
-				   if(state->ballPos.x >=state->homePos[botID].x) 
-				   {
-					
-					if(state->ballPos.y > 0)
-					{
-						//sParam.SpinP.radPerSec = (-MAX_BOT_OMEGA);
-						iState = SPINNING_CW;
-					}
-						
-					else
-					{
-						//sParam.SpinP.radPerSec = (MAX_BOT_OMEGA);
-						iState =SPINNING_CCW;
-					}
-				   }
-				}
-				break;
-		}
-		
-		else 
-		   if(state->ballPos.x > 0)
-		   {
-			int predictPosX = ForwardX(-(HALF_FIELD_MAXX/2)) ;
+	case POSITIONING :        // if ball is in opponent side 
+	{  
+	   if(state->ballPos.x < oppthreshX && state->ballPos.x > ourthreshX)
+	   {
+		   iState = INTERCEPTING ;
+		   isFirstRun = true;
+		   break ;
+	   }
+	   if(state->ballPos.x <  ourthreshX)
+	   {
+		   iState = DEFENDING ; 
+		   break ;
+	   }
+	   cout<<"Positioning "<<endl;
+            int predictPosX = ourthreshX  ;
 			int predictPosY = state->ballPos.y - (state->ballPos.x - predictPosX)*tan(ang1);
-			predictPosY = predictPosY + SGN(predictPosY - state->homePos[botID].y)*2*BOT_RADIUS;
-			if(state->ballVel.x < 0){
-				sParam.DWGoToPointP.x = predictPosX;
+		//	predictPosY = predictPosY + SGN(predictPosY - state->homePos[botID].y)*2*BOT_RADIUS;  //why ?
+			if(state->ballVel.x < -100){
+				sParam.GoToPointP.x = predictPosX;
 				
 				if(predictPosY > HALF_FIELD_MAXY - BOT_RADIUS)
 					predictPosY = HALF_FIELD_MAXY - 2*BOT_RADIUS;
 				else if( predictPosY < (-HALF_FIELD_MAXY + BOT_RADIUS))
 					predictPosY = (-HALF_FIELD_MAXY + 2*BOT_RADIUS);
 					
-				sParam.DWGoToPointP.y = predictPosY ; 
-				sParam.DWGoToPointP.finalSlope = PI/2;
-				skillSet->executeSkill(SkillSet::DWGoToPoint, sParam);
+				cout<<" xpos : "<<predictPosX<<" ::  ypos : "<<predictPosY<<endl;	
+				sParam.GoToPointP.y = predictPosY ; 
+				sParam.GoToPointP.finalslope = PI/2;
+				skillSet->executeSkill(SkillSet::GoToPoint, sParam);   
 			}
-			else{
-				sParam.DWGoToPointP.x = predictPosX ;
-				sParam.DWGoToPointP.y = state->ballPos.y  ;
-				sParam.DWGoToPointP.finalSlope = PI/2;
-				skillSet->executeSkill(SkillSet::DWGoToPoint, sParam);
+			else
+			{
+				sParam.GoToPointP.x = predictPosX ;
+				sParam.GoToPointP.y = state->ballPos.y  ;
+				sParam.GoToPointP.finalslope = PI/2;
+				skillSet->executeSkill(SkillSet::GoToPoint, sParam);
 			}
-			break;
+			break ;
+	   
+	   
+	}
+	case INTERCEPTING :       // ball coming to our side from opp side 
+	{
+		if(state->ballPos.x > oppthreshX )
+		{
+		  iState = POSITIONING ;
+		  isFirstRun = true;
+		  break ;
+		}
+		if(state->ballPos.x < ourthreshX )
+		{
+		   iState = DEFENDING ;
+		   isFirstRun = true;
+		   break ;
+		}
+		cout<<" Intercepting "<<endl;
+		sParam.SplineInterceptBallP.vl = 70;
+		sParam.SplineInterceptBallP.vr = 70;
+		if(isFirstRun){
+			sParam.SplineInterceptBallP.initTraj=true;
+			isFirstRun=false;
+		}
+		else sParam.SplineInterceptBallP.initTraj=false;
+		skillSet->executeSkill(SkillSet::SplineInterceptBall , sParam);
+		break;
+	}
+	case DEFENDING :           	// tAKES THE bot from behind
+	{
+	       if(state->ballPos.x  > oppthreshX )
+		   {
+			   iState = POSITIONING ;
+			   break ;
 		   }
-		   else 
-			 if(state->ballPos.x < 0 && state->ballPos.x > state->homePos[botID].x)
-		     {
-			  int predictX = -(HALF_FIELD_MAXX/2) ;
-			  int predictY = state->ballPos.y + (state->ballPos.x - predictX )*tan(ang1) ;
-			  predictY = predictY - SGN(predictY - state->homePos[botID].y)*2*BOT_RADIUS;
-			  distOppBall = HALF_FIELD_MAXX ; // for testing as there is no opponent bot to test 
-			  if((distOppBall < 2*BOT_BALL_THRESH))
-			  {
-				sParam.DWGoToPointP.x = predictX;
-				sParam.DWGoToPointP.y = predictY  ;
-				sParam.DWGoToPointP.finalSlope = PI/2;
-				skillSet->executeSkill(SkillSet::DWGoToPoint, sParam);
-				break;
-			  }
-			  else 
-			  {
-				iState =  ATTACKING;
-				isFirstRun = true;
-				break;
-			  }
+			//for onot disturbing the covergoal 
+			/*
+			if(abs(state->ballPos.y) >= OUR_GOAL_MAXY + 2*BOT_RADIUS)
+				{
+					sID = SkillSet::GoToPoint;
+					sParam.GoToPointP.align = false;
+					sParam.GoToPointP.finalslope = 0;
+			
+					sParam.GoToPointP.x =state->ballPos.x	; // ..................changed
+					sParam.GoToPointP.y = state->ballPos.y;
+			       skillSet->executeSkill(SkillSet::GoToPoint,sParam) ;
+				   break ;
+			   }
+			   else
+			   {
+			       sID = SkillSet::GoToPoint;
+				   sParam.GoToPointP.x = -HALF_FIELD_MAXX + GOAL_DEPTH + 3*BOT_RADIUS;//can change this if cover goal collides
+			       sParam.GoToPointP.finalslope = PI/2;
+			       if(state->ballPos.y >0)
+				     sParam.GoToPointP.y = OUR_GOAL_MAXY + BOT_RADIUS;
+			       else
+				     sParam.GoToPointP.y = OUR_GOAL_MINY - BOT_RADIUS;
+			       skillSet->executeSkill(SkillSet::GoToPoint, sParam);
+			      break;
+				   
+			   }
+			*/
+			
+			//side spinning 
+			if(distBotBall < BOT_BALL_THRESH)
+            {
+              if(fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x))) < PI / 2 + PI / 9 && fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x)))  > PI / 2 - PI / 9)
+              { 
+				cout<<" Spinning"<<endl;
+               if(state->ballPos.y > 0)
+                iState = FIELD_IS_INVERTED? SPINNING_CCW : SPINNING_CW;
+               else
+                iState = FIELD_IS_INVERTED? SPINNING_CW : SPINNING_CCW;
+               break ;
+               } 
+             } 
+			 
+			 // for ball in D-box 
+			 if(abs(state->ballPos.y) < (OUR_GOAL_MAXY + 2*BOT_RADIUS))
+			 {
+				     cout<<"Defending in D-box_1 "<<endl;
+					 sID = SkillSet::GoToPoint ;
+					 sParam.GoToPointP.x = ForwardX(-(HALF_FIELD_MAXX-GOAL_DEPTH)*0.80 + 2*BOT_RADIUS);
+                     sParam.GoToPointP.y = SGN(state->ballPos.y)*(HALF_FIELD_MAXY/2 + BOT_RADIUS);
+					 skillSet->executeSkill(SkillSet::GoToPoint, sParam);
+					 break ;
 			 }
-			 else
-			{ 
-		      if (state->ballPos.x <= 0 && state->ballPos.x <= state ->homePos[botID].x && state->ballPos.x>=-(HALF_FIELD_MAXX/*-1.2*DBOX_WIDTH*/))
-		      {
-           //
-		       sID = SkillSet::GoToPoint;
+			 if(abs(state->ballPos.y)>OUR_GOAL_MAXY && state->ballPos.x < -(HALF_FIELD_MAXX-GOAL_DEPTH)*0.80 + BOT_RADIUS)  //covergoal line
+			 {
+				 if(abs(state->ballPos.y) < abs(state->homePos[botID].y))
+				 { 
+					 cout<<"Defending in D-box_2 "<<endl;
+					 sID = SkillSet::GoToPoint ;
+					 sParam.GoToPointP.x = ForwardX(-(HALF_FIELD_MAXX-GOAL_DEPTH)*0.80 + 2*BOT_RADIUS);
+                     sParam.GoToPointP.y = SGN(state->ballPos.y)*(HALF_FIELD_MAXY/2 + BOT_RADIUS);
+					 skillSet->executeSkill(SkillSet::GoToPoint, sParam);
+					 break ;
+				 }
+			 }
+			
+			 
+			   cout<<"Defending"<<endl;
+			   sID = SkillSet::GoToPoint;
                sParam.GoToPointP.align = true;
                float ballgoaldist = Vector2D<int>::dist(state->ballPos, Vector2D<int>(OPP_GOAL_X, 0));
-                 // sprintf(debug,"ballgoaldist = %f\n",ballgoaldist);
-                  ////Client::debugClient->SendMessages(debug);
                float offset = 600;
                float factor = 0.00005;
                int targetX = state->ballPos.x + (int)distBotBall  * factor * avgBallVel.x;
@@ -268,41 +320,13 @@ void execute(const Param& tParam)
               if(ForwardX(state->ballPos.x) < ForwardX(state->homePos[botID].x) && Vector2D<int>::dist(state->ballPos,state->homePos[botID]) < 1000) 
 		        sParam.GoToPointP.align = true;
               skillSet->executeSkill(SkillSet::GoToPoint, sParam);
-			//
+			  
 			  break ;
-			}
-		      else
-			  {
-			  // condition left to write for side ball movement from side of the GoalKeeper	  
-			   if(abs(state->ballPos.y) >= OUR_GOAL_MAXY + 2*BOT_RADIUS)
-				{
-					sID = SkillSet::GoToPoint;
-					sParam.GoToPointP.align = false;
-					sParam.GoToPointP.finalslope = 0;
-			
-					sParam.GoToPointP.x =state->ballPos.x	; // ..................changed
-					sParam.GoToPointP.y = state->ballPos.y;
-			       skillSet->executeSkill(SkillSet::GoToPoint,sParam) ;
-				   break ;
-			   }
-			   else
-			   {
-			       sID = SkillSet::GoToPoint;
-				   sParam.GoToPointP.x = -HALF_FIELD_MAXX + GOAL_DEPTH + 3*BOT_RADIUS;//can change this if cover goal collides
-			       sParam.GoToPointP.finalslope = PI/2;
-			       if(state->ballPos.y >0)
-				     sParam.GoToPointP.y = OUR_GOAL_MAXY + BOT_RADIUS;
-			       else
-				     sParam.GoToPointP.y = OUR_GOAL_MINY - BOT_RADIUS;
-			       skillSet->executeSkill(SkillSet::GoToPoint, sParam);
-			      break;
-				   
-			   }
-			  }
- 
-	      }
+		
+	}
 	case SPINNING_CCW :
-		if(distBotBall > 1.1*BOT_BALL_THRESH)
+	{
+	  	if(distBotBall > 1.1*BOT_BALL_THRESH)
 		{
 			iState = DEFENDING;
 			break;
@@ -311,9 +335,9 @@ void execute(const Param& tParam)
 		sParam.SpinP.radPerSec = MAX_BOT_OMEGA;//for testing it is divided by 10
 		skillSet->executeSkill(SkillSet::Spin, sParam);
 		break;
-	
+	}
 	case SPINNING_CW :
-	
+	{
 		if(distBotBall > 1.1*BOT_BALL_THRESH)
 		{
 			iState = DEFENDING;
@@ -322,34 +346,11 @@ void execute(const Param& tParam)
 		sParam.SpinP.radPerSec = -MAX_BOT_OMEGA;//for testing it is divided by 10
 		skillSet->executeSkill(SkillSet::Spin, sParam);
 		break;
-	
-	case ATTACKING :
-		cout<< 2;
-		if(state->ballPos.x > 0 || (state->ballPos.x < state->homePos[botID].x))//(-HALF_FIELD_MAXX/4))
-		{
-			iState = DEFENDING;
-			isFirstRun=false;
-			break;
-		}
-		float ang2 = atan(state->ballPos.y/(state->ballPos.x - ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH) ));
-		float ball_ang = atan(state->ballVel.y/state->ballVel.x);
-		
-		float deltaT = 0.016;
-		sParam.GoToPointP.x = state->ballPos.x + deltaT*state->ballVel.x;
-		sParam.GoToPointP.y = state->ballPos.y + deltaT*state->ballVel.y;
-		sParam.GoToPointP.finalslope = ang2;
-		sParam.GoToPointP.align = true;
-//		sParam.SplineInterceptBallP.vl = 30;
-//		sParam.SplineInterceptBallP.vr = 30;
-//		if(isFirstRun){
-//			sParam.SplineInterceptBallP.initTraj=true;
-//			isFirstRun=false;
-//		}
-//		else sParam.SplineInterceptBallP.initTraj=false;
-		skillSet->executeSkill(SkillSet::GoToPoint, sParam);
-		break;
-     }		
 	}
+	
+
+     }		
+  }
 
 	}; 
 	}

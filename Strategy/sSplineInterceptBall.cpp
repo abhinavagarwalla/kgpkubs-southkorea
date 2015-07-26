@@ -118,7 +118,7 @@ namespace Strategy
 		dt = st->totalTime() - algoController->getCurrentTimeS();
     }
     if(dt < 0.075 && sCount < 2){
-	//	cout << "cljkvsbiuvedv" << endl;
+		cout << "cljkvsbiuvedv" << endl;
 		sCount++;
 		comm->sendCommand(botID, 0, 0);
 	}

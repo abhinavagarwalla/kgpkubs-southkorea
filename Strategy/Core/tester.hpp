@@ -57,7 +57,7 @@ public:
 	Tactic::Param paramShoot;
 	
 	TDWDefender dwDefend2(&state, 2);
-	TDWDefender2015 dwDefend20152(&state, 0);
+	TDWDefender2015 dwDefend20152(&state, 2);
 	Tactic::Param paramDWDefend;
 	Tactic::Param paramDWDefend2015;
 	
@@ -204,7 +204,7 @@ public:
 	params4.SplineInterceptBallP.vr = 20;
 	params4.SplineInterceptBallP.initTraj = 1;
 	params4.SplineInterceptBallP.changeSpline = true;
-	SkillSet sball(&state, 0); 
+	SkillSet sball(&state, 2); 
 	
 	// params2 for dwgo to point
 	Strategy::SParam params2;
@@ -231,7 +231,7 @@ public:
 	params3_old.DWGoToPointP.finalSlope = 0;
 
 	SkillSet simplegoto(&state, 4);
-	SkillSet simplegoto_old(&state, 0);
+	SkillSet simplegoto_old(&state, 2);
     Tactic::Param ptestpoint;
 	   
  //   TestbotRace ttest2(&state,2);
@@ -314,49 +314,28 @@ public:
 			}
 		}
 		#endif
-	  
-        //printf("Ball Pos: %d %d\n",state.ballPos.x,state.ballPos.y);
-		
-			//	printf(" \n\n %d %d \n\n",state.ourGoalCount,state.oppGoalCount);
-		
-      //  printf("our side %d\n",state.pr_ballOurSide);
-	  
-        //printf("opp side %d\n",state.pr_ballOppSide);
-        //printf("mid %d\n",state.pr_ballMidField);
-        //printf("dbox %d\n",state.pr_ball_in_opp_dbox);    
-        //ttest1.execute(ptestpoint);
-        //  tVelocity2.execute(pVelocity);
-	    // tS0.execute(paramStop);
-	    //tAttack2.execute(pAttack);
-        //tAttack4.execute(pAttack); 
-
+	    
 	// tVelocity1.execute(pVelocity); 
 	      //tVelocity0.execute(pVelocity_1);
 	//tVelocity2.execute(pVelocity_2);
    	//tVelocity3.execute(pVelocity_3);  
 	  //tVelocity4.execute(pVelocity_4);
-	
-	        //   tVelocity0.execute(pVelocity_1);
-				//tVelocity3.execute(pVelocity);
-				//tAttackDuo12.execute(pAttack);
-                 // tVelocity0.execute(pVelocity);
-	     // tVelocity0.execute(pVelocity_1);
+	  
 	      //tGoalie2.execute(paramGoal);
-          //tGoalOur0.execute(paramGoal);
+          tGoalOur0.execute(paramGoal);
         //tDefendLine1.execute(pDefendL1);
 				//tGoalOur2.execute(paramGoal);
 		  //tGoalOur4.execute(paramGoal);
-		// tcover20150.execute(paramcover2015);
-      // tAttackSpline0.execute(pAttack) ;
+		 tcover20153.execute(paramcover2015);
+		 dwDefend20152.execute(paramDWDefend2015);
 	//tsupportattack20150.execute(paramsupportattack2015);
 
-	//	tPass.execute(pAttack);
-		if(loopcount++ > 15){		
+		 if(loopcount++ > 15){		
 			//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 			//	params1.SplineGoToPointP.initTraj = 0;
-		//	sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
-		//	params4.SplineInterceptBallP.initTraj = 0;
-			tAttackSpline0.execute(pAttack) ;
+			//sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
+			//params4.SplineInterceptBallP.initTraj = 0;
+		//	tAttackSpline0.execute(pAttack) ;
 			//tKickoff.execute(pAttack) ;
 			loopcount = loopcount%1000 + 15;
 		}
@@ -372,7 +351,6 @@ public:
      // tAttack0.execute(pAttack);
       //  tcover1.execute(paramcover);
 		//dwDefend2.execute(paramDWDefend);
-	    //dwDefend20152.execute(paramDWDefend2015);
 		  //tcover20150.execute(paramcover2015);
 		   // tGoalOur4.execute(paramGoal);
 	   //  	tcoverleft2.execute(paramcoverleft);
