@@ -36,7 +36,7 @@ public:
 	
 	int prev_tactic_id = -1;
 	int prev_bot_id = -1;
-	int prev_play_id = -1;
+	int prev_play_id = 0;
 	  std::cout << "here4" << std::endl;
 	PExec       pExec(&state);
     #endif
@@ -200,8 +200,8 @@ public:
 	
 	//params4 for spline interception with ball
 	Strategy::SParam params4;
-	params4.SplineInterceptBallP.vl = 20;
-	params4.SplineInterceptBallP.vr = 20;
+	params4.SplineInterceptBallP.vl = 120;
+	params4.SplineInterceptBallP.vr = 120;
 	params4.SplineInterceptBallP.initTraj = 1;
 	params4.SplineInterceptBallP.changeSpline = true;
 	SkillSet sball(&state, 2); 
@@ -231,7 +231,7 @@ public:
 	params3_old.DWGoToPointP.finalSlope = 0;
 
 	SkillSet simplegoto(&state, 4);
-	SkillSet simplegoto_old(&state, 2);
+	SkillSet simplegoto_old(&state, 4);
     Tactic::Param ptestpoint;
 	   
  //   TestbotRace ttest2(&state,2);
@@ -307,7 +307,7 @@ public:
 					printf("GOT COMMAND FROM STRATEGY GUI!!!!\n");
 					prev_play_id = strPktSh.play();
 					Util::Logger::toStdOut("Command From Refee.. Reselecting play..\n");
-					pExec.selectfromGUI(prev_play_id);
+					pExec.selectfromGUI(prev_play_id-1);
 				}
 				pExec.executePlay();
 				strCS.leave();
@@ -322,29 +322,41 @@ public:
 	  //tVelocity4.execute(pVelocity_4);
 	  
 	      //tGoalie2.execute(paramGoal);
-          tGoalOur0.execute(paramGoal);
+         // tGoalOur0.execute(paramGoal);
         //tDefendLine1.execute(pDefendL1);
 				//tGoalOur2.execute(paramGoal);
 		  //tGoalOur4.execute(paramGoal);
-		 tcover20153.execute(paramcover2015);
-		 dwDefend20152.execute(paramDWDefend2015);
+		 //tcover20153.execute(paramcover2015);
+		 //dwDefend20152.execute(paramDWDefend2015);
 	//tsupportattack20150.execute(paramsupportattack2015);
 
-		 if(loopcount++ > 15){		
-			//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
-			//	params1.SplineGoToPointP.initTraj = 0;
-			//sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
-			//params4.SplineInterceptBallP.initTraj = 0;
-		//	tAttackSpline0.execute(pAttack) ;
-			//tKickoff.execute(pAttack) ;
-			loopcount = loopcount%1000 + 15;
-		}
-		else{
-			//tVelocity0.execute(pVelocity);		
-		}
+//		 if(loopcount++ > 10){		
+//			//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
+//			//	params1.SplineGoToPointP.initTraj = 0;
+//			sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
+//			params4.SplineInterceptBallP.initTraj = 0;
+//		//	tAttackSpline0.execute(pAttack) ;
+//			//tKickoff.execute(pAttack) ;
+//			loopcount = loopcount%1000 + 10;
+//		}
+//		else{
+//			//tVelocity0.execute(pVelocity);		
+//		}
 		//tVelocity3.execute(pVelocity);		
         
-	    //tPass.execute(pAttack);
+		 if(loopcount++ > 4){		
+			//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
+			//	params1.SplineGoToPointP.initTraj = 0;
+			if(abs(state.ballPos.x)>50 && abs(state.ballPos.y)>50){
+				sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
+				params4.SplineInterceptBallP.initTraj = 0;
+			}
+		//	tAttackSpline0.execute(pAttack) ;
+			//tKickoff.execute(pAttack) ;
+			loopcount = loopcount%1000 + 4;
+		}
+
+		tPass.execute(pAttack);
         //tKickoff.execute(pAttack) ;
 		//tPositionř
 				//tcover3.execute(paramcover);

@@ -92,7 +92,7 @@ void MainWindow::on_pushButton_clicked()
     StrategyPacket packet;
     packet.set_which(StrategyPacket::PLAY);
     int playid = ui->comboBox->currentIndex()+1;
-//    qDebug() << playid;
+    qDebug() << playid;
     packet.set_play(StrategyPacket::Play(playid));
     publisher->publish(packet);
     qDebug() << "Sent play packet";
