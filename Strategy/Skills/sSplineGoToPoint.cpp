@@ -38,12 +38,12 @@ namespace Strategy
 		assert(vl <= 180 && vl >= -180);
 		assert(vr <= 180 && vr >= -180);
 		if (direction){
-			comm->sendCommand(botid, vl/2, vr/2); //maybe add mutex
+			comm->sendCommand(botid, vl, vr); //maybe add mutex
 		}else {
 			//cout << "ulta chaloooo" << endl;
 			int vl1 = (-1)*vr;
 			int vr1 = (-1)*vl;
-			comm->sendCommand(botid, vl1/2, vr1/2);
+			comm->sendCommand(botid, vl1, vr1);
 		}
 	}
 
@@ -89,9 +89,9 @@ namespace Strategy
 			delete algoController;
 		
 		if(direction)
-			algoController = new ControllerWrapper(traj, state->homeVlVr[botID].x, state->homeVlVr[botID].y, PREDICTION_PACKET_DELAY);
+			algoController = new ControllerWrapper(traj, state->homeSentVlVr[botID].x, state->homeSentVlVr[botID].y, PREDICTION_PACKET_DELAY);
 		else
-			algoController = new ControllerWrapper(traj, (-1)*state->homeVlVr[botID].y, (-1)*state->homeVlVr[botID].x, PREDICTION_PACKET_DELAY);
+			algoController = new ControllerWrapper(traj, (-1)*state->homeSentVlVr[botID].y, (-1)*state->homeSentVlVr[botID].x, PREDICTION_PACKET_DELAY);
 		
 		//algoController = new ControllerWrapper(traj, delayedVel.x , delayedVel.y , PREDICTION_PACKET_DELAY);
 
@@ -108,13 +108,13 @@ namespace Strategy
 	
 	cout << state->homePos[botID].x << " " << state->homePos[botID].y << endl;
 	if(param.SplineGoToPointP.initTraj == 1){
-		_splineGoToPointInitTraj(botID, start, end, finalvel, state->homeVlVr[botID].x, state->homeVlVr[botID].y, 0);
+		_splineGoToPointInitTraj(botID, start, end, finalvel, state->homeSentVlVr[botID].x, state->homeSentVlVr[botID].y, 0);
 	}
 	else if(counter > 30){
-		_splineGoToPointInitTraj(botID, start, end, finalvel, state->homeVlVr[botID].x, state->homeVlVr[botID].y, 1);
+		_splineGoToPointInitTraj(botID, start, end, finalvel, state->homeSentVlVr[botID].x, state->homeSentVlVr[botID].y, 1);
 	}
 	else 
-		_splineGoToPointTrack(botID, start, end, finalvel, state->homeVlVr[botID].x, state->homeVlVr[botID].y);
+		_splineGoToPointTrack(botID, start, end, finalvel, state->homeSentVlVr[botID].x, state->homeSentVlVr[botID].y);
    }
 }
 

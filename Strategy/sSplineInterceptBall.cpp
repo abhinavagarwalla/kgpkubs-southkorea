@@ -19,7 +19,7 @@ namespace Strategy
     
     if(!algoController){
       if(traj)
-        algoController = new ControllerWrapper(traj, state->homeVlVr[botID].x, state->homeVlVr[botID].y, PREDICTION_PACKET_DELAY);
+        algoController = new ControllerWrapper(traj, state->homeSentVlVr[botID].x, state->homeSentVlVr[botID].y, PREDICTION_PACKET_DELAY);
     }
     
     if(!direction2)
@@ -33,11 +33,11 @@ namespace Strategy
     assert(vl <= 150 && vl >= -150);
     assert(vr <= 150 && vr >= -150);
     if (direction2)
-      comm->sendCommand(botid, vl/2, vr/2); //maybe add mutex
+      comm->sendCommand(botid, vl, vr); //maybe add mutex
     else {
       int vl1 = (-1)*vr;
       int vr1 = (-1)*vl;
-      comm->sendCommand(botid, vl1/2, vr1/2);
+      comm->sendCommand(botid, vl1, vr1);
     }
   }
 
@@ -51,7 +51,7 @@ namespace Strategy
     }
     Pose start2(state->homePos[botID].x, state->homePos[botID].y, normalizeAngle(state->homeAngle[botID] - PI));
     Vector2D<int> GoalPoint(ForwardX(HALF_FIELD_MAXX), 0);
-    direction2 = _isFrontDirected(start, Pose(state->ballPos.x, state->ballPos.y , Vector2D<int>::angle(state->ballPos, GoalPoint)), state->homeVlVr[botID].x, state->homeVlVr[botID].y);
+    direction2 = _isFrontDirected(start, Pose(state->ballPos.x, state->ballPos.y , Vector2D<int>::angle(state->ballPos, GoalPoint)), state->homeSentVlVr[botID].x, state->homeSentVlVr[botID].y);
     interceptCounter = 0; 
     Vector2D<float> genVel, delayedVel; Pose startP;
 	Vector2D<int> prevV;
@@ -110,24 +110,25 @@ namespace Strategy
       ballVel.x = param.SplineInterceptBallP.ballVelX;
       ballVel.y = param.SplineInterceptBallP.ballVelY;
     }
-    botVel.x = state->homeVlVr[botID].x;
-    botVel.y = state->homeVlVr[botID].y;
+    botVel.x = state->homeSentVlVr[botID].x;
+    botVel.y = state->homeSentVlVr[botID].y;
     double dt = 10;
     if(traj){
 		SplineTrajectory *st = dynamic_cast<SplineTrajectory*>(traj);
 		dt = st->totalTime() - algoController->getCurrentTimeS();
     }
-    if(dt < 0.075 && sCount < 2){
+/*    if(dt < 0.075 && sCount < 2){
 		cout << "cljkvsbiuvedv" << endl;
 		sCount++;
 		comm->sendCommand(botID, 0, 0);
 	}
-	else if(param.SplineInterceptBallP.initTraj == 1 || dt < 0.075){
+	else if(param.SplineInterceptBallP.initTraj == 1 || dt < 0.075){*/
+	if(param.SplineInterceptBallP.initTraj == 1 ){
 		sCount = 0;
        _splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr, 0);
 	}
-   // else if ((param.SplineInterceptBallP.changeSpline == 1 && interceptCounter > 80) || dt < 0.075)
-     //   _splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr, 1);
+    else if (( interceptCounter > 80) || dt < 0.075) //param.SplineInterceptBallP.changeSpline == 1 &&
+        _splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr, 1);
     else {
 		sCount = 0;
         _splineInterceptBallTrack(botID, start, ballPos, ballVel, botVel, final_vl, final_vr);

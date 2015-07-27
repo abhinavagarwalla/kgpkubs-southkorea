@@ -50,8 +50,7 @@ std::vector<double> cubic_LineSegmentIntersection(const double cX[4], const doub
 
 std::vector<Pose> cubicSpline_LineSegmentIntersection(const CubicSpline &s, const LineSegment &ls) {
     // unpack the x and y splines
-	 vector<Pose> results;
-/*    using namespace alglib;
+    using namespace alglib;
     real_2d_array tbly, tblx;
     ae_int_t ny, nx;
     alglib::spline1dunpack(s.getSplineX(), nx, tblx);
@@ -75,7 +74,7 @@ std::vector<Pose> cubicSpline_LineSegmentIntersection(const CubicSpline &s, cons
             double y = cY[0] + cY[1]*u[i] + cY[2]*u[i]*u[i] + cY[3]*u[i]*u[i]*u[i];
             results.push_back(Pose(x*fieldXConvert, y*fieldXConvert, 0));
         }
-    }*/
+    }
     return results;
 }
 }

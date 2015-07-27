@@ -171,13 +171,13 @@ namespace Strategy
 	       {
 			     vl=MAX_BOT_SPEED/radius*(radius-BOT_RADIUS)*0.5;
 				 vr=MAX_BOT_SPEED/radius*(radius+BOT_RADIUS)*0.5;
-				 comm->sendCommand(botID,vl/2,vr/2);
+				 comm->sendCommand(botID,vl,vr);
 		   }	
 		else
 		{
 				vl=MAX_BOT_SPEED/radius*(radius-BOT_RADIUS);
 				vr=MAX_BOT_SPEED/radius*(radius+BOT_RADIUS);
-			    comm->sendCommand(botID,vr/2,vl/2);
+			    comm->sendCommand(botID,vr,vl);
 		}
         /*
 		if(state->homePos[botID].x<state->ballPos.x  && Vector2D<int>::dist(state->homePos[botID],state->ballPos)< BOT_RADIUS)

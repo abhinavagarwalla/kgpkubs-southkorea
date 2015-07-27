@@ -50,6 +50,7 @@ namespace Strategy
     Point2D<int>    opp_goalpoints[5];
     Vector2D<float> homeVel[HomeTeam::SIZE];
 	Vector2D<float> homeVlVr[HomeTeam::SIZE];
+	Vector2D<float> homeSentVlVr[HomeTeam::SIZE];
     Vector2D<float> homeAcc[HomeTeam::SIZE];
 	
     float           homeAngle[HomeTeam::SIZE];

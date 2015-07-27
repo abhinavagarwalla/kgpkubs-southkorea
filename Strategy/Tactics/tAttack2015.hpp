@@ -253,54 +253,14 @@ namespace Strategy
     if(Vector2D<int>::dist(state->homePos[botID],state->ballPos)<1.5*BOT_BALL_THRESH && state->ballPos.x>state->homePos[botID].x )
     {
                             cout<<"CLOSE_TO_BALL"<<endl;
-                        if(((abs(state->homePos[botID].x)>(HALF_FIELD_MAXX-GOAL_DEPTH-2*BOT_RADIUS) || (abs(state->homePos[botID].y)>(HALF_FIELD_MAXY-2*BOT_RADIUS)))))
-                            {
-                                    iState=STUCK;
-                                    break;
-                            }
-                
-                          
-                      /* Ball is with bot. So go to goal */
-                           sID = SkillSet::GoToPoint;
-                      
-                      //****************************************************************
-                           int desty = 0;
-                            Vector2D<int> GoalMidPoint  (OPP_GOAL_X,0);
-                            float angleofBot = state->homeAngle[botID];
-                            if(angleofBot > (3 * PI)/4) angleofBot  = (3 * PI)/4;
-                            if(angleofBot < -(3 * PI)/4) angleofBot = -(3 * PI)/4;
-                           float R =  (OPP_GOAL_X - state->homePos[botID].x) / ( cos(angleofBot) );
-                            float destY = state->homePos[botID].y + R * sin(angleofBot);
-                            if(destY < OPP_GOAL_MINY) destY = OPP_GOAL_MINY + 200;
-                            if(destY > OPP_GOAL_MAXY) destY = OPP_GOAL_MAXY - 200;
-                            
-            
-                            
-                            sParam.GoToPointP.align = false;
-                        sParam.GoToPointP.x = OPP_GOAL_X;
-                        sParam.GoToPointP.y = destY;
-                            if(abs(state->ballPos.y)>HALF_FIELD_MAXY-2*BOT_RADIUS && abs(state->homePos[botID].y)>HALF_FIELD_MAXY-1.7 && botID==state->ourBotNearestToBall)
-                            {
-                                sParam.GoToPointP.finalslope = Vector2D<int>::angle(state->ballPos,state->homePos[botID]);
-                            }
-                            else if(abs(state->ballPos.y)>HALF_FIELD_MAXY-2*BOT_RADIUS && abs(state->homePos[botID].y)>HALF_FIELD_MAXY-1.7*BOT_RADIUS && botID!=state->ourBotNearestToBall)
-                            {
-                                sParam.GoToPointP.finalslope = Vector2D<int>::angle(state->homePos[state->oppBotNearestToBall],state->homePos[botID]);
-                            }
-                            else
-                            {
-                                sParam.GoToPointP.finalslope = Vector2D<int>::angle( Vector2D<int>(OPP_GOAL_X, 0),state->ballPos);
-                            }
-                        sParam.GoToPointP.increaseSpeed = 1;
-
-                //**************************************************************************
-
-
-                            if(!LocalAvoidance::isPointInField(Vector2D<int> (sParam.GoToPointP.x-BOT_RADIUS,sParam.GoToPointP.y-BOT_RADIUS)))
-                        {
-                                sParam.GoToPointP.x=state->ballPos.x;
-                                sParam.GoToPointP.y=state->ballPos.y;
-                            }
+			//printf("\n Going to Ball \n ");
+		    sID = SkillSet::GoToPoint;
+            sParam.GoToPointP.align = false;
+            sParam.GoToPointP.x = OPP_GOAL_X;
+            sParam.GoToPointP.y = 0;
+            sParam.GoToPointP.finalslope = Vector2D<int>::angle(Vector2D<int>(OPP_GOAL_X, 0), state->ballPos);
+            sParam.GoToPointP.increaseSpeed = 1;
+            skillSet->executeSkill(sID, sParam);
                        
 
     }
@@ -319,7 +279,7 @@ namespace Strategy
           float offset = 600;
          
 		  //******************** changed**********************
-		  float factorx = 0.0001;
+		  float factorx = 0.00008;
 		 
 		  float factory=0.0001;
 		  //****************************************************

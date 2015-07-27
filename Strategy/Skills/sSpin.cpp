@@ -16,9 +16,9 @@ namespace Strategy
     //printf("%f %f\n", vl, vr);
     //comm.sendCommand(botID, 0,(vl + vr)/2, ((vl - vr)*MAX_BOT_OMEGA)/(2*MAX_BOT_SPEED), 0, false); 
 #if FIRA_COMM || FIRASSL_COMM
-      comm->sendCommand(botID, vl/2, vr/2);        
+      comm->sendCommand(botID, vl, vr);        
 #else
-      comm->sendCommand(botID, vr/2, vl/2);
+      comm->sendCommand(botID, vr, vl);
 #endif
     //comm.sendCommand(botID, 0, 0, param.SpinP.radPerSec, 0, false);
   } // spin

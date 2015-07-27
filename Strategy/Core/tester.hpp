@@ -132,10 +132,10 @@ public:
     
     //tVelocity
     TVelocity tVelocity0(&state,0);
-		TVelocity tVelocity1(&state,1);
-		TVelocity tVelocity3(&state,3);
-		TVelocity tVelocity4(&state,4);
-		TVelocity tVelocity2(&state,2);
+	TVelocity tVelocity1(&state,1);
+	TVelocity tVelocity3(&state,3);
+	TVelocity tVelocity4(&state,4);
+	TVelocity tVelocity2(&state,2);
     
 	Tactic::Param pVelocity;
 	pVelocity.VelocityP.vl = 0;
@@ -204,7 +204,7 @@ public:
 	params4.SplineInterceptBallP.vr = 120;
 	params4.SplineInterceptBallP.initTraj = 1;
 	params4.SplineInterceptBallP.changeSpline = true;
-	SkillSet sball(&state, 2); 
+	SkillSet sball(&state, 0); 
 	
 	// params2 for dwgo to point
 	Strategy::SParam params2;
@@ -254,11 +254,18 @@ public:
 //	ofstream myfile;
 //	myfile.open ("ballPosLog.txt");
 	std::cout << "here" << std::endl;
+	FILE *f1 = fopen("/tmp/bot_vel_data.txt", "w");
     while(running)
     {
     //      timer.start();
       state.update();
       kFilter.update(state);
+	  {
+		int vl, vr;
+		SkillSet::comm->getSentData(0, vl, vr);
+		fprintf(f1, "sent velocity = (%d, %d), vision velocity = (%f, %f), vision pos = (%f, %f)\n", vl, vr, 
+			kFilter.homeVlVr[0].x, kFilter.homeVlVr[0].y, kFilter.homePose[0].x, kFilter.homePose[0].y);
+	  }
 	  
 	  /*unsigned long long int x;
 	   unsigned a, d;
@@ -343,24 +350,24 @@ public:
 //			//tVelocity0.execute(pVelocity);		
 //		}
 		//tVelocity3.execute(pVelocity);		
-        
+       // tVelocity0.execute(pVelocity_1);
 		 if(loopcount++ > 4){		
 			//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 			//	params1.SplineGoToPointP.initTraj = 0;
-			if(abs(state.ballPos.x)>50 && abs(state.ballPos.y)>50){
-				sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
-				params4.SplineInterceptBallP.initTraj = 0;
-			}
+		//	if(abs(state.ballPos.x)>50 && abs(state.ballPos.y)>50){
+				//sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
+				//params4.SplineInterceptBallP.initTraj = 0;
+		//	}
 		//	tAttackSpline0.execute(pAttack) ;
 			//tKickoff.execute(pAttack) ;
 			loopcount = loopcount%1000 + 4;
 		}
 
-		tPass.execute(pAttack);
+	//	tPass.execute(pAttack);
         //tKickoff.execute(pAttack) ;
 		//tPositionř
 				//tcover3.execute(paramcover);
-     // tAttack0.execute(pAttack);
+      //tAttack0.execute(pAttack);
       //  tcover1.execute(paramcover);
 		//dwDefend2.execute(paramDWDefend);
 		  //tcover20150.execute(paramcover2015);
@@ -388,7 +395,7 @@ public:
       //  tcover0.execute(paramcover);
         //tcover3.execute(paramcover);
      //tCharge1.execute(pCharge);
-	  //tAttack20150.execute(pAttack) ;
+	  tAttack20150.execute(pAttack) ;
 		  //tShoot4.execute(paramShoot) ;
 		  //  tAttack0.execute(pAttack);
 		//	tAttack2.execute(pAttack);
@@ -414,6 +421,7 @@ public:
          usleep(16000);  // Adding sleep to this thread of execution to prevent CPU hogging
       
     }
+	fclose(f1);
     vThread.stop();
     Util::Logger::toStdOut("Exiting process");
 //	myfile.close();

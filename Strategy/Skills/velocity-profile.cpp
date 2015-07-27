@@ -176,18 +176,18 @@ vector<ProfileDatapoint> generateVelocityProfile(Spline &p, int numPoints, doubl
     // 1. at the point where bot goes from negative -> zero velocty, should be
     // at distance of -v^2/(2*a) whre a = max decelaration
     // 2. at the point where it reaches original starting point, but with positive velocity
-//    if (vs < 0) {
-//        double s = -vs*vs/atmax/2./10.;
-//        ProfileDatapoint dp;
-//        dp.v = 0;
-//        dp.s = s;
-//        dp.u = Integration::getArcLengthParam(p, dp.s, full);
-//        v.insert(v.begin()+1, dp);
-//        dp.v = -vs;
-//        dp.s = 0;
-//        dp.u = 0;
-//        v.insert(v.begin()+2, dp);
-//    }
+    if (vs < 0) {
+        double s = -vs*vs/atmax/2./10.;
+        ProfileDatapoint dp;
+        dp.v = 0;
+        dp.s = s;
+        dp.u = Integration::getArcLengthParam(p, dp.s, full);
+        v.insert(v.begin()+1, dp);
+        dp.v = -vs;
+        dp.s = 0;
+        dp.u = 0;
+        v.insert(v.begin()+2, dp);
+    }
 	
     // forward consistency
     v[0].v = vs;

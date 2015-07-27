@@ -12,7 +12,7 @@ namespace BallInterception {
 
 inline Vector2D<float> predictBallPose(Vector2D<float> ballPos, Vector2D<float> ballVel, double timeOfPrediction, Vector2D<float> ballAcc){
     Vector2D<float> bPos;
-	float factor = 0.7;
+	float factor = 0.8;
     bPos.x = ballPos.x + factor*timeOfPrediction*ballVel.x;// + (ballAcc.x*timeOfPrediction*timeOfPrediction)/2.0;
     bPos.y = ballPos.y + factor*timeOfPrediction*ballVel.y;// + (ballAcc.x*timeOfPrediction*timeOfPrediction)/2.0;
 
@@ -30,7 +30,6 @@ inline Vector2D<float> predictBallPose(Vector2D<float> ballPos, Vector2D<float> 
             bPos.x = - (2 * HALF_FIELD_MAXX + bPos.x);
         }
     }
-
     return bPos;
 }
 
@@ -108,8 +107,8 @@ inline SplineTrajectory* getIntTraj(Pose botPosStart, Vector2D<float> ballPos, V
     }
 //	vector<Pose> midPoints;
 //	Pose ballPose(ballPos.x, ballPos.y, Vector2D<float>::angle(ballPos, goalCentre));
-//    return TrajectoryGenerators::cubic(botPosStart, ballPose, botVel.x, botVel.y, 0, 0, midPoints);
-
+//  return TrajectoryGenerators::cubic(botPosStart, ballPose, botVel.x, botVel.y, 0, 0, midPoints);
+	
 	return st;
 	}
 }

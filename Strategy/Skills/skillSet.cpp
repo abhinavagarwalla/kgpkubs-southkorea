@@ -142,7 +142,7 @@ void SkillSet::_goToPoint(int botid, Vector2D<int> dpoint, float finalvel, float
         return;
       }
      finalvel=0;
-		  comm->sendCommand(botID, finalvel/2, finalvel/2);
+		  comm->sendCommand(botID, finalvel, finalvel);
       return;
       // This part of the function is just for safety.
       // The tactic should actually prevent this call.
@@ -195,6 +195,6 @@ void SkillSet::_goToPoint(int botid, Vector2D<int> dpoint, float finalvel, float
 		{
 			
 		}
-			comm->sendCommand(botID, (t - r)/2, (t + r)/2);
+			comm->sendCommand(botID, (t - r), (t + r));
 }
 }

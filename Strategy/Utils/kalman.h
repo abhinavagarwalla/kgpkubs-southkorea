@@ -82,14 +82,17 @@ namespace Strategy
 	Vector2D<float> prevBallVelocity;
     Vector2D<float> ballPosK;
     Vector2D<float> ballPosSigmaSqK;
-
+	Vector2D<float> left_corner;
+	Vector2D<float> right_corner;
+	Vector2D<float> left_center;
+	Vector2D<float> right_center;
     double          ballLastUpdateTime;
 
     Util::CS*        mutex;
     
     void addInfo(SSL_DetectionFrame& detection);
     void update(BeliefState& state);
-	
+	void updateField(SSL_GeometryData& geometry);
 	std::deque<Vector2D<float> > QueueVel, QueuePos;
 	std::deque<Vector2D<float> > ballPosQueue;
 	std::queue<std::pair<BeliefState, double> > bsQ;

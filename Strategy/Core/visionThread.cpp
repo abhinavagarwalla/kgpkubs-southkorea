@@ -35,6 +35,9 @@ namespace Strategy
         if (recvPacket.has_detection())
         {
           SSL_DetectionFrame detection = recvPacket.detection();
+		  
+		SSL_GeometryData gfsize = recvPacket.geometry();
+		kFilter->updateField(gfsize);
           kFilter->addInfo(detection);
 
 #ifdef SHOW_SSLVISION_LOG

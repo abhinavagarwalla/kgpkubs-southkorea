@@ -11,6 +11,7 @@
 #include <set>
 #include <iostream>
 #include <fstream>
+#include "skillSet.h"
 
 #define SGFILTER_SIZE 4
 #define SGFILTER_DERIV 1
@@ -183,7 +184,6 @@ namespace Strategy
   Vector2D<float> Kalman::calcBotVelocity(double delX, double delY , double newTheta, double oldTheta, float timeMs) {
  //   strategyToRealConversion(p1);
   //  strategyToRealConversion(p2);
-
 	float vl,vr;
     double delTheta = normalizeAngle(newTheta - oldTheta); // assuming |delTheta| < PI, which is safe to assume
 	// for ~ 16 ms of rotation at any speed (even 120,-120?).
@@ -191,15 +191,14 @@ namespace Strategy
     // w * timeMs = delTheta
     double w = delTheta / (timeMs);// * 0.001);
 
-	double err = 0.134;
- //   if (delTheta < 1e-2 && delTheta > -1e-2) {  // be realistic
-	if(fabs(delTheta) <  err){	
+    if (delTheta < 1e-2 && delTheta > -1e-2) {  // be realistic
 	
 	//cout << "here" << endl;final_vl
         // bot should be headed straight, but again confusion
         // so taking projection of (delX, delY) along (cos(theta), sin(theta)) as displacement.
         double dispLength = delX*cos(oldTheta) + delY*sin(oldTheta);
         vl = dispLength / (timeMs);// * 0.001);
+		assert(ticksToCmS > 0);
         vl = vl / ticksToCmS;
         vr = vl;
 		Vector2D<float> v(vl,vr);
@@ -213,14 +212,28 @@ namespace Strategy
 	//cout<<" Rhos :: "<<newTheta<<"  "<<oldTheta<< " " << delTheta << endl ;
     // try harmonic mean?
 //    double rho = (rho1 + rho2) / 2;
-    double rho = 2*rho1*rho2 / (rho1 + rho2);
+	assert(ticksToCmS > 0);
+	double rho;
+	if (rho1 + rho2 < 1e-2 && rho1 + rho2 > -1e-2) { // cant do harmonic mean in this case
+		rho = (rho1 + rho2)/2;
+	} else {
+		rho = 2*rho1*rho2 / (rho1 + rho2);
+	}
     vl = w * (rho - d/2.0) / ticksToCmS;
     vr = w * (rho + d/2.0) / ticksToCmS;
 	cout<<"Calculated velocity :: " << vl << "   " << vr << endl;
+	assert(vl == vl && vr == vr);
 	Vector2D<float> v(vl,vr);
     return v;
   }
-	
+	void  Kalman::updateField(SSL_GeometryData& geometry)
+	{
+		cout << "here" << endl;
+		SSL_GeometryFieldSize fiel;
+		fiel = geometry.field();
+		cout<< geometry.field().penalty_spot_from_field_line_dist()<<"1";
+		//getchar();
+	}
   void Kalman::addInfo(SSL_DetectionFrame &detection)
   {
     static double minDelTime = 999999;
@@ -284,7 +297,7 @@ namespace Strategy
 			  ballT.push_back(ans);
 		  }	
 		  // getchar();
-		  myfileX << ballPose.x << "\t" <<  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV) << endl;
+		  //myfileX << ballPose.x << "\t" <<  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV) << endl;
 		  ballVelocity.x =  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV );	
 		//  ballAcceleration.x =  sg.smooth(ballT , ballPosX, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV + 1);
 		  ballPosX.erase(ballPosX.begin());
@@ -300,7 +313,7 @@ namespace Strategy
 			  ans += ballPosTimeY[i];
 			  ballT.push_back(ans);
 		  }
-		  myfileY << ballVelocity.y << "\t"  <<  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV) << endl;
+		  //myfileY << ballVelocity.y << "\t"  <<  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV) << endl;
 		  ballVelocity.y =  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV );
 		//  ballAcceleration.y =  sg.smooth(ballT , ballPosY, 2*SGFILTER_SIZE + 1, SGFILTER_ORDER, SGFILTER_DERIV + 1);
 		  ballPosY.erase(ballPosY.begin());
@@ -486,7 +499,7 @@ namespace Strategy
 		//Adding vl,vr calculation from motion-simulation
 		homeVlVr[id] = calcBotVelocity((newx - lastPoseX)/fieldXConvert, (newy - lastPoseY)/fieldXConvert, newangle, lastAngle, delTime);
 		//cout << (newx - lastPoseX)/fieldXConvert << " " << (newy - lastPoseY)/fieldXConvert << " " << newangle << " " << lastAngle << " " << delTime << endl;
-	 //   myfileX <<" homeVlVr[id] :: "<<homeVlVr[id].x<<"  "<<homeVlVr[id].y<<endl;
+	    myfileX <<" homeVlVr[id] :: "<<homeVlVr[id].x<<"  "<<homeVlVr[id].y<<endl;
 	  }
 	  
       // Blue robot info
@@ -583,6 +596,13 @@ namespace Strategy
 	  state.homeAngle[botID] = homeAngle[botID];// + homeOmega[botID]*delTime;
       state.homeVel[botID]   = homeVelocity[botID];
 	  state.homeVlVr[botID] = homeVlVr[botID];
+	  // set the sent vl, vr from comm
+	  {
+		int vl, vr;		
+		SkillSet::comm->getSentData(botID, vl, vr);
+		state.homeSentVlVr[botID].x = vl;
+		state.homeSentVlVr[botID].y = vr;
+	  }	  
       state.homeOmega[botID] = homeOmega[botID];
       state.homeAcc[botID]   = homeAcc[botID];
       state.homeAngAcc[botID]= homeAngularAcc[botID];

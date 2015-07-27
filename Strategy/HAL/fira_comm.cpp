@@ -14,11 +14,11 @@ namespace HAL
   void FIRAComm::getSentData(int botid, int &vl, int &vr)
   {
     cs_internal[botid].enter();
-    vl = command.data[botid*2];
-    vr = command.data[botid*2+1];
+	// NOTE: multiplying by 2 for new bot, which takes halved values
+    vl = command.data[botid*2]*2;
+    vr = command.data[botid*2+1]*2;
     cs_internal[botid].leave();    
   }
-  
   FIRAComm::FIRAComm()
   {
     debug_cs = new CS();
@@ -80,7 +80,11 @@ namespace HAL
                              float v_l,
                              float v_r)
   {
-    printf("Bot Velocity(firacomm) %d: %d %d\n", botID, (int)v_l, (int)v_r);
+	printf("Bot Velocity(firacomm) %d: %d %d\n", botID, (int)v_l, (int)v_r);
+	// NOTE: adding changes for new FIRA bot, which doubles the velocity value
+	// so that the range is (-256, 255) instead of (-128, 127)
+	v_l = v_l/2.;
+	v_r = v_r/2.;    
     cs_internal[botID].enter();		
     command.data[botID*2] = (int8_t)v_l;
     command.data[botID*2+1] = (int8_t)v_r;

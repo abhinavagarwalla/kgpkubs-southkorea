@@ -51,8 +51,7 @@ namespace HAL
     // Adding dummy functions for compatibity with other codes.
     virtual void addCircle(int x, int y, unsigned int radius, unsigned int color);
     virtual void addLine(int x1, int y1, int x2, int y2, unsigned int color );    
-    virtual void writeCombinedPacket();
-
+    virtual void writeCombinedPacket();	
   }; //class FIRAComm
 
 } // namespace HAL

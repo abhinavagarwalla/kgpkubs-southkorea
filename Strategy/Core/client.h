@@ -31,6 +31,7 @@ namespace Simulator
   public:
     SSL_DetectionFrame* nframe;
     SSL_GeometryData*   gdata;
+	SSL_GeometryFieldSize gfsize;
 
     Client(int port = Simulator::VISION_PORT,
            std::string address = Simulator::ADDRESS,
@@ -47,6 +48,8 @@ namespace Simulator
     void updateBot(TeamColor teamColor, int botID, float x, float y, float orientation);
     
     void updateBall(float x, float y);
+	
+	//void updateField(vector<float> x,vector<float> y);
   }; // class Client
 } // namespace Strategy
 

@@ -38,7 +38,7 @@ namespace Strategy
 ////		vl = (int)((dist/250)*vl);
 ////		vr = (int)((dist/250)*vr);
 ////	}
-    comm->sendCommand(botid, vl/2 , vr/2); //maybe add mutex
+    comm->sendCommand(botid, vl , vr); //maybe add mutex
   }
 
   void SkillSet::_dwGoToPointInitTraj(int botid, Pose start, Pose end, float finalvel){

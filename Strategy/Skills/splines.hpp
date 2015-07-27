@@ -7,6 +7,9 @@ class CubicSpline: public Spline {
 protected:
   alglib::spline1dinterpolant splineX, splineY;
 public:
+	//make SplineX and SplineY accessible from outside
+   alglib::spline1dinterpolant getSplineX() const { return splineX;}
+   alglib::spline1dinterpolant getSplineY() const { return splineY;}
   // midPoints is an array of points through which the path should be interpolated.
   // NOTE: only x, y coordinates of midPoints are used, theta is ignored.
   CubicSpline(Pose start, Pose end, vector<Pose> midPoints = vector<Pose>());
