@@ -46,6 +46,13 @@ MiscData ControllerWrapper::genControls_(Pose s, int &vl, int &vr, double time, 
     return m;
 }
 
+Pose ControllerWrapper::getReferencePose() {
+	// does not work with motion-simulation simulator
+	double t = getCurrentTimeS();
+	Pose ref(tracker.getTraj()->x(t)*fieldXConvert, tracker.getTraj()->y(t)*fieldXConvert, tracker.getTraj()->theta(t));
+	return ref;
+}
+
 ControllerWrapper::ControllerWrapper(FType fun, int start_vl, int start_vr, int k):fun(fun), k(k), ctrlType(POINTCTRL), tracker(),
                                                                 startTime(), isFirstCall(true){
     for(int i = 0; i < k; i++)

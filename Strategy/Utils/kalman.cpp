@@ -221,18 +221,17 @@ namespace Strategy
 	}
     vl = w * (rho - d/2.0) / ticksToCmS;
     vr = w * (rho + d/2.0) / ticksToCmS;
-	cout<<"Calculated velocity :: " << vl << "   " << vr << endl;
+	//cout<<"Calculated velocity :: " << vl << "   " << vr << endl;
 	assert(vl == vl && vr == vr);
 	Vector2D<float> v(vl,vr);
     return v;
   }
 	void  Kalman::updateField(SSL_GeometryData& geometry)
 	{
-		cout << "here" << endl;
+		//cout << "here" << endl;
 		SSL_GeometryFieldSize fiel;
 		fiel = geometry.field();
-		cout<< geometry.field().penalty_spot_from_field_line_dist()<<"1";
-		//getchar();
+	//	cout<< geometry.field().test_num()<<"<><><><><><><><<><><\n"<<endl;
 	}
   void Kalman::addInfo(SSL_DetectionFrame &detection)
   {
@@ -624,7 +623,7 @@ namespace Strategy
       state.ballVel = ballVelocity;
       state.ballAcc = ballAcceleration;
 	  state.prevBallVel = prevBallVelocity;
-	  cout << ballAcceleration.x << " " << ballAcceleration.y << endl;
+	//  cout << ballAcceleration.x << " " << ballAcceleration.y << endl;
     //printf("Omega-> %lf\n",state.homeOmega[2]);
 
         /*for (int botID = 0; botID < HomeTeam::SIZE; ++botID)

@@ -213,7 +213,7 @@ namespace Strategy
   {        
   case APPROACHING:
   {       
-    if(state->homePos[botID].x < state->ballPos.x && diff < PI/4);//&& abs(state->homePos[botID].x - state->ballPos.x) > 0.5*BOT_BALL_THRESH)
+    if(state->homePos[botID].x < state->ballPos.x && diff < PI/8);//&& abs(state->homePos[botID].x - state->ballPos.x) > 0.5*BOT_BALL_THRESH)
     {
      if(dist < 2*BOT_BALL_THRESH)
      {

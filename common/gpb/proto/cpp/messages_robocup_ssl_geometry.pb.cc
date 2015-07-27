@@ -35,7 +35,7 @@ void protobuf_AssignDesc_messages_5frobocup_5fssl_5fgeometry_2eproto() {
       "messages_robocup_ssl_geometry.proto");
   GOOGLE_CHECK(file != NULL);
   SSL_GeometryFieldSize_descriptor_ = file->message_type(0);
-  static const int SSL_GeometryFieldSize_offsets_[14] = {
+  static const int SSL_GeometryFieldSize_offsets_[15] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SSL_GeometryFieldSize, line_width_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SSL_GeometryFieldSize, field_length_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SSL_GeometryFieldSize, field_width_),
@@ -50,6 +50,7 @@ void protobuf_AssignDesc_messages_5frobocup_5fssl_5fgeometry_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SSL_GeometryFieldSize, free_kick_from_defense_dist_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SSL_GeometryFieldSize, penalty_spot_from_field_line_dist_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SSL_GeometryFieldSize, penalty_line_from_spot_dist_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SSL_GeometryFieldSize, test_num_),
   };
   SSL_GeometryFieldSize_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -145,7 +146,7 @@ void protobuf_AddDesc_messages_5frobocup_5fssl_5fgeometry_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n#messages_robocup_ssl_geometry.proto\"\212\003"
+    "\n#messages_robocup_ssl_geometry.proto\"\234\003"
     "\n\025SSL_GeometryFieldSize\022\022\n\nline_width\030\001 "
     "\002(\005\022\024\n\014field_length\030\002 \002(\005\022\023\n\013field_width"
     "\030\003 \002(\005\022\026\n\016boundary_width\030\004 \002(\005\022\025\n\rrefere"
@@ -155,18 +156,19 @@ void protobuf_AddDesc_messages_5frobocup_5fssl_5fgeometry_2eproto() {
     "radius\030\n \002(\005\022\027\n\017defense_stretch\030\013 \002(\005\022#\n"
     "\033free_kick_from_defense_dist\030\014 \002(\005\022)\n!pe"
     "nalty_spot_from_field_line_dist\030\r \002(\005\022#\n"
-    "\033penalty_line_from_spot_dist\030\016 \002(\005\"\311\002\n\035S"
-    "SL_GeometryCameraCalibration\022\021\n\tcamera_i"
-    "d\030\001 \002(\r\022\024\n\014focal_length\030\002 \002(\002\022\031\n\021princip"
-    "al_point_x\030\003 \002(\002\022\031\n\021principal_point_y\030\004 "
-    "\002(\002\022\022\n\ndistortion\030\005 \002(\002\022\n\n\002q0\030\006 \002(\002\022\n\n\002q"
-    "1\030\007 \002(\002\022\n\n\002q2\030\010 \002(\002\022\n\n\002q3\030\t \002(\002\022\n\n\002tx\030\n "
-    "\002(\002\022\n\n\002ty\030\013 \002(\002\022\n\n\002tz\030\014 \002(\002\022\037\n\027derived_c"
-    "amera_world_tx\030\r \001(\002\022\037\n\027derived_camera_w"
-    "orld_ty\030\016 \001(\002\022\037\n\027derived_camera_world_tz"
-    "\030\017 \001(\002\"h\n\020SSL_GeometryData\022%\n\005field\030\001 \002("
-    "\0132\026.SSL_GeometryFieldSize\022-\n\005calib\030\002 \003(\013"
-    "2\036.SSL_GeometryCameraCalibration", 872);
+    "\033penalty_line_from_spot_dist\030\016 \002(\005\022\020\n\010te"
+    "st_num\030\017 \001(\005\"\311\002\n\035SSL_GeometryCameraCalib"
+    "ration\022\021\n\tcamera_id\030\001 \002(\r\022\024\n\014focal_lengt"
+    "h\030\002 \002(\002\022\031\n\021principal_point_x\030\003 \002(\002\022\031\n\021pr"
+    "incipal_point_y\030\004 \002(\002\022\022\n\ndistortion\030\005 \002("
+    "\002\022\n\n\002q0\030\006 \002(\002\022\n\n\002q1\030\007 \002(\002\022\n\n\002q2\030\010 \002(\002\022\n\n"
+    "\002q3\030\t \002(\002\022\n\n\002tx\030\n \002(\002\022\n\n\002ty\030\013 \002(\002\022\n\n\002tz\030"
+    "\014 \002(\002\022\037\n\027derived_camera_world_tx\030\r \001(\002\022\037"
+    "\n\027derived_camera_world_ty\030\016 \001(\002\022\037\n\027deriv"
+    "ed_camera_world_tz\030\017 \001(\002\"h\n\020SSL_Geometry"
+    "Data\022%\n\005field\030\001 \002(\0132\026.SSL_GeometryFieldS"
+    "ize\022-\n\005calib\030\002 \003(\0132\036.SSL_GeometryCameraC"
+    "alibration", 890);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "messages_robocup_ssl_geometry.proto", &protobuf_RegisterTypes);
   SSL_GeometryFieldSize::default_instance_ = new SSL_GeometryFieldSize();
@@ -203,6 +205,7 @@ const int SSL_GeometryFieldSize::kDefenseStretchFieldNumber;
 const int SSL_GeometryFieldSize::kFreeKickFromDefenseDistFieldNumber;
 const int SSL_GeometryFieldSize::kPenaltySpotFromFieldLineDistFieldNumber;
 const int SSL_GeometryFieldSize::kPenaltyLineFromSpotDistFieldNumber;
+const int SSL_GeometryFieldSize::kTestNumFieldNumber;
 #endif  // !_MSC_VER
 
 SSL_GeometryFieldSize::SSL_GeometryFieldSize()
@@ -235,6 +238,7 @@ void SSL_GeometryFieldSize::SharedCtor() {
   free_kick_from_defense_dist_ = 0;
   penalty_spot_from_field_line_dist_ = 0;
   penalty_line_from_spot_dist_ = 0;
+  test_num_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -285,6 +289,7 @@ void SSL_GeometryFieldSize::Clear() {
     free_kick_from_defense_dist_ = 0;
     penalty_spot_from_field_line_dist_ = 0;
     penalty_line_from_spot_dist_ = 0;
+    test_num_ = 0;
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -515,6 +520,22 @@ bool SSL_GeometryFieldSize::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(120)) goto parse_test_num;
+        break;
+      }
+      
+      // optional int32 test_num = 15;
+      case 15: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_test_num:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &test_num_)));
+          set_has_test_num();
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -607,6 +628,11 @@ void SSL_GeometryFieldSize::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(14, this->penalty_line_from_spot_dist(), output);
   }
   
+  // optional int32 test_num = 15;
+  if (has_test_num()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(15, this->test_num(), output);
+  }
+  
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -683,6 +709,11 @@ void SSL_GeometryFieldSize::SerializeWithCachedSizes(
   // required int32 penalty_line_from_spot_dist = 14;
   if (has_penalty_line_from_spot_dist()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(14, this->penalty_line_from_spot_dist(), target);
+  }
+  
+  // optional int32 test_num = 15;
+  if (has_test_num()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(15, this->test_num(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -796,6 +827,13 @@ int SSL_GeometryFieldSize::ByteSize() const {
           this->penalty_line_from_spot_dist());
     }
     
+    // optional int32 test_num = 15;
+    if (has_test_num()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->test_num());
+    }
+    
   }
   if (!unknown_fields().empty()) {
     total_size +=
@@ -867,6 +905,9 @@ void SSL_GeometryFieldSize::MergeFrom(const SSL_GeometryFieldSize& from) {
     if (from.has_penalty_line_from_spot_dist()) {
       set_penalty_line_from_spot_dist(from.penalty_line_from_spot_dist());
     }
+    if (from.has_test_num()) {
+      set_test_num(from.test_num());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -905,6 +946,7 @@ void SSL_GeometryFieldSize::Swap(SSL_GeometryFieldSize* other) {
     std::swap(free_kick_from_defense_dist_, other->free_kick_from_defense_dist_);
     std::swap(penalty_spot_from_field_line_dist_, other->penalty_spot_from_field_line_dist_);
     std::swap(penalty_line_from_spot_dist_, other->penalty_line_from_spot_dist_);
+    std::swap(test_num_, other->test_num_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

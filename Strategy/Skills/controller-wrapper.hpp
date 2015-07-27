@@ -30,5 +30,6 @@ public:
     Pose getNewStartPose();
     Vector2D<float> getDelayedVel();
 	Vector2D<int> getPrevDelVel();
+	Pose getReferencePose();
 };
 #endif // CONTROLLERWRAPPER_HPP

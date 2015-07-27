@@ -34,6 +34,7 @@ public:
     }
 	Pose getNewStartPose(double t);
     MiscData genControls(Pose s, int &vl, int &vr, int prevVl, int prevVr, double t);
+	Trajectory* getTraj();
 };
 
 #endif // TRACKING_HPP

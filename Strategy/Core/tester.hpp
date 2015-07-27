@@ -349,18 +349,19 @@ public:
 //		else{
 //			//tVelocity0.execute(pVelocity);		
 //		}
-		//tVelocity3.execute(pVelocity);		
-       // tVelocity0.execute(pVelocity_1);
 		 if(loopcount++ > 4){		
 			//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 			//	params1.SplineGoToPointP.initTraj = 0;
 		//	if(abs(state.ballPos.x)>50 && abs(state.ballPos.y)>50){
-				//sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
-				//params4.SplineInterceptBallP.initTraj = 0;
+		//	sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
+		//	params4.SplineInterceptBallP.initTraj = 0;
 		//	}
-		//	tAttackSpline0.execute(pAttack) ;
+			tAttackSpline0.execute(pAttack) ;
 			//tKickoff.execute(pAttack) ;
 			loopcount = loopcount%1000 + 4;
+		}
+		else{
+			tVelocity0.execute(pVelocity);		
 		}
 
 	//	tPass.execute(pAttack);
@@ -384,7 +385,7 @@ public:
 			//dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
 	  	    //  simplegoto.executeSkill(SkillSet::GoToPoint, params3);
 		  
-		//simplegoto_old.executeSkill(SkillSet::GoToPoint, params2_old);
+	//	simplegoto_old.executeSkill(SkillSet::GoToPoint, params2_old);
         
 		//tAttack2.execute(pAttack);
 			//	tReceive3.execute(pReceive);
@@ -395,7 +396,7 @@ public:
       //  tcover0.execute(paramcover);
         //tcover3.execute(paramcover);
      //tCharge1.execute(pCharge);
-	  tAttack20150.execute(pAttack) ;
+	  //tAttack20150.execute(pAttack) ;
 		  //tShoot4.execute(paramShoot) ;
 		  //  tAttack0.execute(pAttack);
 		//	tAttack2.execute(pAttack);

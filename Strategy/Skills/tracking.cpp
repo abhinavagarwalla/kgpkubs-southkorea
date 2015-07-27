@@ -8,7 +8,9 @@ using namespace std;
 double sgn(double x) {
     return (x > 0) - (0 > x);
 }
-
+Trajectory* Tracker::getTraj() {
+	return traj;
+}
 MiscData Tracker::genControls(Pose s, int &vl, int &vr, int prevVl, int prevVr, double t) {
 
     Pose ref(traj->x(t)*fieldXConvert, traj->y(t)*fieldXConvert, traj->theta(t));

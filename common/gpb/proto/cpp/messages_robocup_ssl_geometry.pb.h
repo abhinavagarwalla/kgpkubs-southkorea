@@ -188,6 +188,13 @@ class SSL_GeometryFieldSize : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 penalty_line_from_spot_dist() const;
   inline void set_penalty_line_from_spot_dist(::google::protobuf::int32 value);
   
+  // optional int32 test_num = 15;
+  inline bool has_test_num() const;
+  inline void clear_test_num();
+  static const int kTestNumFieldNumber = 15;
+  inline ::google::protobuf::int32 test_num() const;
+  inline void set_test_num(::google::protobuf::int32 value);
+  
   // @@protoc_insertion_point(class_scope:SSL_GeometryFieldSize)
  private:
   inline void set_has_line_width();
@@ -218,6 +225,8 @@ class SSL_GeometryFieldSize : public ::google::protobuf::Message {
   inline void clear_has_penalty_spot_from_field_line_dist();
   inline void set_has_penalty_line_from_spot_dist();
   inline void clear_has_penalty_line_from_spot_dist();
+  inline void set_has_test_num();
+  inline void clear_has_test_num();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
@@ -235,9 +244,10 @@ class SSL_GeometryFieldSize : public ::google::protobuf::Message {
   ::google::protobuf::int32 free_kick_from_defense_dist_;
   ::google::protobuf::int32 penalty_spot_from_field_line_dist_;
   ::google::protobuf::int32 penalty_line_from_spot_dist_;
+  ::google::protobuf::int32 test_num_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(14 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(15 + 31) / 32];
   
   friend void  protobuf_AddDesc_messages_5frobocup_5fssl_5fgeometry_2eproto();
   friend void protobuf_AssignDesc_messages_5frobocup_5fssl_5fgeometry_2eproto();
@@ -877,6 +887,28 @@ inline ::google::protobuf::int32 SSL_GeometryFieldSize::penalty_line_from_spot_d
 inline void SSL_GeometryFieldSize::set_penalty_line_from_spot_dist(::google::protobuf::int32 value) {
   set_has_penalty_line_from_spot_dist();
   penalty_line_from_spot_dist_ = value;
+}
+
+// optional int32 test_num = 15;
+inline bool SSL_GeometryFieldSize::has_test_num() const {
+  return (_has_bits_[0] & 0x00004000u) != 0;
+}
+inline void SSL_GeometryFieldSize::set_has_test_num() {
+  _has_bits_[0] |= 0x00004000u;
+}
+inline void SSL_GeometryFieldSize::clear_has_test_num() {
+  _has_bits_[0] &= ~0x00004000u;
+}
+inline void SSL_GeometryFieldSize::clear_test_num() {
+  test_num_ = 0;
+  clear_has_test_num();
+}
+inline ::google::protobuf::int32 SSL_GeometryFieldSize::test_num() const {
+  return test_num_;
+}
+inline void SSL_GeometryFieldSize::set_test_num(::google::protobuf::int32 value) {
+  set_has_test_num();
+  test_num_ = value;
 }
 
 // -------------------------------------------------------------------

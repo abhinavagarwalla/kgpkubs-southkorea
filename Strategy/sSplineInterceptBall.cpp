@@ -113,22 +113,26 @@ namespace Strategy
     botVel.x = state->homeSentVlVr[botID].x;
     botVel.y = state->homeSentVlVr[botID].y;
     double dt = 10;
+	float deviatedDist;
     if(traj){
 		SplineTrajectory *st = dynamic_cast<SplineTrajectory*>(traj);
 		dt = st->totalTime() - algoController->getCurrentTimeS();
     }
-/*    if(dt < 0.075 && sCount < 2){
-		cout << "cljkvsbiuvedv" << endl;
+	if(traj && algoController){
+		Pose refPose = algoController->getReferencePose();
+		deviatedDist = sqrt((refPose.x() - start.x())*(refPose.x() - start.x()) + (refPose.y() - start.y())*(refPose.y() - start.y()));
+	}
+    if((dt < 0.075 || deviatedDist > 3*BOT_RADIUS) && sCount < 2){
 		sCount++;
 		comm->sendCommand(botID, 0, 0);
 	}
-	else if(param.SplineInterceptBallP.initTraj == 1 || dt < 0.075){*/
-	if(param.SplineInterceptBallP.initTraj == 1 ){
+//	else if(param.SplineInterceptBallP.initTraj == 1 || dt < 0.075){
+	else if(param.SplineInterceptBallP.initTraj == 1 || deviatedDist > 3*BOT_RADIUS || dt < 0.075){
 		sCount = 0;
        _splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr, 0);
 	}
-    else if (( interceptCounter > 80) || dt < 0.075) //param.SplineInterceptBallP.changeSpline == 1 &&
-        _splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr, 1);
+ //   else if (interceptCounter > 80 || dt < 0.075) //param.SplineInterceptBallP.changeSpline == 1 &&
+ //      _splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr, 1);
     else {
 		sCount = 0;
         _splineInterceptBallTrack(botID, start, ballPos, ballVel, botVel, final_vl, final_vr);

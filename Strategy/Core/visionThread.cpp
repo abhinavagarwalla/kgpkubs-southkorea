@@ -32,12 +32,16 @@ namespace Strategy
     {
       if (client.receive(recvPacket))
       {
+		if (recvPacket.has_geometry()) {
+			SSL_GeometryData gfsize = recvPacket.geometry();
+			kFilter->updateField(gfsize);			
+		}
         if (recvPacket.has_detection())
         {
           SSL_DetectionFrame detection = recvPacket.detection();
 		  
-		SSL_GeometryData gfsize = recvPacket.geometry();
-		kFilter->updateField(gfsize);
+		
+		
           kFilter->addInfo(detection);
 
 #ifdef SHOW_SSLVISION_LOG
