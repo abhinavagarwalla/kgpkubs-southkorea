@@ -71,8 +71,23 @@ public:
     TReceiveBall tReceive0(&state, 0);
 	TReceiveBall tReceive1(&state, 1);
 	TReceiveBall tReceive2(&state, 2);
+	TReceiveBall tReceive4(&state, 4);
     Tactic::Param pReceive;
-    
+	
+	TReceiveBall2015 tReceive2015_3(&state, 3);
+    TReceiveBall2015 tReceive2015_0(&state, 0);
+	TReceiveBall2015 tReceive2015_1(&state, 1);
+	TReceiveBall2015 tReceive2015_2(&state, 2);
+	TReceiveBall2015 tReceive2015_4(&state, 4);
+    Tactic::Param pReceive2015; 
+	
+	TReceiveSpline tReceiveSpline3(&state, 3);
+    TReceiveSpline tReceiveSpline0(&state, 0);
+	TReceiveSpline tReceiveSpline1(&state, 1);
+	TReceiveSpline tReceiveSpline2(&state, 2);
+	TReceiveSpline tReceiveSpline4(&state, 4);
+    Tactic::Param pReceiveSpline;
+	
     //tCover Bot
     TCoverGoal tcover0(&state, 0);
     TCoverGoal tcover1(&state,1);
@@ -173,6 +188,8 @@ public:
     TAttack tAttack4(&state, 4);
 	 
 	TAttackSpline tAttackSpline0(&state , 0);
+	TAttackSpline tAttackSpline4(&state , 4);
+	TAttackSpline tAttackSpline3(&state , 3);
 	
 	TAttack2015 tAttack20150(&state , 0) ;
 	TAttack2015 tAttack20151(&state , 1) ;
@@ -231,7 +248,7 @@ public:
 	params3_old.DWGoToPointP.finalSlope = 0;
 
 	SkillSet simplegoto(&state, 4);
-	SkillSet simplegoto_old(&state, 4);
+	SkillSet simplegoto_old(&state,0);
     Tactic::Param ptestpoint;
 	   
  //   TestbotRace ttest2(&state,2);
@@ -255,6 +272,7 @@ public:
 //	myfile.open ("ballPosLog.txt");
 	std::cout << "here" << std::endl;
 	FILE *f1 = fopen("/tmp/bot_vel_data.txt", "w");
+	int aid=3;int rid=4;
     while(running)
     {
     //      timer.start();
@@ -330,7 +348,6 @@ public:
 	  
 	      //tGoalie2.execute(paramGoal);
          // tGoalOur0.execute(paramGoal);
-        //tDefendLine1.execute(pDefendL1);
 				//tGoalOur2.execute(paramGoal);
 		  //tGoalOur4.execute(paramGoal);
 		 //tcover20153.execute(paramcover2015);
@@ -349,21 +366,37 @@ public:
 //		else{
 //			//tVelocity0.execute(pVelocity);		
 //		}
-		 if(loopcount++ > 4){		
+
+		  if(loopcount++ > 4){		
 			//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 			//	params1.SplineGoToPointP.initTraj = 0;
 		//	if(abs(state.ballPos.x)>50 && abs(state.ballPos.y)>50){
 		//	sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
 		//	params4.SplineInterceptBallP.initTraj = 0;
 		//	}
-			tAttackSpline0.execute(pAttack) ;
-			//tKickoff.execute(pAttack) ;
+			//if(Vector2D<int>::dist(state.ballPos, state.homePos[0]) < Vector2D<int>::dist(state.ballPos, state.homePos[4])){
+			
+//			if(aid != state.ourBotNearestToBall){
+//			if(((state.homePos[aid].y > OPP_GOAL_MINY && state.ballPos.y > OPP_GOAL_MINY) || ((state.homePos[aid].y < OPP_GOAL_MAXY) && state.ballPos.y < OPP_GOAL_MAXY)) && state.ballPos.x > HALF_FIELD_MAXX/2){
+//				aid= aid>3?3:aid;
+//			}
+//			}
+//			
+//			if(aid){
+//				tAttackSpline4.execute(pAttack) ;
+//				tReceive3.execute(pReceive2015);
+//			}
+//			else{
+//				tAttackSpline3.execute(pAttack) ;
+//				tReceive4.execute(pReceive2015);
+//			}
 			loopcount = loopcount%1000 + 4;
 		}
 		else{
 			tVelocity0.execute(pVelocity);		
 		}
 
+        tReceiveSpline4.execute(pReceiveSpline);
 	//	tPass.execute(pAttack);
         //tKickoff.execute(pAttack) ;
 		//tPositionř
@@ -388,7 +421,7 @@ public:
 	//	simplegoto_old.executeSkill(SkillSet::GoToPoint, params2_old);
         
 		//tAttack2.execute(pAttack);
-			//	tReceive3.execute(pReceive);
+				//tReceive4.execute(pReceive);
 				//tReceive1.execute(pReceive);
 	//	tAttack3.execute(pAttack);
 	 //tAttack1.execute(pAttack);

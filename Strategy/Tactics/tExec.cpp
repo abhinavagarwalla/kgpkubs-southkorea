@@ -55,6 +55,7 @@ namespace Strategy
 		tacticList[Tactic::CoverGoalPairLeft][botID]           = new TCoverGoalPairLeft(state,botID);
 		tacticList[Tactic::CoverGoalPairRight][botID]           = new TCoverGoalPairRight(state,botID);
 		tacticList[Tactic::ReceiveBall2015][botID]         = new TReceiveBall2015(state, botID);
+		tacticList[Tactic::ReceiveSpline][botID]         = new TReceiveSpline(state, botID);
 		tacticList[Tactic::AttackSpline][botID]			   = new TAttackSpline(state, botID);
 		tacticList[Tactic::Attack2015][botID]			   = new TAttack2015(state, botID);
 //		tacticList[Tactic::AttackDuo][botID]			   = new TAttackDuo(state, botID);

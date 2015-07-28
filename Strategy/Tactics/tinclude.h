@@ -12,6 +12,7 @@
 #include "tPass.hpp"
 #include "tPosition.hpp"
 #include "tReceiveBall.hpp"
+#include "tReceiveSpline.hpp"
 #include "tShoot.hpp"
 #include "tStop.hpp"
 #include "tVelocity.hpp"

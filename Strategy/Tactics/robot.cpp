@@ -51,6 +51,7 @@ namespace Strategy
 		tacticList[Tactic::Velocity]            = new TVelocity(state, botID);
 		tacticList[Tactic::Backup]              = new TBackup(state, botID);
 		tacticList[Tactic::ReceiveBall]         = new TReceiveBall(state, botID);
+		tacticList[Tactic::ReceiveSpline]         = new TReceiveSpline(state, botID);
 		tacticList[Tactic::TestgotoPoint] 			= new Testgotopoint(state,botID);
 		tacticList[Tactic::TestbotRace] 				= new TestbotRace(state,botID);
 		tacticList[Tactic::GoalKick]						= new TGoalKick(state,botID);

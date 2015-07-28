@@ -212,7 +212,21 @@ namespace Strategy
   switch(iState)
   {        
   case APPROACHING:
-  {       
+  { 
+      
+	// SPINNIGN IN APPROACH
+	 if(dist < BOT_BALL_THRESH)
+     {
+     if(fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x))) < PI / 2 + PI / 9 && fabs(normalizeAngle(state->homeAngle[botID] - atan2(state->homePos[botID].y - state->ballPos.y, state->homePos[botID].x - state->ballPos.x)))  > PI / 2 - PI / 9)
+       {
+        if(state->ballPos.y < 0)
+          iState = FIELD_IS_INVERTED? SPINNING_CCW : SPINNING_CW;
+    else
+       iState = FIELD_IS_INVERTED? SPINNING_CW : SPINNING_CCW;
+     break ;
+       } 
+     }
+	//*********************
     if(state->homePos[botID].x < state->ballPos.x && diff < PI/8);//&& abs(state->homePos[botID].x - state->ballPos.x) > 0.5*BOT_BALL_THRESH)
     {
      if(dist < 2*BOT_BALL_THRESH)
@@ -222,13 +236,12 @@ namespace Strategy
        break ;
      }
     } 
-    
     if(state->ballPos.x < ForwardX(-HALF_FIELD_MAXX / 2  ))
     { 
     sID=SkillSet::GoToPoint;
     cout<<"In DBox"<<endl;
       sParam.GoToPointP.x = ForwardX(-HALF_FIELD_MAXX / 2  - BOT_RADIUS ) ;
-    sParam.GoToPointP.y = -1*SGN(state->ballPos.y)*( HALF_FIELD_MAXY /2 );
+    sParam.GoToPointP.y = -1*SGN(state->ballPos.y)*( OUR_GOAL_MAXY  );
     splin = 0 ;    
         skillSet->executeSkill(sID, sParam);
         break;

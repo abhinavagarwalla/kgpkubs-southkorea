@@ -32,6 +32,7 @@ namespace Strategy
       Position,             // Go to the given position
      // PositionForReceive,   // Pass Receive check
       ReceiveBall,          // Receive Pass
+	  ReceiveSpline,
       Defend,               // Defend the ball from coming to our side
       Attack,               // Attck the ball towards the goal      
       Attack2015,

@@ -53,16 +53,12 @@ namespace Strategy
     } // chooseBestBot)
     void execute(const Param& tParam)
     {
-
-      char debug[50];
-		sprintf(debug, "%f\n", state->ballVel.y);  
-//		Client::debugClient->SendMessages(debug);
 		Vector2D<int> dest;
 		bool isDW = false;
 		dest.x = state->ballPos.x - (3.5)*(state->ballPos.x - (HALF_FIELD_MAXX/2))/(HALF_FIELD_MAXX/2)*BOT_RADIUS; //0.5 as factor  dest.y =-SGN(state->ballPos.y)*HALF_FIELD_MAXY*0.4;//-SGN(state->ballPos.y)*1.5*BOT_RADIUS;
 		dest.y = SGN(state->ballPos.y)*0.4*HALF_FIELD_MAXY*(-1);
 			
-		//****************************  ******************************************
+		//**********************************************************************
 		Vector2D<int> hit;
 		Vector2D<int> oppGoal(HALF_FIELD_MAXX, 0);
 		float n;
