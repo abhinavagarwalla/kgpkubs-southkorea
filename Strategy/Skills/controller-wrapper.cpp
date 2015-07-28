@@ -53,10 +53,10 @@ Pose ControllerWrapper::getReferencePose() {
 	return ref;
 }
 
-int ControllerWrapper::ballPredictionCheck(Vector2D<float> ballPos, Vector2D<float> ballVel, float deviatedDist, double splineTotalTime){
+int ControllerWrapper::ballPredictionCheck(Vector2D<float> botPos, Vector2D<float> ballPos, Vector2D<float> ballVel, float deviatedDist, double splineTotalTime){
 	// to check if the spline end point is not very far from ball predictedpoint
 	double t = getCurrentTimeS();
-	Vector2D<float> ballPredictedPose = BallInterception::predictBallPose(ballPos, ballVel, splineTotalTime-t, Vector2D<float>(0,0));
+	Vector2D<float> ballPredictedPose = BallInterception::predictBallPose(botPos, ballPos, ballVel, splineTotalTime-t, Vector2D<float>(0,0));
 	Vector2D<float> botPose(tracker.getTraj()->x(splineTotalTime)*fieldXConvert, tracker.getTraj()->y(splineTotalTime)*fieldXConvert);
 	if (Vector2D<float>::dist(ballPredictedPose, botPose) > deviatedDist)
 		return 1;

@@ -30,6 +30,6 @@ public:
     Vector2D<float> getDelayedVel();
 	Vector2D<int> getPrevDelVel();
 	Pose getReferencePose();
-	int ballPredictionCheck(Vector2D<float> ballPos, Vector2D<float> ballVel, float deviatedDist, double splineTotalTime);
+	int ballPredictionCheck(Vector2D<float> botPos, Vector2D<float> ballPos, Vector2D<float> ballVel, float deviatedDist, double splineTotalTime);
 };
 #endif // CONTROLLERWRAPPER_HPP

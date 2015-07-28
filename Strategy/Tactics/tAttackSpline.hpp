@@ -229,7 +229,7 @@ namespace Strategy
 	//*********************
     if(state->homePos[botID].x < state->ballPos.x && diff < PI/8);//&& abs(state->homePos[botID].x - state->ballPos.x) > 0.5*BOT_BALL_THRESH)
     {
-     if(dist < 1.2*BOT_BALL_THRESH)
+     if(dist < 2*BOT_BALL_THRESH)
      {
        iState = CLOSE_TO_BALL ;
        splin = 0 ; 

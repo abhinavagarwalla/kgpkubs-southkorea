@@ -119,7 +119,7 @@ namespace Strategy
 		dt = st->totalTime() - algoController->getCurrentTimeS();
 		Pose refPose = algoController->getReferencePose();
 		deviatedDist = sqrt((refPose.x() - start.x())*(refPose.x() - start.x()) + (refPose.y() - start.y())*(refPose.y() - start.y()));
-		splineTrack = algoController->ballPredictionCheck(ballPos, ballVel, deviatedDist, st->totalTime());
+		splineTrack = algoController->ballPredictionCheck(Vector2D<float>(refPose.x(), refPose.y()), ballPos, ballVel, deviatedDist, st->totalTime());
 		if(!splineTrack){
 			sTrack++;	
 		}
