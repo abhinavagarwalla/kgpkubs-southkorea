@@ -191,6 +191,7 @@ public:
 	TAttackSpline tAttackSpline4(&state , 4);
 	TAttackSpline tAttackSpline3(&state , 3);
 	TAttackSpline tAttackSpline1(&state , 1);
+	TAttackSpline tAttackSpline2(&state , 2);
 	
 	TAttack2015 tAttack20150(&state , 0) ;
 	TAttack2015 tAttack20151(&state , 1) ;
@@ -273,7 +274,7 @@ public:
 //	myfile.open ("ballPosLog.txt");
 	std::cout << "here" << std::endl;
 	FILE *f1 = fopen("/tmp/bot_vel_data.txt", "w");
-	int aid=3;int rid=4;
+	int aid=4;int rid=4;
     while(running)
     {
     //      timer.start();
@@ -355,20 +356,20 @@ public:
 		 //dwDefend20152.execute(paramDWDefend2015);
 	//tsupportattack20150.execute(paramsupportattack2015);
 
-		 if(loopcount++ > 14){		
+//		 if(loopcount++ > 14){		
 //			//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 //			//	params1.SplineGoToPointP.initTraj = 0;
 //			sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
 //			params4.SplineInterceptBallP.initTraj = 0;
-		    tAttackSpline4.execute(pAttack) ;
+		    //tAttackSpline4.execute(pAttack) ;
 //			//tKickoff.execute(pAttack) ;
-			loopcount = loopcount%1000 + 14;
-		}
-		else{
-			tVelocity3.execute(pVelocity);		
-		}
+//			loopcount = loopcount%1000 + 14;
+//		}
+//		else{
+//			tVelocity4.execute(pVelocity);		
+//		}
 
-	//	  if(loopcount++ > 14){		
+		  if(loopcount++ > 14){		
 			//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 			//	params1.SplineGoToPointP.initTraj = 0;
 		//	if(abs(state.ballPos.x)>50 && abs(state.ballPos.y)>50){
@@ -379,25 +380,26 @@ public:
 			
 //			if(aid != state.ourBotNearestToBall){
 //			if(((state.homePos[aid].y > OPP_GOAL_MINY && state.ballPos.y > OPP_GOAL_MINY) || ((state.homePos[aid].y < OPP_GOAL_MAXY) && state.ballPos.y < OPP_GOAL_MAXY)) && state.ballPos.x > HALF_FIELD_MAXX/2){
-//				aid= aid>3?3:aid;
+//				if(aid==4)aid=2;
+//				else aid=4;
 //			}
 //			}
 //			
-//			if(aid){
+//			if(aid==4){
 //				tAttackSpline4.execute(pAttack) ;
-//				tReceive3.execute(pReceive2015);
+//				tReceive2.execute(pReceive2015);
 //			}
 //			else{
-//				tAttackSpline3.execute(pAttack) ;
+//				tAttackSpline2.execute(pAttack) ;
 //				tReceive4.execute(pReceive2015);
 //			}
-	//		loopcount = loopcount%1000 + 14;
-	//	}
-	//	else{
-			///tVelocity0.execute(pVelocity);		
-	//	}
+			loopcount = loopcount%1000 + 14;
+		}
+		else{
+			tVelocity0.execute(pVelocity);		
+		}
 		//tVelocity3.execute(pVelocity_1);	
-     //   tReceiveSpline4.execute(pReceiveSpline);
+        //tReceiveSpline2.execute(pReceiveSpline);
 	//	tPass.execute(pAttack);
         //tKickoff.execute(pAttack) ;
 		//tPositionř
@@ -430,7 +432,7 @@ public:
       //  tcover0.execute(paramcover);
         //tcover3.execute(paramcover);
      //tCharge1.execute(pCharge);
-	//tAttack20153.execute(pAttack) ;
+	//tAttack20154.execute(pAttack) ;
 		  //tShoot4.execute(paramShoot) ;
 		  //  tAttack0.execute(pAttack);
 		//	tAttack2.execute(pAttack);

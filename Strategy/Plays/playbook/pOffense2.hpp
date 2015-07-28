@@ -21,18 +21,18 @@ namespace Strategy
       AttackPlay   = PLAYTYPE_YES;
       Tactic::Param param;
       
-      /* Role 1 - Goalie */
+	   /* Role 1 - Goalie */
       roleList[0].push_back(std::make_pair(Tactic::GoalieOur,param));
       
       /* Role 2 - Striker */
 			param.AttackP.rotateOnError = true;
-      roleList[1].push_back(std::make_pair(Tactic::Attack,param));
+      roleList[1].push_back(std::make_pair(Tactic::AttackSpline,param));
+
+      roleList[2].push_back(std::make_pair(Tactic::ReceiveSpline,param));
       
-      /* Role 3 - Defender */
-      roleList[2].push_back(std::make_pair(Tactic::CoverGoal,param));
-      
-      
-      /* Role 4 - Mid Field Player/Charger */
+      roleList[3].push_back(std::make_pair(Tactic::SupportAttack2015,param));
+	  
+	  roleList[4].push_back(std::make_pair(Tactic::CoverGoal2015,param));
 
       param.BlockP.dist = 1000;
       //if(state.pr_ball_in_opp_dbox  && !state.pr_ourBall)

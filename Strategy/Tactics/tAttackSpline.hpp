@@ -403,7 +403,7 @@ namespace Strategy
     }
     else {
       cout<<"CLOSE_TO_BALL :: DRAG_TO_GOAL"<<endl;
-      sParam.GoToPointP.align = false;
+         sParam.GoToPointP.align = false;
         sParam.GoToPointP.x = OPP_GOAL_X;
         sParam.GoToPointP.y = 0 ; //destY;
       if(abs(state->ballPos.y)>HALF_FIELD_MAXY-2*BOT_RADIUS && abs(state->homePos[botID].y)>HALF_FIELD_MAXY-1.7 && botID==state->ourBotNearestToBall)

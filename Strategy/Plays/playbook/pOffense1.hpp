@@ -28,20 +28,13 @@ namespace Strategy
       
       /* Role 2 - Striker */
 			param.AttackP.rotateOnError = true;
-      roleList[1].push_back(std::make_pair(Tactic::Attack,pAttack));
+      roleList[1].push_back(std::make_pair(Tactic::AttackSpline,pAttack));
+
+      roleList[2].push_back(std::make_pair(Tactic::ReceiveBall,param));
       
-      /* Role 3 - Defender */
-      roleList[2].push_back(std::make_pair(Tactic::CoverGoal,param));
-      
-      /* Role 4 - Mid Field Player/Charger */
-      param.BlockP.dist = 1000;
-      if(state.pr_ball_in_opp_dbox)
-        roleList[3].push_back(std::make_pair(Tactic::ChargeBall,param));
-      else
-        roleList[3].push_back(std::make_pair(Tactic::Block,param));
-      
-      /* Role 5 - Support Player */
-      roleList[4].push_back(std::make_pair(Tactic::Backup,param));
+      roleList[3].push_back(std::make_pair(Tactic::DWDefender2015,param));
+	  
+	  roleList[4].push_back(std::make_pair(Tactic::CoverGoal2015,param));
         
       computeMaxTacticTransits();
     }

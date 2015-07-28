@@ -24,24 +24,20 @@ namespace Strategy
       /* Role 1 - Goalie */
       roleList[0].push_back(std::make_pair(Tactic::GoalieOur,param));
       
-      /* Role 2 - Striker */
-			param.AttackP.rotateOnError = true;
-      roleList[1].push_back(std::make_pair(Tactic::Attack,param));
+      /* Role 2 - Covergoal */
+	  roleList[1].push_back(std::make_pair(Tactic::CoverGoal2015,param));
+	
+	  /* Role 3 - Defender */
+	  roleList[2].push_back(std::make_pair(Tactic::DWDefender2015,param));
+	  
+	  /* Role 4 - Block */
+	  roleList[3].push_back(std::make_pair(Tactic::Block,param));
+	  
+	  /* Role 5 - Striker */	
+		param.AttackP.rotateOnError = true;
+      roleList[4].push_back(std::make_pair(Tactic::AttackSpline,param));
       
-      /* Role 3 - Defender 1 */
-      roleList[2].push_back(std::make_pair(Tactic::CoverGoal,param));
-      
-      /* Role 4 - Defender 2 */
-      param.DefendPointP.x = ForwardX(HALF_FIELD_MAXX)/2;
-      param.DefendPointP.y = HALF_FIELD_MAXY;
-      param.DefendPointP.radius = HALF_FIELD_MAXX;
-      roleList[3].push_back(std::make_pair(Tactic::DefendPoint,param));
-      
-      /* Role 5 - Defender 3 */
-      param.DefendPointP.x = ForwardX(HALF_FIELD_MAXX)/2;
-      param.DefendPointP.y = -HALF_FIELD_MAXY;
-      param.DefendPointP.radius = HALF_FIELD_MAXX;
-      roleList[4].push_back(std::make_pair(Tactic::DefendPoint,param));
+     
       
       computeMaxTacticTransits();
     }

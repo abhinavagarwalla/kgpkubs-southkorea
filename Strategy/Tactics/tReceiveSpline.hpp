@@ -72,14 +72,13 @@ namespace Strategy
 	
     } // chooseBestBot)
     void execute(const Param& tParam)
-    {
-
+    { 
       switch(iState)
       {
                                 
         case POSITIONING:
         {
-			if(abs(state->ballPos.y) < OUR_GOAL_MAXY + BOT_RADIUS)
+			if(abs(state->ballPos.y) < OUR_GOAL_MAXY + 2*BOT_RADIUS)
 			{   
 				if(state->ourBotNearestToBall==botID)
 				{  
@@ -95,10 +94,14 @@ namespace Strategy
 					cout<<"POSITIONG "<<endl ;
 					Vector2D<int>Goal(OPP_GOAL_X,0);
 					sID = SkillSet::GoToPoint;
-					sParam.GoToPointP.y = -SGN(state->ballPos.y)*(HALF_FIELD_MAXY-2*BOT_RADIUS)/2;          
+					sParam.GoToPointP.y = -SGN(state->ballPos.y)*(HALF_FIELD_MAXY-2*BOT_RADIUS)/2;
+					if(ForwardX(state->ballPos.x) > HALF_FIELD_MAXX - GOAL_DEPTH - 2*BOT_RADIUS )
+					sParam.GoToPointP.x =  ForwardX(HALF_FIELD_MAXX - GOAL_DEPTH - 2*BOT_RADIUS) ;
+					else
+					sParam.GoToPointP.x = state->ballPos.x ;
 					sParam.GoToPointP.x = botdpointx(sParam.GoToPointP.y,sParam.GoToPointP.finalslope) + BOT_RADIUS;
 					SkillSet::addCircle(sParam.GoToPointP.x,sParam.GoToPointP.y,50, 0xFFF000);
-					sParam.GoToPointP.finalslope =  sParam.GoToPointP.finalslope = Vector2D<int>::angle(Goal,state->homePos[botID]);
+					sParam.GoToPointP.finalslope = Vector2D<int>::angle(Goal,state->homePos[botID]);
 					sParam.GoToPointP.align = true;
 					char debug[100];
 					sprintf(debug,"our ball %d\n",state->pr_ourBall);
@@ -108,42 +111,59 @@ namespace Strategy
         }
         case ATTACKING :
 		{ 
-			if(abs(state->ballPos.y) > OUR_GOAL_MAXY + BOT_RADIUS)
-			{
+			if(abs(state->ballPos.y) > OUR_GOAL_MAXY + 2*BOT_RADIUS)
+			{  
 			   iState = POSITIONING ;
 			    splin = 0 ;			   
 			   break ;
 			}
-			if((abs(state->ballPos.y) < OUR_GOAL_MAXY + BOT_RADIUS)&&((state->ourBotNearestToBall!=botID)&&(Vector2D<int>::dist(state->homePos[state->ourBotNearestToBall],state->ballPos) < 2*BOT_BALL_THRESH)))
+			if((abs(state->ballPos.y) < OUR_GOAL_MAXY + 2*BOT_RADIUS)&&((state->ourBotNearestToBall!=botID)&&(Vector2D<int>::dist(state->homePos[state->ourBotNearestToBall],state->ballPos) < 2*BOT_BALL_THRESH)))
 		    {
 			   iState = POSITIONING ; 
 			   splin = 0 ;
 			   break ;
 			}
-			cout<<"ATTACKING "<<endl ;
-	  sID = SkillSet::SplineInterceptBall;
-      sParam.SplineInterceptBallP.vl = 100;
-      sParam.SplineInterceptBallP.vr = 100;
-      sParam.SplineInterceptBallP.velGiven = 1;
-      sParam.SplineInterceptBallP.ballVelX = state->ballVel.x;
-      sParam.SplineInterceptBallP.ballVelY = state->ballVel.y;
-     if(splin == 0){
-		splin = 1;
-        sParam.SplineInterceptBallP.initTraj = 1;
-      } else{
-      splin = 1;
-        sParam.SplineInterceptBallP.initTraj = 0;
-      }
-      sParam.SplineInterceptBallP.changeSpline = true;
-      skillSet->executeSkill(sID, sParam);
-      splin  = 1; 
+			
+			if(state->homePos[botID].x < state->ballPos.x && Vector2D<int>::dist(state->homePos[botID],state->ballPos)< 1.5*BOT_BALL_THRESH)
+			{	
+             //CLOSE TO BALL 
+			 cout<<"DRAGGING "<<endl ;
+			 sID = SkillSet::GoToPoint;
+			 sParam.GoToPointP.x = OPP_GOAL_X;
+             sParam.GoToPointP.y = 0 ; 
+			 sParam.GoToPointP.finalslope = Vector2D<int>::angle( Vector2D<int>(OPP_GOAL_X, 0),state->ballPos);
+			 sParam.GoToPointP.align = false ;
+             splin = 0 ; 
+			 skillSet->executeSkill(sID, sParam);
+			 break ;
+             
+            } 
+			cout<<"ATTACKING "<<endl ; 
+	        sID = SkillSet::SplineInterceptBall;
+            sParam.SplineInterceptBallP.vl = 100;
+            sParam.SplineInterceptBallP.vr = 100;
+            sParam.SplineInterceptBallP.velGiven = 1;
+            sParam.SplineInterceptBallP.ballVelX = state->ballVel.x;
+            sParam.SplineInterceptBallP.ballVelY = state->ballVel.y;
+            if(splin == 0){
+		      splin = 1;
+            sParam.SplineInterceptBallP.initTraj = 1;
+			} 
+			else{
+            splin = 1;
+            sParam.SplineInterceptBallP.initTraj = 0;
+            }
+            sParam.SplineInterceptBallP.changeSpline = true;
+            skillSet->executeSkill(sID, sParam);
+            splin  = 1; 
+	  
       break;
 		 
 	     }
 	   }
     }
     
-      float botdpointx(float &dpointy,float &slope)
+	float botdpointx(float &dpointy,float &slope)
     {
       int x;
       float dpointx,flag=0;

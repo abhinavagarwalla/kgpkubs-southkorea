@@ -26,7 +26,7 @@ namespace Strategy
       
       /* Role 2 - Striker */
 			param.AttackP.rotateOnError = true;
-      roleList[1].push_back(std::make_pair(Tactic::Attack,param));
+      roleList[1].push_back(std::make_pair(Tactic::AttackSpline,param));
       
       /* Role 3 - Defender */
       param.BlockP.dist = 1000;
@@ -36,10 +36,10 @@ namespace Strategy
         roleList[2].push_back(std::make_pair(Tactic::Block,param));
       
       /* Role 4 - Forward Support Player 1 */
-      roleList[3].push_back(std::make_pair(Tactic::ReceiveBall,param));
+      roleList[3].push_back(std::make_pair(Tactic::ReceiveSpline,param));
       
       /* Role 5 - Forward Support Player 2*/
-      roleList[4].push_back(std::make_pair(Tactic::Backup,param));
+      roleList[4].push_back(std::make_pair(Tactic::CoverGoal2015,param));
       
       computeMaxTacticTransits();
     }

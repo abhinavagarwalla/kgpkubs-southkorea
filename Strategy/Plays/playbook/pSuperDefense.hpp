@@ -26,10 +26,10 @@ namespace Strategy
       
       /* Role 2 - Striker */
 			param.AttackP.rotateOnError = true;
-      roleList[1].push_back(std::make_pair(Tactic::Attack,param));
+      roleList[1].push_back(std::make_pair(Tactic::AttackSpline,param));
       
       /* Role 3 - Defender 1 */
-      roleList[2].push_back(std::make_pair(Tactic::CoverGoal,param));
+      roleList[2].push_back(std::make_pair(Tactic::CoverGoal2015,param));
       
       /* Role 4 - Defender 2 */
       param.DefendLineP.x1 = ForwardX(-HALF_FIELD_MAXX)/2;

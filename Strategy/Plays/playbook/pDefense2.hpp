@@ -21,27 +21,22 @@ namespace Strategy
       AttackPlay   = PLAYTYPE_YES;
       Tactic::Param param;
       
-      /* Role 1 - Goalie */
+	  /* Role 1 - Goalie */
       roleList[0].push_back(std::make_pair(Tactic::GoalieOur,param));
       
-      /* Role 2 - Striker */
-			param.AttackP.rotateOnError = true;
-      roleList[1].push_back(std::make_pair(Tactic::Attack,param));
-      
-      /* Role 3 - Defender 1 */
-      roleList[2].push_back(std::make_pair(Tactic::CoverGoal,param));
-      
-      /* Role 4 - Defender 3 */
-      param.BlockP.dist = 1000;
-      roleList[3].push_back(std::make_pair(Tactic::Block,param));
-      
-      /* Role 5 - Defender 2 */
-      param.DefendLineP.x1 = ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH);
-      param.DefendLineP.x2 = ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH);
-      param.DefendLineP.y1 = OUR_GOAL_MAXY - 2*BOT_RADIUS;
-      param.DefendLineP.y2 = OUR_GOAL_MINY + 2*BOT_RADIUS;
-      roleList[4].push_back(std::make_pair(Tactic::DefendLine,param));
+      /* Role 2 - Covergoal */
+	  roleList[1].push_back(std::make_pair(Tactic::CoverGoalPairLeft,param));
+	
+	  /* Role 3 - Covergoal */
+	  roleList[2].push_back(std::make_pair(Tactic::CoverGoalPairRight,param));
 	  
+	  /* Role 4 - Defender */
+	  roleList[3].push_back(std::make_pair(Tactic::DWDefender2015,param));
+	  
+	  /* Role 5 - Block */
+	  roleList[4].push_back(std::make_pair(Tactic::AttackSpline,param));
+	  
+
       computeMaxTacticTransits();
     }
     

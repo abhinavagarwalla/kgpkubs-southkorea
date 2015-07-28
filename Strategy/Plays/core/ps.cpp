@@ -110,5 +110,6 @@ namespace Strategy
 
   void PS::selectfromStr_Gui(int pID){
 	  playID = (Strategy::PlayBook::PlayID)pID;
+	  playList[playID]->startTimer();
   }
 } // namespace Strategy
