@@ -354,20 +354,20 @@ public:
 		 //dwDefend20152.execute(paramDWDefend2015);
 	//tsupportattack20150.execute(paramsupportattack2015);
 
-//		 if(loopcount++ > 10){		
+		 if(loopcount++ > 10){		
 //			//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 //			//	params1.SplineGoToPointP.initTraj = 0;
 //			sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
 //			params4.SplineInterceptBallP.initTraj = 0;
-//		//	tAttackSpline0.execute(pAttack) ;
+			tAttackSpline0.execute(pAttack) ;
 //			//tKickoff.execute(pAttack) ;
 //			loopcount = loopcount%1000 + 10;
-//		}
-//		else{
-//			//tVelocity0.execute(pVelocity);		
-//		}
+		}
+		else{
+			tVelocity0.execute(pVelocity);		
+		}
 
-		  if(loopcount++ > 4){		
+		  if(loopcount++ > 14){		
 			//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 			//	params1.SplineGoToPointP.initTraj = 0;
 		//	if(abs(state.ballPos.x)>50 && abs(state.ballPos.y)>50){
@@ -390,13 +390,13 @@ public:
 //				tAttackSpline3.execute(pAttack) ;
 //				tReceive4.execute(pReceive2015);
 //			}
-			loopcount = loopcount%1000 + 4;
+			loopcount = loopcount%1000 + 14;
 		}
 		else{
 			tVelocity0.execute(pVelocity);		
 		}
 
-        tReceiveSpline4.execute(pReceiveSpline);
+     //   tReceiveSpline4.execute(pReceiveSpline);
 	//	tPass.execute(pAttack);
         //tKickoff.execute(pAttack) ;
 		//tPositionř

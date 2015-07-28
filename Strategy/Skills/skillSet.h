@@ -116,7 +116,7 @@ namespace Strategy
 	private:
 		ControllerWrapper *algoController;
 		Trajectory* traj;
-		int counter, interceptCounter, sCount;
+		int counter, interceptCounter, sCount, splineTrack, sTrack;
 	public:
 		enum SkillID
 		{

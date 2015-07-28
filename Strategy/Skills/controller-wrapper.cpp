@@ -1,6 +1,6 @@
 #include "controller-wrapper.hpp"
 #include <iostream>
-
+#include "ballinterception.cpp"
 using namespace std;
 
 MiscData ControllerWrapper::genControls_(Pose s, Pose e, int &vl, int &vr, double finalVel) {
@@ -53,6 +53,15 @@ Pose ControllerWrapper::getReferencePose() {
 	return ref;
 }
 
+int ControllerWrapper::ballPredictionCheck(Vector2D<float> ballPos, Vector2D<float> ballVel, float deviatedDist, double splineTotalTime){
+	// to check if the spline end point is not very far from ball predictedpoint
+	double t = getCurrentTimeS();
+	Vector2D<float> ballPredictedPose = BallInterception::predictBallPose(ballPos, ballVel, splineTotalTime-t, Vector2D<float>(0,0));
+	Vector2D<float> botPose(tracker.getTraj()->x(splineTotalTime)*fieldXConvert, tracker.getTraj()->y(splineTotalTime)*fieldXConvert);
+	if (Vector2D<float>::dist(ballPredictedPose, botPose) > deviatedDist)
+		return 1;
+	return 0;
+}
 ControllerWrapper::ControllerWrapper(FType fun, int start_vl, int start_vr, int k):fun(fun), k(k), ctrlType(POINTCTRL), tracker(),
                                                                 startTime(), isFirstCall(true){
     for(int i = 0; i < k; i++)

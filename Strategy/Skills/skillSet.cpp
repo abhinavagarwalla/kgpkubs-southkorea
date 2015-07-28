@@ -71,6 +71,7 @@ SkillSet::SkillSet(const BeliefState* state, const int botID) :
 	algoController = NULL;
 	traj = NULL;
 	sCount = 0;
+	sTrack =0 ;
 } // SkillSet
 SkillSet::~SkillSet()
 {

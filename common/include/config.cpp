@@ -98,4 +98,4 @@ const double vwmax      = 200; // cm/s^2
 const double vsat       = ticksToCmS*120.; // cm/s   
 const double atmax      = 100*ticksToCmS; // cm/s^2, need to measure this, need to take inertia into account
 const double awmax      = 1000; // 1/s^2, no idea how to measure this, need to take inertia into account
-
+const double ballacc    = 0.8;

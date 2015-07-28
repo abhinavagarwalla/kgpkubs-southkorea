@@ -114,27 +114,34 @@ namespace Strategy
     botVel.y = state->homeSentVlVr[botID].y;
     double dt = 10;
 	float deviatedDist;
-    if(traj){
+	if((traj) && (algoController) && (sTrack < 5)){
 		SplineTrajectory *st = dynamic_cast<SplineTrajectory*>(traj);
 		dt = st->totalTime() - algoController->getCurrentTimeS();
-    }
-	if(traj && algoController){
 		Pose refPose = algoController->getReferencePose();
 		deviatedDist = sqrt((refPose.x() - start.x())*(refPose.x() - start.x()) + (refPose.y() - start.y())*(refPose.y() - start.y()));
+		splineTrack = algoController->ballPredictionCheck(ballPos, ballVel, deviatedDist, st->totalTime());
+		if(!splineTrack){
+			sTrack++;	
+		}
+		else{
+			sTrack = 0;
+		}
 	}
-    if((dt < 0.075 || deviatedDist > 3*BOT_RADIUS) && sCount < 2){
+    if((dt < 0.075 || deviatedDist > 2*BOT_RADIUS || sTrack >=5) && sCount < 2 ){
 		sCount++;
 		comm->sendCommand(botID, 0, 0);
 	}
 //	else if(param.SplineInterceptBallP.initTraj == 1 || dt < 0.075){
-	else if(param.SplineInterceptBallP.initTraj == 1 || deviatedDist > 3*BOT_RADIUS || dt < 0.075){
+	else if(param.SplineInterceptBallP.initTraj == 1 || deviatedDist > 2*BOT_RADIUS || dt < 0.075 || sTrack >=5){
 		sCount = 0;
+		sTrack = 0;
        _splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr, 0);
 	}
  //   else if (interceptCounter > 80 || dt < 0.075) //param.SplineInterceptBallP.changeSpline == 1 &&
  //      _splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr, 1);
     else {
 		sCount = 0;
+		sTrack = 0;
         _splineInterceptBallTrack(botID, start, ballPos, ballVel, botVel, final_vl, final_vr);
     }
   }
