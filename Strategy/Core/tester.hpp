@@ -157,8 +157,8 @@ public:
 	pVelocity.VelocityP.vr = 0;
 	
 	Tactic::Param pVelocity_1;
-	pVelocity_1.VelocityP.vl = 80;
-	pVelocity_1.VelocityP.vr = 60;
+	pVelocity_1.VelocityP.vl = 140;
+	pVelocity_1.VelocityP.vr = 140;
 	
 	Tactic::Param pVelocity_2;
 	pVelocity_2.VelocityP.vl = 60;
@@ -249,7 +249,7 @@ public:
 	params3_old.DWGoToPointP.finalSlope = 0;
 
 	SkillSet simplegoto(&state, 4);
-	SkillSet simplegoto_old(&state,0);
+	SkillSet simplegoto_old(&state,3);
     Tactic::Param ptestpoint;
 	   
  //   TestbotRace ttest2(&state,2);
@@ -341,11 +341,11 @@ public:
 		}
 		#endif
 	    
-	tVelocity1.execute(pVelocity_1); 
-	tVelocity0.execute(pVelocity_1);
-	tVelocity2.execute(pVelocity_1);
-   	tVelocity3.execute(pVelocity_1);  
-	tVelocity4.execute(pVelocity_1);
+	//tVelocity1.execute(pVelocity_1); 
+	//tVelocity0.execute(pVelocity_1);
+	//tVelocity2.execute(pVelocity_1);
+   	//tVelocity3.execute(pVelocity_1);  
+	//tVelocity4.execute(pVelocity_1);
 	  
 	      //tGoalie2.execute(paramGoal);
          // tGoalOur0.execute(paramGoal);
@@ -360,7 +360,7 @@ public:
 //			//	params1.SplineGoToPointP.initTraj = 0;
 //			sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
 //			params4.SplineInterceptBallP.initTraj = 0;
-		    tAttackSpline3.execute(pAttack) ;
+		    tAttackSpline4.execute(pAttack) ;
 //			//tKickoff.execute(pAttack) ;
 			loopcount = loopcount%1000 + 14;
 		}
@@ -419,7 +419,7 @@ public:
 			//dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
 	  	    //  simplegoto.executeSkill(SkillSet::GoToPoint, params3);
 		  
-	//	simplegoto_old.executeSkill(SkillSet::GoToPoint, params2_old);
+		//simplegoto_old.executeSkill(SkillSet::GoToPoint, params2_old);
         
 		//tAttack2.execute(pAttack);
 				//tReceive4.execute(pReceive);
