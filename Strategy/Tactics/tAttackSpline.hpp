@@ -226,9 +226,9 @@ namespace Strategy
        } 
      }
 	//*********************
-    if(state->homePos[botID].x < state->ballPos.x && diff < PI/8);//&& abs(state->homePos[botID].x - state->ballPos.x) > 0.5*BOT_BALL_THRESH)
+    if(state->homePos[botID].x < state->ballPos.x && diff < PI/8 && abs(state->homePos[botID].x - state->ballPos.x) > 0.5*BOT_BALL_THRESH)
     {
-     if(dist < 1.5*BOT_BALL_THRESH)
+     if(dist < 2*BOT_BALL_THRESH)
      {
        iState = CLOSE_TO_BALL ;
        splin = 0 ; 
@@ -364,7 +364,7 @@ namespace Strategy
      break ;
        } 
      }
-		if(dist > 4*BOT_BALL_THRESH)
+		if(dist > 3*BOT_BALL_THRESH)
        {
 			iState = APPROACHING ;
 			break ;
@@ -394,11 +394,11 @@ namespace Strategy
       
       // **************  YAHAN PE SPLINE ******************************************************* 
       cout<<":::::::::::::::    "<<dist<<" "<<1.5*BOT_BALL_THRESH<<endl;
-    if (dist > 1.2*BOT_BALL_THRESH && diff < PI/8) {
+    if (dist > 1.5*BOT_BALL_THRESH){// && diff < PI/8) {
         cout<<"CLOSE_TO_BALL :: Something else"<<endl;
         sParam.GoToPointP.align = false;
-        sParam.GoToPointP.x = state->ballPos.x - 0.016*state->ballVel.x;
-      sParam.GoToPointP.y = state->ballPos.y - 0.016*state->ballVel.y;
+        sParam.GoToPointP.x = state->ballPos.x + 0.016*state->ballVel.x;
+      sParam.GoToPointP.y = state->ballPos.y + 0.016*state->ballVel.y;
       sParam.GoToPointP.finalslope = Vector2D<int>::angle( Vector2D<int>(OPP_GOAL_X, 0),state->ballPos);
     }
     else {

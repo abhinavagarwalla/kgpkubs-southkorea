@@ -360,12 +360,12 @@ public:
 //			//	params1.SplineGoToPointP.initTraj = 0;
 //			sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
 //			params4.SplineInterceptBallP.initTraj = 0;
-		    tAttackSpline0.execute(pAttack) ;
+		    tAttackSpline3.execute(pAttack) ;
 //			//tKickoff.execute(pAttack) ;
-//			loopcount = loopcount%1000 + 10;
+			loopcount = loopcount%1000 + 14;
 		}
 		else{
-	//		tVelocity0.execute(pVelocity);		
+			tVelocity3.execute(pVelocity);		
 		}
 
 	//	  if(loopcount++ > 14){		

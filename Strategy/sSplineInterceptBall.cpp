@@ -130,9 +130,9 @@ namespace Strategy
 				}
 			}
 	}
-    if((dt < 0.075 || deviatedDist > 2*BOT_RADIUS || sTrack >=5) && sCount < 2 ){
+    if((dt < 0.075 || deviatedDist > 2*BOT_RADIUS || sTrack >=5) && sCount < 1 ){
 		sCount++;
-		comm->sendCommand(botID, 0, 0);
+		comm->sendCommand(botID, 30, 30);
 	}
 //	else if(param.SplineInterceptBallP.initTraj == 1 || dt < 0.075){
 	else if(param.SplineInterceptBallP.initTraj == 1 || deviatedDist > 2*BOT_RADIUS || dt < 0.075 || sTrack >=5){
