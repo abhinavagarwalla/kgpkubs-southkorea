@@ -157,8 +157,8 @@ public:
 	pVelocity.VelocityP.vr = 0;
 	
 	Tactic::Param pVelocity_1;
-	pVelocity_1.VelocityP.vl = 30;
-	pVelocity_1.VelocityP.vr = 20;
+	pVelocity_1.VelocityP.vl = 80;
+	pVelocity_1.VelocityP.vr = 60;
 	
 	Tactic::Param pVelocity_2;
 	pVelocity_2.VelocityP.vl = 60;
@@ -190,6 +190,7 @@ public:
 	TAttackSpline tAttackSpline0(&state , 0);
 	TAttackSpline tAttackSpline4(&state , 4);
 	TAttackSpline tAttackSpline3(&state , 3);
+	TAttackSpline tAttackSpline1(&state , 1);
 	
 	TAttack2015 tAttack20150(&state , 0) ;
 	TAttack2015 tAttack20151(&state , 1) ;
@@ -340,11 +341,11 @@ public:
 		}
 		#endif
 	    
-	// tVelocity1.execute(pVelocity); 
-	      //tVelocity0.execute(pVelocity_1);
-	//tVelocity2.execute(pVelocity_2);
-   	//tVelocity3.execute(pVelocity_3);  
-	  //tVelocity4.execute(pVelocity_4);
+	tVelocity1.execute(pVelocity_1); 
+	tVelocity0.execute(pVelocity_1);
+	tVelocity2.execute(pVelocity_1);
+   	tVelocity3.execute(pVelocity_1);  
+	tVelocity4.execute(pVelocity_1);
 	  
 	      //tGoalie2.execute(paramGoal);
          // tGoalOur0.execute(paramGoal);
@@ -354,20 +355,20 @@ public:
 		 //dwDefend20152.execute(paramDWDefend2015);
 	//tsupportattack20150.execute(paramsupportattack2015);
 
-		 if(loopcount++ > 10){		
+		 if(loopcount++ > 14){		
 //			//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 //			//	params1.SplineGoToPointP.initTraj = 0;
 //			sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
 //			params4.SplineInterceptBallP.initTraj = 0;
-			tAttackSpline0.execute(pAttack) ;
+		    tAttackSpline0.execute(pAttack) ;
 //			//tKickoff.execute(pAttack) ;
 //			loopcount = loopcount%1000 + 10;
 		}
 		else{
-			tVelocity0.execute(pVelocity);		
+	//		tVelocity0.execute(pVelocity);		
 		}
 
-		  if(loopcount++ > 14){		
+	//	  if(loopcount++ > 14){		
 			//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 			//	params1.SplineGoToPointP.initTraj = 0;
 		//	if(abs(state.ballPos.x)>50 && abs(state.ballPos.y)>50){
@@ -390,12 +391,12 @@ public:
 //				tAttackSpline3.execute(pAttack) ;
 //				tReceive4.execute(pReceive2015);
 //			}
-			loopcount = loopcount%1000 + 14;
-		}
-		else{
-			tVelocity0.execute(pVelocity);		
-		}
-
+	//		loopcount = loopcount%1000 + 14;
+	//	}
+	//	else{
+			///tVelocity0.execute(pVelocity);		
+	//	}
+		//tVelocity3.execute(pVelocity_1);	
      //   tReceiveSpline4.execute(pReceiveSpline);
 	//	tPass.execute(pAttack);
         //tKickoff.execute(pAttack) ;
@@ -429,7 +430,7 @@ public:
       //  tcover0.execute(paramcover);
         //tcover3.execute(paramcover);
      //tCharge1.execute(pCharge);
-	  //tAttack20150.execute(pAttack) ;
+	//tAttack20153.execute(pAttack) ;
 		  //tShoot4.execute(paramShoot) ;
 		  //  tAttack0.execute(pAttack);
 		//	tAttack2.execute(pAttack);

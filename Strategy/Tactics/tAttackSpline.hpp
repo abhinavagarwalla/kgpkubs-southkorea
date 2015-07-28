@@ -205,7 +205,7 @@ namespace Strategy
     { 
      printf("Attack BotID: %d\n",botID);
     
-      float dist = Vector2D<int>::dist(state->ballPos, state->homePos[botID]);
+	float dist = Vector2D<int>::dist(state->ballPos, state->homePos[botID]);
     float botBallAngle = normalizeAngle(Vector2D<int>::angle(state->homePos[botID] , state->ballPos));
     float ballGoalAngle = normalizeAngle(Vector2D<int>::angle(state->ballPos, Vector2D<int>(ForwardX(HALF_FIELD_MAXX), 0)));
 	float diff = fabs(normalizeAngle(botBallAngle - ballGoalAngle));
@@ -213,7 +213,6 @@ namespace Strategy
   {        
   case APPROACHING:
   { 
-      
 	// SPINNIGN IN APPROACH
 	 if(dist < BOT_BALL_THRESH)
      {
@@ -229,7 +228,7 @@ namespace Strategy
 	//*********************
     if(state->homePos[botID].x < state->ballPos.x && diff < PI/8);//&& abs(state->homePos[botID].x - state->ballPos.x) > 0.5*BOT_BALL_THRESH)
     {
-     if(dist < 2*BOT_BALL_THRESH)
+     if(dist < 1.5*BOT_BALL_THRESH)
      {
        iState = CLOSE_TO_BALL ;
        splin = 0 ; 
@@ -314,7 +313,7 @@ namespace Strategy
   {
     splin = 0;
      cout<<"SPINNING_CW"<<endl;
-     if(dist>1.2*BOT_BALL_THRESH)
+     if(dist>1.5*BOT_BALL_THRESH)
      {
      iState = APPROACHING;
      return;
@@ -333,7 +332,7 @@ namespace Strategy
   {
   splin = 0;
     cout<<"SPINNING_CCW"<<endl;
-    if(dist>1.2*BOT_BALL_THRESH)
+    if(dist>1.5*BOT_BALL_THRESH)
     {
     iState = APPROACHING;
     return;
@@ -365,7 +364,7 @@ namespace Strategy
      break ;
        } 
      }
-		if(dist > 3*BOT_BALL_THRESH)
+		if(dist > 4*BOT_BALL_THRESH)
        {
 			iState = APPROACHING ;
 			break ;
@@ -395,7 +394,7 @@ namespace Strategy
       
       // **************  YAHAN PE SPLINE ******************************************************* 
       cout<<":::::::::::::::    "<<dist<<" "<<1.5*BOT_BALL_THRESH<<endl;
-    if (dist > 1.5*BOT_BALL_THRESH) {
+    if (dist > 1.2*BOT_BALL_THRESH && diff < PI/8) {
         cout<<"CLOSE_TO_BALL :: Something else"<<endl;
         sParam.GoToPointP.align = false;
         sParam.GoToPointP.x = state->ballPos.x - 0.016*state->ballVel.x;
@@ -409,22 +408,20 @@ namespace Strategy
         sParam.GoToPointP.y = 0 ; //destY;
       if(abs(state->ballPos.y)>HALF_FIELD_MAXY-2*BOT_RADIUS && abs(state->homePos[botID].y)>HALF_FIELD_MAXY-1.7 && botID==state->ourBotNearestToBall)
       {
-      sParam.GoToPointP.finalslope = Vector2D<int>::angle(state->ballPos,state->homePos[botID]);
+		sParam.GoToPointP.finalslope = Vector2D<int>::angle(state->ballPos,state->homePos[botID]);
       }
       else if(abs(state->ballPos.y)>HALF_FIELD_MAXY-2*BOT_RADIUS && abs(state->homePos[botID].y)>HALF_FIELD_MAXY-1.7*BOT_RADIUS && botID!=state->ourBotNearestToBall)
-      {
-      sParam.GoToPointP.finalslope = Vector2D<int>::angle(state->homePos[state->oppBotNearestToBall],state->homePos[botID]);
+	  {
+		sParam.GoToPointP.finalslope = Vector2D<int>::angle(state->homePos[state->oppBotNearestToBall],state->homePos[botID]);
       }
       else
       {
-      sParam.GoToPointP.finalslope = Vector2D<int>::angle( Vector2D<int>(OPP_GOAL_X, 0),state->ballPos);
-      }
-    
+		sParam.GoToPointP.finalslope = Vector2D<int>::angle( Vector2D<int>(OPP_GOAL_X, 0),state->ballPos);
+      }    
     }
-            sParam.GoToPointP.increaseSpeed = 1;
-            skillSet->executeSkill(sID, sParam);
-           
-          break ;
+	sParam.GoToPointP.increaseSpeed = 1;
+	skillSet->executeSkill(sID, sParam);           
+	break ;
   }
         
       }

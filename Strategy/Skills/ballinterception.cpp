@@ -12,10 +12,10 @@ namespace BallInterception {
 inline Vector2D<float> predictBallPose(Vector2D<float> botPos, Vector2D<float> ballPos, Vector2D<float> ballVel, double timeOfPrediction, Vector2D<float> ballAcc){
     Vector2D<float> bPos;
 	float factor = 0.8;
-	float diffx = fabs(ballPos.x - botPos.x);
-	if (diffx < 2 * BOT_BALL_THRESH) {
-		factor += 0.05 * diffx / BOT_BALL_THRESH; 
-	}
+//	float diffx = fabs(ballPos.x - botPos.x);
+//	if (diffx < 2 * BOT_BALL_THRESH) {
+//		factor += 0.05 * diffx / BOT_BALL_THRESH; 
+//	}
 	float e = 1;
 	
     bPos.x = ballPos.x + factor*timeOfPrediction*ballVel.x;// + (ballAcc.x*timeOfPrediction*timeOfPrediction)/2.0;

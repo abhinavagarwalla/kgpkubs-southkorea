@@ -114,18 +114,21 @@ namespace Strategy
     botVel.y = state->homeSentVlVr[botID].y;
     double dt = 10;
 	float deviatedDist;
-	if((traj) && (algoController) && (sTrack < 5)){
-		SplineTrajectory *st = dynamic_cast<SplineTrajectory*>(traj);
-		dt = st->totalTime() - algoController->getCurrentTimeS();
-		Pose refPose = algoController->getReferencePose();
-		deviatedDist = sqrt((refPose.x() - start.x())*(refPose.x() - start.x()) + (refPose.y() - start.y())*(refPose.y() - start.y()));
-		splineTrack = algoController->ballPredictionCheck(Vector2D<float>(refPose.x(), refPose.y()), ballPos, ballVel, deviatedDist, st->totalTime());
-		if(!splineTrack){
-			sTrack++;	
-		}
-		else{
-			sTrack = 0;
-		}
+	sTrack = 0;
+	if((traj) && (algoController)){
+			SplineTrajectory *st = dynamic_cast<SplineTrajectory*>(traj);
+			dt = st->totalTime() - algoController->getCurrentTimeS();
+			if(sTrack < 5){
+				Pose refPose = algoController->getReferencePose();
+				deviatedDist = sqrt((refPose.x() - start.x())*(refPose.x() - start.x()) + (refPose.y() - start.y())*(refPose.y() - start.y()));
+				splineTrack = algoController->ballPredictionCheck(Vector2D<float>(refPose.x(), refPose.y()), ballPos, ballVel, deviatedDist, st->totalTime());
+				if(!splineTrack){
+					sTrack++;	
+				}
+				else{
+					sTrack = 0;
+				}
+			}
 	}
     if((dt < 0.075 || deviatedDist > 2*BOT_RADIUS || sTrack >=5) && sCount < 2 ){
 		sCount++;
