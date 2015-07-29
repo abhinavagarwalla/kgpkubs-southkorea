@@ -216,10 +216,16 @@ public:
 				//cout<< " here"<<std::endl;
 			}
 		}
-
-		if(abs(dest.y-state->homePos[botID].y)<0.3*BOT_RADIUS)
-			break;
-		sParam.DWGoToPointP.x = dest.x;
+     
+	   if(ForwardX(state->ballPos.x) > ForwardX(state->homePos[botID].x )  && Vector2D<int>::dist(state->ballPos , state->homePos[botID]) < 3*BOT_RADIUS)
+	   {   
+		   dest.y = state->ballPos.y - SGN(state->ballPos.y)*0.5*BOT_RADIUS;
+           if(dest.y > OUR_GOAL_MAXY)
+					dest.y = OUR_GOAL_MAXY + BOT_RADIUS;
+		   else if(state->ballPos.y < OUR_GOAL_MINY)
+					dest.y = OUR_GOAL_MINY + 2*BOT_RADIUS;
+	   }
+	   sParam.DWGoToPointP.x = dest.x;
 		sParam.DWGoToPointP.y = dest.y;
 		skillSet->executeSkill(SkillSet::DWGoToPoint, sParam);
 		break;
@@ -244,12 +250,23 @@ public:
 		}
 		// clear the ball away 
 		// currently its just going to the ball .. change the algo..to go from the back 
-		        sParam.GoToPointP.x = state->ballPos.x;
-				sParam.GoToPointP.y = state->ballPos.y;
+		sID = SkillSet::GoToPoint ;
+		if(ForwardX(state->ballPos.x) < ForwardX(state->homePos[botID].x) && (abs(state->ballPos.y) - abs(state->homePos[botID].y) )< 0)
+		{
+		  	    
+				sParam.GoToPointP.x = dest.x ;
+		 		sParam.GoToPointP.y = SGN(state->ballPos.y)*(HALF_FIELD_MAXY/2 + BOT_RADIUS) ; 
+				skillSet->executeSkill(SkillSet::GoToPoint, sParam);
+				break;
+		}
+		else
+		{
+				sParam.GoToPointP.x = state->ballPos.x;
+		 		sParam.GoToPointP.y = state->ballPos.y;
 				skillSet->executeSkill(SkillSet::GoToPoint, sParam);
 				break;
 		
-			
+		}	
 
 	case BLOCKING :
 	
@@ -270,8 +287,7 @@ public:
 		   break ;
 		}
 		
-		oppID = 4 ;//nearestOppBot(dest.x) ;
-			std::cout<<"ID = "<<oppID<<std::endl;
+		oppID = nearestOppBot(dest.x) ;
 			if(abs(state->awayPos[oppID].y) > OUR_GOAL_MAXY)
 				sParam.DWGoToPointP.y = SGN(state->awayPos[oppID].y)*OUR_GOAL_MAXY ;
 			else
@@ -300,8 +316,7 @@ public:
 		  break ;
 		}
 		
-		oppID = 4 ;//nearestOppBot(dest.x) ;
-			std::cout<<"ID = "<<oppID<<std::endl;
+		    oppID = nearestOppBot(dest.x) ;
 			if(state->awayPos[oppID].y > 0 )
 			{
 			  if(abs(state->awayPos[oppID].y) > OUR_GOAL_MAXY)

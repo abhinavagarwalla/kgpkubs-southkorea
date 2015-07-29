@@ -31,7 +31,7 @@ namespace Strategy
 	  roleList[2].push_back(std::make_pair(Tactic::CoverGoalPairRight,param));
 	  
 	  /* Role 4 - Defender */
-	  roleList[3].push_back(std::make_pair(Tactic::DWDefender2015,param));
+	  roleList[3].push_back(std::make_pair(Tactic::Defender2,param));
 	  
 	  /* Role 5 - Block */
 	  roleList[4].push_back(std::make_pair(Tactic::AttackSpline,param));

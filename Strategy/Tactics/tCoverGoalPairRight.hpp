@@ -191,7 +191,16 @@ public:
 				dest.y = predictPosY -1*BOT_RADIUS;
 			}
 		}
-		
+		if(ForwardX(state->ballPos.x) > ForwardX(state->homePos[botID].x )  && Vector2D<int>::dist(state->ballPos , state->homePos[botID]) < 3*BOT_RADIUS)
+	      { 
+			  dest.y = state->ballPos.y + SGN(state->ballPos.y)*0.5*BOT_RADIUS;
+			  dest.y = state->ballPos.y ;
+			  if(state->ballPos.y > OUR_GOAL_MAXY)
+					dest.y = OUR_GOAL_MAXY -2*BOT_RADIUS;
+				else if(state->ballPos.y < OUR_GOAL_MINY)
+					dest.y = OUR_GOAL_MINY - BOT_RADIUS;
+		      
+		  }
 		sParam.DWGoToPointP.x = dest.x;
 		sParam.DWGoToPointP.y = dest.y;
 		skillSet->executeSkill(SkillSet::DWGoToPoint, sParam);
@@ -215,11 +224,22 @@ public:
 		  iState = BLOCKING ;
 		  break ;
 		}
-		
-		        sParam.GoToPointP.x = state->ballPos.x;
-				sParam.GoToPointP.y = state->ballPos.y;
+		if(ForwardX(state->ballPos.x) < ForwardX(state->homePos[botID].x) && (abs(state->ballPos.y) - abs(state->homePos[botID].y) )< 0)
+		{
+		  	    
+				sParam.GoToPointP.x = dest.x ;
+		 		sParam.GoToPointP.y = SGN(state->ballPos.y)*(HALF_FIELD_MAXY/2 + BOT_RADIUS) ; 
 				skillSet->executeSkill(SkillSet::GoToPoint, sParam);
 				break;
+		}
+		else
+		{
+				sParam.GoToPointP.x = state->ballPos.x;
+		 		sParam.GoToPointP.y = state->ballPos.y;
+				skillSet->executeSkill(SkillSet::GoToPoint, sParam);
+				break;
+		
+		}	
 
 	case BLOCKING :
 		
@@ -241,8 +261,8 @@ public:
 		   break ;
 		}
 		 
-		    oppID = 4 ; //nearestOppBot(dest.x) ;
-			std::cout<<"ID = "<<oppID<<std::endl;
+		 //  oppID = 4 ; //nearestOppBot(dest.x) ;
+			//std::cout<<"ID = "<<oppID<<std::endl;
 			if(abs(state->awayPos[oppID].y) > OUR_GOAL_MAXY)
 				sParam.DWGoToPointP.y = SGN(state->awayPos[oppID].y)*OUR_GOAL_MAXY ;
 			else

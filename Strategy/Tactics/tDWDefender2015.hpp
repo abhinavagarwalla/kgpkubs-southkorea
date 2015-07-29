@@ -19,7 +19,7 @@ namespace Strategy
 		  int hasAchievedOffset;
 		
 			TDWDefender2015(const BeliefState* state, int botID) :
-			  Tactic(Tactic::DWDefender, state, botID)
+			  Tactic(Tactic::DWDefender2015, state, botID)
 			{
 			  iState = POSITIONING;
 			} // TDWDefender	

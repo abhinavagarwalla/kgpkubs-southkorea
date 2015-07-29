@@ -99,8 +99,17 @@ namespace Strategy
 					sParam.GoToPointP.x =  ForwardX(HALF_FIELD_MAXX - GOAL_DEPTH - 2*BOT_RADIUS) ;
 					else
 					sParam.GoToPointP.x = state->ballPos.x ;
-					sParam.GoToPointP.x = botdpointx(sParam.GoToPointP.y,sParam.GoToPointP.finalslope) + BOT_RADIUS;
-					SkillSet::addCircle(sParam.GoToPointP.x,sParam.GoToPointP.y,50, 0xFFF000);
+				//	sParam.GoToPointP.x = botdpointx(sParam.GoToPointP.y,sParam.GoToPointP.finalslope) + BOT_RADIUS;
+					if(state->ballPos.x < ForwardX(-HALF_FIELD_MAXX / 2 - BOT_RADIUS  ))
+                    { 
+                          sID=SkillSet::GoToPoint;
+                          sParam.GoToPointP.x = ForwardX(-HALF_FIELD_MAXX / 2  - BOT_RADIUS ) ;
+						  sParam.GoToPointP.y =  SGN(state->ballPos.y)*( OUR_GOAL_MAXY  );
+						  splin = 0 ;    
+                          skillSet->executeSkill(sID, sParam);
+                          break;
+                    } 
+				    SkillSet::addCircle(sParam.GoToPointP.x,sParam.GoToPointP.y,50, 0xFFF000);
 					sParam.GoToPointP.finalslope = Vector2D<int>::angle(Goal,state->homePos[botID]);
 					sParam.GoToPointP.align = true;
 					char debug[100];

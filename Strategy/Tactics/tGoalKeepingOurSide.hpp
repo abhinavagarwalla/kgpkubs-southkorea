@@ -68,7 +68,7 @@ namespace Strategy
     void execute(const Param& tParam)
     {
      
-      cout<<"BallVel :: "<<state->ballVel.x<<std::endl; 
+      //cout<<"BallVel :: "<<state->ballVel.x<<std::endl; 
       prevBotPos = state->homePos[botID];
       prevBotAngle = state->homeAngle[botID];
 	  int dist = Vector2D<int>::dist(state->homePos[botID],state->ballPos);
@@ -109,7 +109,7 @@ namespace Strategy
 			  sParam.DWGoToPointP.x = ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS*1.2) /*/4*/;
 			  int temp = getBotDestPointY();
 			  if( state->ballPos.x <  ForwardX(-HALF_FIELD_MAXX + GOAL_DEPTH + BOT_RADIUS))
-				  sParam.DWGoToPointP.y = SGN(state->ballPos.y)*state->ballPos.y ;
+			  {  sParam.DWGoToPointP.y = SGN(state->ballPos.y)*OUR_GOAL_MAXY ; }
 			  else
 			  sParam.DWGoToPointP.y = temp;
 //			  sParam.DWGoToPointP.align = false;

@@ -45,7 +45,7 @@ namespace Strategy
 	  TestbotRace,
 	  GoalKick,
 	  Shoot,
-	  DWDefender,
+	  Defender2,
 	  Goalie2,
 	  DWDefender2015,
 	  CoverGoal2015,
@@ -67,7 +67,7 @@ namespace Strategy
        */
             // Parameters for tactic Goalie
       struct type1
-        { } GoalieP, ClearP, ShootP, StopP,TestgotopointP, DWDefenderP, DWDefender2015P;
+        { } GoalieP, ClearP, ShootP, StopP,TestgotopointP, Defender2, DWDefender2015P;
 
 
 

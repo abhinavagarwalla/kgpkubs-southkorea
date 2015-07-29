@@ -18,7 +18,7 @@
 #include "tVelocity.hpp"
 #include "tCoverGoal.hpp"
 #include "tGoalKick.hpp"
-#include "tDWDefender.hpp"
+#include "tDefender2.hpp"
 #include "tDWDefender2015.hpp"
 #include "tCoverGoal2015.hpp"
 #include "tCoverGoalPairLeft.hpp"

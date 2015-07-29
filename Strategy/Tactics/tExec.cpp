@@ -48,7 +48,7 @@ namespace Strategy
 		tacticList[Tactic::TestbotRace][botID] 				= new TestbotRace(state,botID);
 		tacticList[Tactic::GoalKick][botID]						= new TGoalKick(state,botID);
 		tacticList[Tactic::Shoot][botID]                  = new TShoot(state,botID);
-		tacticList[Tactic::DWDefender][botID]		   = new TDWDefender(state, botID);
+		tacticList[Tactic::Defender2][botID]		   = new TDefender2(state, botID);
 		tacticList[Tactic::Goalie2][botID]		   = new TGoalie2(state, botID);	
 		tacticList[Tactic::DWDefender2015][botID]		   = new TDWDefender2015(state, botID);
 		tacticList[Tactic::CoverGoal2015][botID]           = new TCoverGoal2015(state,botID);

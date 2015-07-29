@@ -246,6 +246,14 @@ namespace Strategy
         break;
     } 
     
+	if(state->ourBotNearestToBall!=botID && Vector2D<int>::dist(state->ballPos , state->homePos[state->ourBotNearestToBall]) < 2*BOT_BALL_THRESH)
+	{ 
+		cout<<"stopping"<<endl; 
+	  	sID = SkillSet::Stop ;
+		splin = 0 ;
+		skillSet->executeSkill(sID , sParam) ;
+		break ;
+	}
     if(abs(abs(state->ballPos.y) - HALF_FIELD_MAXY) < 2*BOT_RADIUS || abs(abs(state->ballPos.x) - (HALF_FIELD_MAXX - GOAL_DEPTH - BOT_RADIUS*1.2)) < 2*BOT_RADIUS)
     {
     cout<<"Local Avoidance"<<endl ;

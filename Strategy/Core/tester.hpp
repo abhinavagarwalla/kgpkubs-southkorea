@@ -56,9 +56,9 @@ public:
 	TShoot tShoot4(&state , 4) ;
 	Tactic::Param paramShoot;
 	
-	TDWDefender dwDefend2(&state, 2);
-	TDWDefender2015 dwDefend20152(&state, 2);
-	Tactic::Param paramDWDefend;
+	TDefender2 defender2_4(&state, 4);
+	TDWDefender2015 dwDefend20151(&state, 1);
+	Tactic::Param paramDefend2;
 	Tactic::Param paramDWDefend2015;
 	
     //tCharge
@@ -66,13 +66,6 @@ public:
     TCharge tCharge1(&state, 1);
     Tactic::Param pCharge;
     
-    //tReceiveBall
-    TReceiveBall tReceive3(&state, 3);
-    TReceiveBall tReceive0(&state, 0);
-	TReceiveBall tReceive1(&state, 1);
-	TReceiveBall tReceive2(&state, 2);
-	TReceiveBall tReceive4(&state, 4);
-    Tactic::Param pReceive;
 	
 	TReceiveBall2015 tReceive2015_3(&state, 3);
     TReceiveBall2015 tReceive2015_0(&state, 0);
@@ -342,34 +335,38 @@ public:
 		}
 		#endif
 	    
-	//tVelocity1.execute(pVelocity_1); 
-	//tVelocity0.execute(pVelocity_1);
-	//tVelocity2.execute(pVelocity_1);
-   	//tVelocity3.execute(pVelocity_1);  
-	//tVelocity4.execute(pVelocity_1);
+	// tVelocity1.execute(pVelocity_1); 
 	  
-	      //tGoalie2.execute(paramGoal);
-         // tGoalOur0.execute(paramGoal);
-				//tGoalOur2.execute(paramGoal);
-		  //tGoalOur4.execute(paramGoal);
-		 //tcover20153.execute(paramcover2015);
-		 //dwDefend20152.execute(paramDWDefend2015);
-	//tsupportattack20150.execute(paramsupportattack2015);
-
-//		 if(loopcount++ > 14){		
-//			//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
-//			//	params1.SplineGoToPointP.initTraj = 0;
-//			sball.executeSkill(SkillSet::SplineInterceptBall , params4) ;
-//			params4.SplineInterceptBallP.initTraj = 0;
-		    //tAttackSpline4.execute(pAttack) ;
-//			//tKickoff.execute(pAttack) ;
-//			loopcount = loopcount%1000 + 14;
-//		}
-//		else{
-//			tVelocity4.execute(pVelocity);		
-//		}
-
-		  if(loopcount++ > 14){		
+	// simplegoto_old.executeSkill(SkillSet::GoToPoint, params2_old);
+	
+	// dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
+	//tShoot4.execute(paramShoot) ;
+		  
+	tGoalOur1.execute(paramGoal);
+	// tcover20150.execute(paramcover2015);
+     tcoverleft2.execute(paramcoverleft);
+     tcoverright0.execute(paramcoverright);
+	 defender2_4.execute(paramDefend2) ;
+   //  dwDefend20151.execute(paramDWDefend2015);
+   
+	// tAttack20154.execute(pAttack) ;
+	//tAttackSpline4.execute(pAttack) ;
+	
+   // tReceiveSpline4.execute(pReceiveSpline);
+   // tReceiveBall2015.execute(pReceiveSpline);
+   
+   	//	tPass.execute(pAttack);
+	//tKickoff.execute(pAttack) ;
+   
+		//tBackup0.execute(pBackup);
+        //tDefendArc0.execute(pDefendArc);
+       //        tDefendLine1.execute(pDefendL1);
+	   // tDefendLine2.execute(pDefendL2);
+     /*
+		  if(loopcount++ > 14){
+			  tGoalOur3.execute(paramGoal);
+			  tcover20150.execute(paramcover2015);
+			  dwDefend20151.execute(paramDWDefend2015);
 			//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 			//	params1.SplineGoToPointP.initTraj = 0;
 		//	if(abs(state.ballPos.x)>50 && abs(state.ballPos.y)>50){
@@ -377,75 +374,26 @@ public:
 		//	params4.SplineInterceptBallP.initTraj = 0;
 		//	}
 			//if(Vector2D<int>::dist(state.ballPos, state.homePos[0]) < Vector2D<int>::dist(state.ballPos, state.homePos[4])){
-			
-//			if(aid != state.ourBotNearestToBall){
-//			if(((state.homePos[aid].y > OPP_GOAL_MINY && state.ballPos.y > OPP_GOAL_MINY) || ((state.homePos[aid].y < OPP_GOAL_MAXY) && state.ballPos.y < OPP_GOAL_MAXY)) && state.ballPos.x > HALF_FIELD_MAXX/2){
-//				if(aid==4)aid=2;
-//				else aid=4;
-//			}
-//			}
-//			
-//			if(aid==4){
-//				tAttackSpline4.execute(pAttack) ;
-//				tReceive2.execute(pReceive2015);
-//			}
-//			else{
-//				tAttackSpline2.execute(pAttack) ;
-//				tReceive4.execute(pReceive2015);
-//			}
+
+			if(Vector2D<int>::dist(state.ballPos , state.homePos[4]) < Vector2D<int>::dist(state.ballPos , state.homePos[2]))
+			{
+			  tAttackSpline4.execute(pAttack) ;
+			  tReceiveSpline2.execute(pReceiveSpline);
+			}
+			else
+			{
+			   tAttackSpline2.execute(pAttack) ;
+			  tReceiveSpline4.execute(pReceiveSpline);
+			}
 			loopcount = loopcount%1000 + 14;
 		}
 		else{
 			tVelocity0.execute(pVelocity);		
 		}
-		//tVelocity3.execute(pVelocity_1);	
-        //tReceiveSpline2.execute(pReceiveSpline);
-	//	tPass.execute(pAttack);
-        //tKickoff.execute(pAttack) ;
-		//tPositionř
-				//tcover3.execute(paramcover);
-      //tAttack0.execute(pAttack);
-      //  tcover1.execute(paramcover);
-		//dwDefend2.execute(paramDWDefend);
-		  //tcover20150.execute(paramcover2015);
-		   // tGoalOur4.execute(paramGoal);
-	   //  	tcoverleft2.execute(paramcoverleft);
-	  //      tcoverright0.execute(paramcoverright);
-	 // dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
-	//		dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
-//			dwpoint_old.executeSkill(SkillSet::DWGoToPoint,params3_old) ;
-//			params3.DWGoToPointP.initTraj = 0;
-//			params3_old.DWGoToPointP.initTraj = 0;
-			//sppoint.executeSkill(SkillSet::SplineGoToPoint,params1) ;
-			//params1.SplineGoToPointP.initTraj = 0;
-			//dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
-	  	    //  simplegoto.executeSkill(SkillSet::GoToPoint, params3);
-		  
-		//simplegoto_old.executeSkill(SkillSet::GoToPoint, params2_old);
-        
-		//tAttack2.execute(pAttack);
-				//tReceive4.execute(pReceive);
-				//tReceive1.execute(pReceive);
-	//	tAttack3.execute(pAttack);
-	 //tAttack1.execute(pAttack);
-       //tAttack0.execute(pAttack);
-      //  tcover0.execute(paramcover);
-        //tcover3.execute(paramcover);
-     //tCharge1.execute(pCharge);
-	//tAttack20154.execute(pAttack) ;
-		  //tShoot4.execute(paramShoot) ;
-		  //  tAttack0.execute(pAttack);
-		//	tAttack2.execute(pAttack);
-		//	tAttack1.execute(pAttack);
-			//tAttack3.execute(pAttack);
-			//tAttack4.execute(pAttack);
-		//tBackup0.execute(pBackup);
-        //tDefendArc0.execute(pDefendArc);
-//        tDefendLine1.execute(pDefendL1);
-	     //tDefendLine2.execute(pDefendL2);
-       //tAttack2.execute(pAttack);
+		*/
         SkillSet::comm->writeCombinedPacket();       
-      }
+   //**************************************** END OF TESTING ************************************************  
+	 }
      else
       {
         printf("OFF!\n");
