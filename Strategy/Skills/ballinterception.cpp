@@ -16,7 +16,7 @@ inline Vector2D<float> predictBallPose(Vector2D<float> botPos, Vector2D<float> b
 	if (diffx < 2 * BOT_BALL_THRESH  && SGN(botPos.x - ballPos.x) == 1) {
 		factor += 0.1 * diffx / BOT_BALL_THRESH; 
 	}
-	float e = 0.6;
+	float e = 0.4;
 	
     bPos.x = ballPos.x + factor*timeOfPrediction*ballVel.x;// + (ballAcc.x*timeOfPrediction*timeOfPrediction)/2.0;
     bPos.y = ballPos.y + factor*timeOfPrediction*ballVel.y;// + (ballAcc.x*timeOfPrediction*timeOfPrediction)/2.0;
@@ -46,7 +46,7 @@ inline SplineTrajectory* getIntTraj(Pose botPosStart, Vector2D<float> ballPos, V
 
     Vector2D<float> predictedBallPos;
 	Vector2D<float> botPos(botPosStart.x(), botPosStart.y());
-    double error = 0.02;
+    double error = 0.02; // 0.01
     double T2 = 6.0;
     double T1 = 0.0;
     double S = 1.0;
@@ -57,14 +57,17 @@ inline SplineTrajectory* getIntTraj(Pose botPosStart, Vector2D<float> ballPos, V
         if (st)
             delete st;
         predictedBallPos = predictBallPose(botPos, ballPos, ballVel, T, ballAcc);
-        double endTheta = atan2(goalCentre.y - predictedBallPos.y, goalCentre.x - predictedBallPos.x);
+         double endTheta = atan2(goalCentre.y - predictedBallPos.y, goalCentre.x - predictedBallPos.x);
         Pose endPose(predictedBallPos.x, predictedBallPos.y, endTheta);
         // add a cp behind the ball pos, distance of 500
       //  Pose cp1(predictedBallPos.x+500*cos(endTheta+M_PI), predictedBallPos.y+500*sin(endTheta+M_PI), 0);
         vector<Pose> midPoints;
        // midPoints.push_back(cp1);
        //st = TrajectoryGenerators::cubic(botPosStart, endPose, 0,0, 40,40 , midPoints);
-       st = TrajectoryGenerators::cubic(botPosStart, endPose, botVel.x, botVel.y, 30, 30, midPoints);
+		if((ballPos.x - botPosStart.x()) < 2*BOT_BALL_THRESH && ballVel.x < -100){
+			midPoints.push_back(Pose((predictedBallPos.x - 2*BOT_BALL_THRESH), (predictedBallPos.y + botPosStart.y())/2, 0)) ;
+		}
+		st = TrajectoryGenerators::cubic(botPosStart, endPose, botVel.x, botVel.y, 0, 0, midPoints);
         double t = st->totalTime();
         if (t < T)
             break;
@@ -93,7 +96,10 @@ inline SplineTrajectory* getIntTraj(Pose botPosStart, Vector2D<float> ballPos, V
 		vector<Pose> midPoints;
        // midPoints.push_back(cp1);
     //   st = TrajectoryGenerators::cubic(botPosStart, endPose, 0,0, 40, 40, midPoints);
-	     st = TrajectoryGenerators::cubic(botPosStart, endPose, botVel.x, botVel.y, 30, 30, midPoints);
+		if((ballPos.x - botPosStart.x()) < 2*BOT_BALL_THRESH && ballVel.x < -100){
+			midPoints.push_back(Pose((predictedBallPos.x - 2*BOT_BALL_THRESH), (predictedBallPos.y + botPosStart.y())/2, 0)) ;
+		}
+	     st = TrajectoryGenerators::cubic(botPosStart, endPose, botVel.x, botVel.y, 0, 0, midPoints);
 
         double t = st->totalTime();
 		//std::cout << "time" << t << std::endl;

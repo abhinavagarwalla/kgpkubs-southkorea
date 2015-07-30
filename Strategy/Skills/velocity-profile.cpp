@@ -158,13 +158,11 @@ vector<ProfileDatapoint> generateVelocityProfile(Spline &p, int numPoints, doubl
     vector<ProfileDatapoint> v(numPoints, ProfileDatapoint());
     double dels = full/(numPoints-1);
 
-    Integration::refreshMatrix();
-    //Integration::computeInverseBezierMatrices(p); //comment this when final
-    Integration::computeSplineApprox(p);
-    //Integration::computeBezierMatrices(p);
+	alglib::spline1dinterpolant splineSU;
+    Integration::computeSplineApprox(p, &splineSU);
     for (int i = 0; i < v.size(); i++) {
         double s = full/(numPoints-1)*(double)i;
-        double u = Integration::getArcLengthParam(p, s, full);
+        double u = Integration::getArcLengthParam(p, s, &splineSU, full);
         double k = p.k(u);
         //NOTE: hardcoding vsat here!!
         v[i].v = min(vmax_isolated(k, vsat), vsat);
@@ -181,7 +179,7 @@ vector<ProfileDatapoint> generateVelocityProfile(Spline &p, int numPoints, doubl
         ProfileDatapoint dp;
         dp.v = 0;
         dp.s = s;
-        dp.u = Integration::getArcLengthParam(p, dp.s, full);
+        dp.u = Integration::getArcLengthParam(p, dp.s, &splineSU, full);
         v.insert(v.begin()+1, dp);
         dp.v = -vs;
         dp.s = 0;

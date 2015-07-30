@@ -6,6 +6,9 @@
 #include "trajectory.hpp"
 #include "splines.hpp"
 #include "collision-checking.h"
+#include <iostream>
+#include <vector>
+
 //#include "controlpoint-optimization.hpp"
 using namespace std;
 namespace TrajectoryGenerators {
@@ -22,20 +25,27 @@ inline Trajectory* circleGenerator(double x, double y, double r, double startThe
 inline SplineTrajectory *cubic(Pose start, Pose end, double vls, double vrs, double vle, double vre, vector<Pose> midPoints = vector<Pose>()) {
     CubicSpline *p = new CubicSpline(start, end, midPoints);
 //    p->maxk();
-/*	using CollisionChecking::LineSegment;
-    vector<LineSegment> ls;
-    ls.push_back(LineSegment(-HALF_FIELD_MAXX/fieldXConvert, -HALF_FIELD_MAXY/fieldXConvert, HALF_FIELD_MAXX/fieldXConvert, -HALF_FIELD_MAXY/fieldXConvert));
-    ls.push_back(LineSegment(-HALF_FIELD_MAXX/fieldXConvert, HALF_FIELD_MAXY/fieldXConvert, HALF_FIELD_MAXX/fieldXConvert, HALF_FIELD_MAXY/fieldXConvert));
-    ls.push_back(LineSegment(-HALF_FIELD_MAXX/fieldXConvert, -HALF_FIELD_MAXY/fieldXConvert, -HALF_FIELD_MAXX/fieldXConvert, +HALF_FIELD_MAXY/fieldXConvert));
-    ls.push_back(LineSegment(HALF_FIELD_MAXX/fieldXConvert, -HALF_FIELD_MAXY/fieldXConvert, HALF_FIELD_MAXX/fieldXConvert, +HALF_FIELD_MAXY/fieldXConvert));
-    bool collides_flag = false;
-    for (int i = 0; i < ls.size(); i++) {
-        vector<Pose> collisions = CollisionChecking::cubicSpline_LineSegmentIntersection(*p, ls[i]);
-        if (collisions.size()) {
-            collides_flag = true;
-            break;
-        }
-    }*/
+	bool collides_flag = true;
+	double fact = 1;
+	if(collides_flag == true) {
+		collides_flag = false;
+		using CollisionChecking::LineSegment;
+		vector<LineSegment> ls;
+		ls.push_back(LineSegment(-(HALF_FIELD_MAXX - fact*BOT_RADIUS)/fieldXConvert , -(HALF_FIELD_MAXY - fact*BOT_RADIUS)/fieldXConvert, (HALF_FIELD_MAXX - fact*BOT_RADIUS)/fieldXConvert, -(HALF_FIELD_MAXY - fact*BOT_RADIUS)/fieldXConvert));
+		ls.push_back(LineSegment(-(HALF_FIELD_MAXX - fact*BOT_RADIUS)/fieldXConvert, (HALF_FIELD_MAXY -  fact*BOT_RADIUS)/fieldXConvert, (HALF_FIELD_MAXX - fact*BOT_RADIUS)/fieldXConvert, (HALF_FIELD_MAXY - fact*BOT_RADIUS)/fieldXConvert));
+		ls.push_back(LineSegment(-(HALF_FIELD_MAXX - fact*BOT_RADIUS)/fieldXConvert, -(HALF_FIELD_MAXY - fact*BOT_RADIUS)/fieldXConvert, -(HALF_FIELD_MAXX - fact*BOT_RADIUS)/fieldXConvert, (HALF_FIELD_MAXY - fact*BOT_RADIUS)/fieldXConvert));
+		ls.push_back(LineSegment((HALF_FIELD_MAXX - fact*BOT_RADIUS)/fieldXConvert, -(HALF_FIELD_MAXY -  fact*BOT_RADIUS)/fieldXConvert, (HALF_FIELD_MAXX - fact*BOT_RADIUS)/fieldXConvert, (HALF_FIELD_MAXY - fact*BOT_RADIUS)/fieldXConvert));
+
+		for (int i = 0; i < ls.size(); i++) {
+			vector<Pose> collisions = CollisionChecking::cubicSpline_LineSegmentIntersection(*p, ls[i]);
+			if(collisions.size() >= 2) {
+				midPoints.push_back(Pose((collisions[0].x() + collisions[1].x())/2, (collisions[0].y() + collisions[1].y())/2 , 0));  
+				collides_flag = true;
+				break;
+			}
+		}
+		 CubicSpline *p = new CubicSpline(start, end, midPoints);
+	}
     SplineTrajectory *st = new SplineTrajectory(p, vls, vrs, vle, vre);
     return st;
 }

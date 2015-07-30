@@ -16,6 +16,7 @@ namespace Strategy
     float movementError[10]; // records for previous 10 frames
     float movementErrorSum;
     int movementErrorIndex;
+	
     Point2D<int> prevBotPos;
     float prevBotAngle;
   public:

@@ -57,7 +57,7 @@ public:
 	Tactic::Param paramShoot;
 	
 	TDefender2 defender2_4(&state, 4);
-	TDWDefender2015 dwDefend20151(&state, 1);
+	TDWDefender2015 dwDefend20152(&state, 2);
 	Tactic::Param paramDefend2;
 	Tactic::Param paramDWDefend2015;
 	
@@ -150,8 +150,8 @@ public:
 	pVelocity.VelocityP.vr = 0;
 	
 	Tactic::Param pVelocity_1;
-	pVelocity_1.VelocityP.vl = 140;
-	pVelocity_1.VelocityP.vr = 140;
+	pVelocity_1.VelocityP.vl = -140;
+	pVelocity_1.VelocityP.vr = -140;
 	
 	Tactic::Param pVelocity_2;
 	pVelocity_2.VelocityP.vl = 60;
@@ -185,6 +185,9 @@ public:
 	TAttackSpline tAttackSpline3(&state , 3);
 	TAttackSpline tAttackSpline1(&state , 1);
 	TAttackSpline tAttackSpline2(&state , 2);
+	
+	TSupportAttack2015 tSupportAttack0(&state , 0) ;
+    TSupportAttack2015 tSupportAttack1(&state , 1) ;
 	
 	TAttack2015 tAttack20150(&state , 0) ;
 	TAttack2015 tAttack20151(&state , 1) ;
@@ -243,7 +246,7 @@ public:
 	params3_old.DWGoToPointP.finalSlope = 0;
 
 	SkillSet simplegoto(&state, 4);
-	SkillSet simplegoto_old(&state,3);
+	SkillSet simplegoto_old(&state,0);
     Tactic::Param ptestpoint;
 	   
  //   TestbotRace ttest2(&state,2);
@@ -315,8 +318,7 @@ public:
 				strCS.leave();
 				tExec.execute(&state,(Tactic::ID)(prev_tactic_id-1),paramList[prev_tactic_id -1],prev_bot_id);
 				cout << "\n\n From tester: "<< prev_tactic_id-1 << "\t\t" << prev_bot_id;
-			}
-		
+			}		
 			else{
 				// Critical Section protected by refBoxCS
 				strCS.enter();
@@ -335,19 +337,19 @@ public:
 		}
 		#endif
 	    
-	// tVelocity1.execute(pVelocity_1); 
+	// tVelocity4.execute(pVelocity_1); 
 	  
-	// simplegoto_old.executeSkill(SkillSet::GoToPoint, params2_old);
+	 // simplegoto_old.executeSkill(SkillSet::GoToPoint, params2_old);
 	
 	// dwpoint.executeSkill(SkillSet::DWGoToPoint,params2) ;
 	//tShoot4.execute(paramShoot) ;
 		  
-	tGoalOur1.execute(paramGoal);
+	//tGoalOur1.execute(paramGoal);
 	// tcover20150.execute(paramcover2015);
-     tcoverleft2.execute(paramcoverleft);
-     tcoverright0.execute(paramcoverright);
-	 defender2_4.execute(paramDefend2) ;
-   //  dwDefend20151.execute(paramDWDefend2015);
+    // tcoverleft2.execute(paramcoverleft);
+    // tcoverright0.execute(paramcoverright);
+    
+	//  dwDefend20151.execute(paramDWDefend2015);
    
 	// tAttack20154.execute(pAttack) ;
 	//tAttackSpline4.execute(pAttack) ;
@@ -362,11 +364,49 @@ public:
         //tDefendArc0.execute(pDefendArc);
        //        tDefendLine1.execute(pDefendL1);
 	   // tDefendLine2.execute(pDefendL2);
-     /*
+	/*
+	   //new defense 
+	   tGoalOur1.execute(paramGoal);
+	   tcoverleft2.execute(paramcoverleft);
+       tcoverright0.execute(paramcoverright);
+       defender2_4.execute(paramDefend2) ;
+   */
+   
+   /*  
+    // offense 1 with attack , receive , goalie , covergoal and defender
+     tGoalOur0.execute(paramGoal) ;*/
+	
+	if(loopcount++ > 14){
+	//	tGoalOur0.execute(paramGoal);
+	//	tcover20151.execute(paramcover2015);
+	//	dwDefend20152.execute(paramDWDefend2015);
+	//	if(Vector2D<int>::dist(state.ballPos , state.homePos[3]) < Vector2D<int>::dist(state.ballPos , state.homePos[4]))
+	//	tAttackSpline1.execute(pAttack) ;
+	//	  tReceiveSpline4.execute(pReceiveSpline) ;
+		
+/*		else
+		{
+			tAttackSpline4.execute(pAttack) ;
+			tReceiveSpline3.execute(pReceiveSpline) ;
+		}*/
+		loopcount = loopcount%1000 + 15;
+	 }
+	
+   /*
+	// offense 2 with attack , supportattack , receive , goalie , covergoal 
+	 
+   */	
+   
+   /*
+       defense2 with goalie , two covergoal , defender2 , attack 
+	    
+   */
+   
+          
 		  if(loopcount++ > 14){
-			  tGoalOur3.execute(paramGoal);
-			  tcover20150.execute(paramcover2015);
-			  dwDefend20151.execute(paramDWDefend2015);
+			 // tGoalOur3.execute(paramGoal);
+			 // tcover20150.execute(paramcover2015);
+			 // dwDefend20151.execute(paramDWDefend2015);
 			//	sppoint.executeSkill(SkillSet::SplineGoToPoint , params1) ;
 			//	params1.SplineGoToPointP.initTraj = 0;
 		//	if(abs(state.ballPos.x)>50 && abs(state.ballPos.y)>50){
@@ -374,23 +414,24 @@ public:
 		//	params4.SplineInterceptBallP.initTraj = 0;
 		//	}
 			//if(Vector2D<int>::dist(state.ballPos, state.homePos[0]) < Vector2D<int>::dist(state.ballPos, state.homePos[4])){
-
-			if(Vector2D<int>::dist(state.ballPos , state.homePos[4]) < Vector2D<int>::dist(state.ballPos , state.homePos[2]))
-			{
-			  tAttackSpline4.execute(pAttack) ;
-			  tReceiveSpline2.execute(pReceiveSpline);
+            tAttackSpline1.execute(pAttack) ;
+		   /*
+			if(Vector2D<int>::dist(state.ballPos , state.homePos[1]) < Vector2D<int>::dist(state.ballPos , state.homePos[0]))
+			{ tAttackSpline1.execute(pAttack) ;
+			  tSupportAttack0.execute(pAttack) ;
 			}
 			else
 			{
-			   tAttackSpline2.execute(pAttack) ;
-			  tReceiveSpline4.execute(pReceiveSpline);
+			  	tAttackSpline0.execute(pAttack) ;
+			  tSupportAttack1.execute(pAttack) ;
 			}
-			loopcount = loopcount%1000 + 14;
+			*/
+			//loopcount = loopcount%1000 + 14;
 		}
 		else{
-			tVelocity0.execute(pVelocity);		
+			//tVelocity0.execute(pVelocity);		
 		}
-		*/
+		
         SkillSet::comm->writeCombinedPacket();       
    //**************************************** END OF TESTING ************************************************  
 	 }

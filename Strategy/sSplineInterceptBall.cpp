@@ -130,12 +130,12 @@ namespace Strategy
 				}
 			}
 	}
-    if((dt < 0.075 || deviatedDist > 2*BOT_RADIUS || sTrack >=5) && sCount < 1 ){
+    if((dt < 0.075 || deviatedDist > BOT_RADIUS || sTrack >=3) && sCount < 1 ){
 		sCount++;
-		comm->sendCommand(botID, 30, 30);
+		comm->sendCommand(botID, 0, 0);
 	}
 //	else if(param.SplineInterceptBallP.initTraj == 1 || dt < 0.075){
-	else if(param.SplineInterceptBallP.initTraj == 1 || deviatedDist > 2*BOT_RADIUS || dt < 0.075 || sTrack >=5){
+	else if(param.SplineInterceptBallP.initTraj == 1 || deviatedDist > BOT_RADIUS || dt < 0.075 || sTrack >=3){
 		sCount = 0;
 		sTrack = 0;
        _splineInterceptBallInitTraj(botID, start, ballPos, ballVel, botVel, final_vl, final_vr, 0);

@@ -163,12 +163,14 @@ void SplineTrajectory::calculateAll(double t) const
     vector<ProfileDatapoint>::const_iterator upper = std::upper_bound(profile.begin(), profile.end(), ProfileDatapoint(0.,0.,0.,t));
     double dt, s, u, at;
     int i;
+	alglib::spline1dinterpolant splineSU;
+    Integration::computeSplineApprox(*p, &splineSU);
     if (upper == profile.end()) {
         i = profile.size()-1;
         // handle
         dt = t-profile[i].t;
         s = profile[i].s + profile[i].v*dt;
-        u = Integration::getArcLengthParam(*p,s,full);
+        u = Integration::getArcLengthParam(*p,s,&splineSU,full);
         at = 0;
     } else {
         assert(upper != profile.begin());// upper can't possibly be v.begin() since v[0].t = 0.. ?
@@ -180,7 +182,7 @@ void SplineTrajectory::calculateAll(double t) const
         s = 0.5*at*dt*dt+profile[i].v*dt+profile[i].s;
         assert(s <= full);
         // now find u
-        u = Integration::getArcLengthParam(*p, s, full);
+        u = Integration::getArcLengthParam(*p, s, &splineSU, full);
     }
     x_ = p->x(u);
     y_ = p->y(u);

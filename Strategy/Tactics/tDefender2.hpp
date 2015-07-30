@@ -203,32 +203,6 @@ void execute(const Param& tParam)
 			   break ;
 		   }
 			//for onot disturbing the covergoal 
-			/*
-			if(abs(state->ballPos.y) >= OUR_GOAL_MAXY + 2*BOT_RADIUS)
-				{
-					sID = SkillSet::GoToPoint;
-					sParam.GoToPointP.align = false;
-					sParam.GoToPointP.finalslope = 0;
-			
-					sParam.GoToPointP.x =state->ballPos.x	; // ..................changed
-					sParam.GoToPointP.y = state->ballPos.y;
-			       skillSet->executeSkill(SkillSet::GoToPoint,sParam) ;
-				   break ;
-			   }
-			   else
-			   {
-			       sID = SkillSet::GoToPoint;
-				   sParam.GoToPointP.x = -HALF_FIELD_MAXX + GOAL_DEPTH + 3*BOT_RADIUS;//can change this if cover goal collides
-			       sParam.GoToPointP.finalslope = PI/2;
-			       if(state->ballPos.y >0)
-				     sParam.GoToPointP.y = OUR_GOAL_MAXY + BOT_RADIUS;
-			       else
-				     sParam.GoToPointP.y = OUR_GOAL_MINY - BOT_RADIUS;
-			       skillSet->executeSkill(SkillSet::GoToPoint, sParam);
-			      break;
-				   
-			   }
-			*/
 			
 			//side spinning 
 			if(distBotBall < BOT_BALL_THRESH)
