@@ -118,7 +118,7 @@ namespace Strategy
 	if((traj) && (algoController)){
 			SplineTrajectory *st = dynamic_cast<SplineTrajectory*>(traj);
 			dt = st->totalTime() - algoController->getCurrentTimeS();
-			if(sTrack < 5){
+			if(sTrack < 3){
 				Pose refPose = algoController->getReferencePose();
 				deviatedDist = sqrt((refPose.x() - start.x())*(refPose.x() - start.x()) + (refPose.y() - start.y())*(refPose.y() - start.y()));
 				splineTrack = algoController->ballPredictionCheck(Vector2D<float>(refPose.x(), refPose.y()), ballPos, ballVel, deviatedDist, st->totalTime());

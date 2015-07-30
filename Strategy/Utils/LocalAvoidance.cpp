@@ -213,7 +213,6 @@ namespace Strategy
       printf("what\n");
     }
     return true;
-
   }
 
 
